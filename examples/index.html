@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <script src="../dist/realtime.js"></script>
+    <script type="text/javascript">
+        var a = new Realtime({
+            subscribeKey: 'sub-c-28e05466-8c18-11e6-a68c-0619f8945a4f',
+            publishKey: 'pub-c-72832def-4ca3-4802-971d-68112db1b30a'
+        });
+
+        pubnub = new PubNub({
+            publishKey : 'demo',
+            subscribeKey : 'demo'
+        })
+         
+        setInterval(function(){
+
+            a.publish({
+                channel : "hello_world",
+                message : "Hello from PubNub Docs!"
+            }, function(status, response) {
+                console.log('published', status);
+            });
+
+        }, 1000);
+               
+        a.addListener({
+            message: function(message) {
+                console.log("subscribed", message);
+            }
+        });
+
+        a.subscribe({
+            channels: ['hello_world'] 
+        });
+    </script>
+</body>
+</html>

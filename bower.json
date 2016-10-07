@@ -1,0 +1,27 @@
+{
+  "name": "realtimejs",
+  "homepage": "https://github.com/pubnub/realtimejs",
+  "authors": [
+    "PubNub"
+  ],
+  "description": "abstraction for realtime apis",
+  "main": "src/index.js",
+  "keywords": [
+    "realtime",
+    "abstrction",
+    "pubnub",
+    "socket.io",
+    "faye"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pubnub": "^4.0.13"
+  }
+}
