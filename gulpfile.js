@@ -5,8 +5,8 @@ const concat = require("gulp-concat");
 gulp.task('minify-js', function () {
     gulp
     .src(['./bower_components/pubnub/dist/web/pubnub.js', './src/index.js'])
-    .pipe(concat('realtime.js'))
-    .pipe(gulp.dest('./dist'));
+    .pipe(concat('rltm.js'))
+    .pipe(gulp.dest('./web'));
 });
 
 gulp.task('default', ['minify-js']);
