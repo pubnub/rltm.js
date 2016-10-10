@@ -1,10 +1,10 @@
 {
-  "name": "realtimejs",
-  "homepage": "https://github.com/pubnub/realtimejs",
+  "name": "rltm",
+  "homepage": "https://github.com/pubnub/rltm",
   "authors": [
     "PubNub"
   ],
-  "description": "abstraction for realtime apis",
+  "description": "Abstraction for realtime apis",
   "main": "src/index.js",
   "keywords": [
     "realtime",

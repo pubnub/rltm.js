@@ -1,5 +1,5 @@
 {
-  "name": "realtimejs",
+  "name": "rltm",
   "version": "0.0.1",
   "description": "abstraction for realtime frameworks",
   "main": "gulpfile.js",
@@ -20,9 +20,9 @@
   "author": "PubNub",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pubnub/realtimejs/issues"
+    "url": "https://github.com/pubnub/rltm/issues"
   },
-  "homepage": "https://github.com/pubnub/realtimejs#readme",
+  "homepage": "https://github.com/pubnub/rltm#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0"
