@@ -5,7 +5,7 @@
     "PubNub"
   ],
   "description": "Abstraction for realtime apis",
-  "main": "src/index.js",
+  "main": "web/rltm.js",
   "keywords": [
     "realtime",
     "abstrction",
