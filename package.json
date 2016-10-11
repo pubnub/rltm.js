@@ -24,7 +24,12 @@
   },
   "homepage": "https://github.com/pubnub/rltm#readme",
   "devDependencies": {
+    "browserify": "^13.1.0",
     "gulp": "^3.9.1",
-    "gulp-concat": "^2.6.0"
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "browserify": "^13.1.0",
+    "pubnub": "^4.0.13"
   }
 }
