@@ -1,12 +1,19 @@
 const gulp = require('gulp');
 const concat = require("gulp-concat");
- 
+const browserify = require('browserify');
+const source = require('vinyl-source-stream');
+
 // task
-gulp.task('minify-js', function () {
-    gulp
-    .src(['./bower_components/pubnub/dist/web/pubnub.js', './src/index.js'])
-    .pipe(concat('rltm.js'))
-    .pipe(gulp.dest('./web'));
+gulp.task('compile', function () {
+    
+    browserify({
+        entries: 'src/index.js',
+        debug: true
+    })
+    .bundle()
+    .pipe(source('rltm.js'))
+    .pipe(gulp.dest('./web/'));
+
 });
 
-gulp.task('default', ['minify-js']);
+gulp.task('default', ['compile']);
