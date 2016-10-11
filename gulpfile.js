@@ -1,5 +1,4 @@
 const gulp = require('gulp');
-const concat = require("gulp-concat");
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
 
