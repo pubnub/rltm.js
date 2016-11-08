@@ -1,0 +1,32 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  
+  var socket = io('http://localhost:8000');
+
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+
+  socket.on('user joined', function (data) {
+    
+    console.log('someone joined');
+    console.log(data);
+
+  });
+
+  socket.emit('join', {
+    uuid: new Date().getTime(),
+    state: {
+        hello: 'world'
+    }
+  });
+
+  socket.emit('whosonline', null, function(users) {
+    
+    console.log('whos online');
+    console.log(users);
+    
+  });
+
+</script>
