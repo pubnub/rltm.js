@@ -38,7 +38,7 @@ io.on('connection', function (socket) {
     socket.state = data.state;
     
     // echo globally (all clients) that a person has connected
-    io.sockets.emit('user joined', data);
+    io.sockets.emit('joined', data);
 
   });
 

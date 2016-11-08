@@ -15,6 +15,13 @@
 
   });
 
+  socket.on('leave', function (data) {
+    
+    console.log('someone left');
+    console.log(data);
+
+  });
+
   socket.emit('join', {
     uuid: new Date().getTime(),
     state: {
@@ -22,11 +29,13 @@
     }
   });
 
-  socket.emit('whosonline', null, function(users) {
-    
-    console.log('whos online');
-    console.log(users);
-    
-  });
+  setInterval(function(){
+    socket.emit('whosonline', null, function(users) {
+      
+      console.log('whos online');
+      console.log(users);
+
+    });
+  }, 3000);
 
 </script>
