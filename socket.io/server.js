@@ -21,15 +21,9 @@ function handler (req, res) {
 var users = {};
 
 io.on('connection', function (socket) {
-
-  socket.emit('news', { hello: 'world' });
   
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-
   // when the client emits 'add user', this listens and executes
-  socket.on('join', function (data) {
+  socket.on('subscribe', function (data) {
 
     // store user in object
     users[data.uuid] = data.state;
@@ -38,14 +32,14 @@ io.on('connection', function (socket) {
     socket.state = data.state;
     
     // echo globally (all clients) that a person has connected
-    io.sockets.emit('joined', data);
+    io.sockets.emit('join', data);
 
   });
 
   // when the client emits 'add user', this listens and executes
   socket.on('whosonline', function (data, fn) {
 
-    // echo globally (all clients) that a person has connected
+    // callback with user data
     fn(users);
 
   });
