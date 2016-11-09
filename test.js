@@ -36,7 +36,8 @@ describe('PubNub', function() {
 
         it('should send and receive message', function(done) {
 
-            agent.subscribe(function (data) {
+            agent.subscribe(function(data) {
+                console.log(data)
                 assert.isTrue(data.works, 'data was received');
                 done();
             });
@@ -62,7 +63,7 @@ describe('Socket.io', function() {
 
     describe('init', function() {
 
-        agent = new rltm('socketio', '', 'http://localhost:8000');
+        agent = new rltm('socketio', 'test-channel', 'http://localhost:8000');
 
         it('should create agent object', function(done) {
             assert.isObject(agent, 'was successfully created');

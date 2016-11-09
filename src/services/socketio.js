@@ -7,7 +7,7 @@ let map = (channel, config) => {
 
     let endpoint = config + '/' + channel;
     console.log(endpoint);
-    
+
     this.socket = require('socket.io-client')(endpoint);
 
     let readyFired = false;
@@ -16,6 +16,8 @@ let map = (channel, config) => {
     let onJoin = () => {};
     let onLeave = () => {};
     let onTimeout = () => {};
+    let onSubscribe = () => {};
+    let onMessage = () => {};
 
     this.ready = (fn) => {
         onReady = fn;
@@ -34,37 +36,27 @@ let map = (channel, config) => {
     }
 
     this.subscribe = (fn) => {
-
+        onSubscribe = fn;
     };
 
     this.publish = (message) => {
-        
+        this.socket.emit('publish', message);
     };
 
     this.socket.on('connect', () => {
         onReady();
-        console.log('connected')
     });
 
     this.socket.on('join', (data) => {
-
-        console.log('someone joined');
-        console.log(data);
-
         onJoin(data);
-
     });
 
     this.socket.on('leave', (data) => {
-
-        console.log('someone left');
         onLeave(data);
-
     });
 
-    this.socket.on('news', (data) => {
-        console.log(data);
-        socket.emit('my other event', { my: 'data' });
+    this.socket.on('message', (data) => {
+        onSubscribe(data);
     });
 
     return this;

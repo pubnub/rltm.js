@@ -2,7 +2,11 @@ var io = require('socket.io')(8000);
 
 var users = {};
 
-io.on('connection', function (socket) {
+let channel = 'test-channel';
+
+let room = io.of(channel);
+
+room.on('connection', function (socket) {
   
   // when the client emits 'add user', this listens and executes
   socket.on('subscribe', function (data) {
@@ -14,8 +18,13 @@ io.on('connection', function (socket) {
     socket.state = data.state;
     
     // echo globally (all clients) that a person has connected
-    io.sockets.emit('join', data);
+    room.sockets.emit('join', data);
 
+  });
+
+  // when the client emits 'add user', this listens and executes
+  socket.on('publish', function (data, fn) {
+    io.of(channel).emit('message', data);
   });
 
   // when the client emits 'add user', this listens and executes
