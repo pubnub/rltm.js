@@ -25,6 +25,7 @@
   "homepage": "https://github.com/pubnub/rltm#readme",
   "devDependencies": {
     "browserify": "^13.1.0",
+    "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "vinyl-source-stream": "^1.1.0"
   },

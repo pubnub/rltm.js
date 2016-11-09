@@ -11,5 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "socket.io": "^1.5.1"
+  },
+  "devDependencies": {
+    "mocha": "^3.1.2"
   }
 }
