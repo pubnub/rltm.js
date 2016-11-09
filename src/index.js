@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(service, config) {
+module.exports = function(service, channel, config) {
 
-    return require('./services/' + service)(config);
+    return require('./services/' + service)(channel, config);
 }; 

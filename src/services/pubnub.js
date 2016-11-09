@@ -2,7 +2,7 @@
 
 let PubNub = require('pubnub');
 
-let map = (config) => {
+let map = (channel, config) => {
 
     // initialize RLTM with pubnub keys
     this.pubnub = new PubNub(config);
@@ -30,7 +30,7 @@ let map = (config) => {
         onTimeout = fn;
     }
 
-    this.subscribe = (channel, fn) => {
+    this.subscribe = (fn) => {
 
         this.pubnub.addListener({
 
@@ -58,7 +58,7 @@ let map = (config) => {
 
     };
 
-    this.publish = (channel, message) => {
+    this.publish = (message) => {
         
         this.pubnub.publish({
             channel: channel,
