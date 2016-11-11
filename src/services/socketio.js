@@ -5,8 +5,7 @@ let map = (channel, config) => {
 
     // initialize RLTM with pubnub keys
 
-    let endpoint = config + '/' + channel;
-    console.log(endpoint);
+    let endpoint = config.endpoint + '/' + channel;
 
     this.socket = require('socket.io-client')(endpoint);
 

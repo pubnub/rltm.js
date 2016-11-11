@@ -67,6 +67,24 @@ let map = (channel, config) => {
 
     };
 
+    this.hereNow = (cb) => {
+        
+        this.pubnub.hereNow({
+            channels: [channel],
+            includeUUIDs: true,
+            includeState: true
+        }, (status, response) => {
+
+            if(!status.error) {
+                cb(response.channels[channel].occupants);
+            } else {
+                console.log(status, response);
+            }
+
+        });
+
+    }
+
     this.pubnub.addListener({
         presence: (presenceEvent) => {
 

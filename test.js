@@ -6,16 +6,21 @@ let testMessageData = {
     rand: Math.random()
 };
 
+let testStateData = {
+    rand: Math.random()
+};
+
 describe('PubNub', function() {
 
     let agent;
 
     describe('init', function() {
 
-        agent = new rltm('pubnub', 'channel1', {
+        agent = new rltm('pubnub', 'test-channel', {
             publishKey: 'pub-c-f7d7be90-895a-4b24-bf99-5977c22c66c9',
             subscribeKey: 'sub-c-bd013f24-9a24-11e6-a681-02ee2ddab7fe',
-            uuid: new Date().getTime()
+            uuid: new Date(),
+            state: testStateData
         });
 
         it('should create agent object', function() {
@@ -41,11 +46,24 @@ describe('PubNub', function() {
         it('should send and receive message', function(done) {
 
             agent.subscribe(function(data) {
-                assert.deepEqual(data, testMessageData);
+                assert.deepEqual(data, testMessageData, 'input data matches output data');
                 done();
             });
 
             agent.publish(testMessageData);
+
+        });
+
+    });
+
+    describe('here now', function() {
+
+        it('at least one user online', function(done) {
+
+            agent.hereNow(function(users) {
+                assert.isAtLeast(users.length, 1, 'At least one user online now');
+                done();
+            });
 
         });
 
@@ -66,7 +84,11 @@ describe('Socket.io', function() {
 
     describe('init', function() {
 
-        agent = new rltm('socketio', 'test-channel', 'http://localhost:8000');
+        agent = new rltm('socketio', 'test-channel', {
+            endpoint: 'http://localhost:8000',
+            uuid: new Date(),
+            state: testStateData
+        });
 
         it('should create agent object', function(done) {
             assert.isObject(agent, 'was successfully created');
@@ -94,7 +116,7 @@ describe('Socket.io', function() {
         it('should send and receive message', function(done) {
 
             agent.subscribe(function (data) {
-                assert.deepEqual(data, testMessageData);
+                assert.deepEqual(data, testMessageData, 'input data matches output data');
                 done();
             });
 
