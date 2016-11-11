@@ -17,6 +17,10 @@ let testStateData = {
     rand: Math.random()
 };
 
+let testNewStateData = {
+    rand: Math.random()
+};
+
 var agents = [
     new rltm('pubnub', new Date(), {
         publishKey: 'pub-c-f7d7be90-895a-4b24-bf99-5977c22c66c9',
@@ -56,8 +60,8 @@ agents.forEach(function(agent){
 
             it('should get itself as a join event', function(done) {
 
-                agent.join(function(data) {
-                    assert.isObject(data, 'event received');
+                agent.join(function(uuid, state) {
+                    assert.isOk(uuid, 'uuid is set');
                     done();
                 });
 
@@ -91,6 +95,22 @@ agents.forEach(function(agent){
                     done();
 
                 });
+
+            });
+
+        });
+
+        describe('state', function() {
+
+            it('should set state', function(done) {
+
+                agent.state(function(data) {
+                    assert.isOk(data.uuid, 'uuid supplied');
+                    assert.isObject(data.state, 'state is object');
+                    done();
+                });
+
+                agent.setState(testNewStateData);
 
             });
 

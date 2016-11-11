@@ -18,6 +18,7 @@ let map = (service, channel, config) => {
     let onTimeout = () => {};
     let onSubscribe = () => {};
     let onMessage = () => {};
+    let onState = () => {};
 
     this.ready = (fn) => {
         onReady = fn;
@@ -33,6 +34,14 @@ let map = (service, channel, config) => {
 
     this.timeout = (fn) => {
         onTimeout = fn;
+    }
+
+    this.state = (fn) => {
+        onState = fn;
+    }
+
+    this.setState = (state) => {
+        this.socket.emit('setState', config.uuid, state);
     }
 
     this.subscribe = (fn) => {
@@ -74,6 +83,10 @@ let map = (service, channel, config) => {
 
     this.socket.on('message', (data) => {
         onSubscribe(data);
+    });
+
+    this.socket.on('state', (data) => {
+        onState(data);
     });
 
     return this;

@@ -15,6 +15,7 @@ let map = (service, channel, config) => {
     let onJoin = () => {};
     let onLeave = () => {};
     let onTimeout = () => {};
+    let onState = () => {};
 
     this.ready = (fn) => {
         onReady = fn;
@@ -30,6 +31,10 @@ let map = (service, channel, config) => {
 
     this.timeout = (fn) => {
         onTimeout = fn;
+    }
+
+    this.state = (fn) => {
+        onState = fn;
     }
 
     this.subscribe = (fn) => {
@@ -95,16 +100,27 @@ let map = (service, channel, config) => {
 
     }
 
+    this.setState = (state) => {
+        
+        this.pubnub.setState(
+            {
+                state: state,
+                uuid: config.uuid,
+                channels: [channel]
+            },
+            function (status) {
+
+                // handle state setting response
+            }
+        );
+
+    }
+
     this.pubnub.addListener({
         presence: (presenceEvent) => {
 
             if(presenceEvent.action == "join") {
-                
-                onJoin({
-                    uuid: presenceEvent.uuid, 
-                    state: presenceEvent.state
-                });
-
+                onJoin(presenceEvent.uuid, presenceEvent.state);
             }
             if(presenceEvent.action == "leave") {
                 onLeave(presenceEvent.uuid);
@@ -114,15 +130,12 @@ let map = (service, channel, config) => {
             }
             if(presenceEvent.action == "state-change") {
 
-                if(this.users[presenceEvent.uuid]) {
-                    // this.users[presenceEvent.uuid].update(presenceEvent.state);
-                } else {
-                    // onJoin({
-                    //     uuid: presenceEvent.uuid, 
-                    //     state: presenceEvent.state
-                    // });
-                }
+                console.log('state called')
 
+                onState({
+                    uuid: presenceEvent.uuid, 
+                    state: presenceEvent.state
+                });
             }
 
         }

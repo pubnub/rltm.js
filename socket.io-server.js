@@ -24,6 +24,17 @@ room.on('connection', function (socket) {
     });
 
   });
+  
+  socket.on('setState', function (uuid, state) {
+    
+    users[uuid] = state;
+
+    room.emit('state', {
+      uuid: uuid, 
+      state: state
+    });    
+
+  });
 
   // when the client emits 'add user', this listens and executes
   socket.on('publish', function (data, fn) {
