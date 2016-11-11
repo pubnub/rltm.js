@@ -36,7 +36,11 @@ room.on('connection', function (socket) {
   socket.on('publish', function (uuid, data, fn) {
     
     io.of(channel).emit('message', uuid, data);
-    messageHistory.push({uuid: uuid, data: data});
+
+    messageHistory.unshift({uuid: uuid, data: data});
+    if(messageHistory.length > 100) {
+      messageHistory.pop();
+    }
 
   });
 

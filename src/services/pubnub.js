@@ -66,7 +66,7 @@ let map = (service, channel, config) => {
     };
 
     this.publish = (data) => {
-        
+
         this.pubnub.publish({
             channel: channel,
             message: {
@@ -118,10 +118,32 @@ let map = (service, channel, config) => {
 
     }
 
+    this.history = (cb) => {
+        
+        this.pubnub.history({
+            channel: channel,
+            reverse: true, // Setting to true will traverse the time line in reverse starting with the oldest message first.
+            count: 100, // how many items to fetch
+            stringifiedTimeToken: true, // false is the default
+        }, function (status, response) {
+
+            var data = [];
+            for(var i in response.messages) {
+                data.push(response.messages[i].entry)
+            }
+
+            console.log(data.length + ' messages returned')
+
+            cb(data);
+
+        });
+
+    }
+
     this.unsubscribe = () => {
         
         this.pubnub.unsubscribe({
-            channel: channel,
+            channels: [channel],
         });
 
     }

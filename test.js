@@ -23,8 +23,8 @@ let testNewStateData = {
 
 var agents = [
     new rltm('pubnub', new Date(), {
-        publishKey: 'pub-c-f7d7be90-895a-4b24-bf99-5977c22c66c9',
-        subscribeKey: 'sub-c-bd013f24-9a24-11e6-a681-02ee2ddab7fe',
+        publishKey: 'pub-c-191d5212-dd99-4f2e-a8cf-fb63775232bc',
+        subscribeKey: 'sub-c-aa1d9fe8-a85b-11e6-a397-02ee2ddab7fe',
         uuid: new Date(),
         state: testStateData
     }),
@@ -119,9 +119,8 @@ agents.forEach(function(agent){
         describe('unsubscribe', function() {
 
             it('should disconnect', function() {
-
                 agent.unsubscribe();
-
+                agent.publish(testMessageData);
             });
 
         });
@@ -130,9 +129,22 @@ agents.forEach(function(agent){
 
             it('should recall history', function(done) {
 
+                this.timeout(5000);
+
+                let i = 0;
+                while(i < 105) {
+                    agent.publish({i: i});
+                    i++;
+                }
+
                 agent.history(function(history) {
-                    console.log(history);
+
+                    assert.equal(history.length, 100, '100 messages retrieved');
+                    assert.equal(history[0].data.i, 104, 'latest message is correct');
+                    assert.equal(history[99].data.i, 5, 'oldest message is correct');
+
                     done();
+
                 });
 
             });

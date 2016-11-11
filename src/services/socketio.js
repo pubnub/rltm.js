@@ -40,10 +40,6 @@ let map = (service, channel, config) => {
         onState = fn;
     }
 
-    this.setState = (state) => {
-        this.socket.emit('setState', config.uuid, state);
-    }
-
     this.subscribe = (fn) => {
 
         onSubscribe = fn;
@@ -69,6 +65,10 @@ let map = (service, channel, config) => {
 
     }
 
+    this.setState = (state) => {
+        this.socket.emit('setState', config.uuid, state);
+    }
+
     this.history = (cb) => {
         
         this.socket.emit('history', null, function(data) {
@@ -78,7 +78,7 @@ let map = (service, channel, config) => {
     }
 
     this.unsubscribe = (cb) => {
-        this.socket.removeAllListeners(channel);
+        this.socket.off('message');
     }
 
     this.socket.on('connect', () => {
