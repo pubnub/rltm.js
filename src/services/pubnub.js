@@ -2,7 +2,9 @@
 
 let PubNub = require('pubnub');
 
-let map = (channel, config) => {
+let map = (service, channel, config) => {
+
+    this.service = service;
 
     // initialize RLTM with pubnub keys
     this.pubnub = new PubNub(config);
@@ -97,7 +99,12 @@ let map = (channel, config) => {
         presence: (presenceEvent) => {
 
             if(presenceEvent.action == "join") {
-                onJoin(presenceEvent.uuid, presenceEvent.state);
+                
+                onJoin({
+                    uuid: presenceEvent.uuid, 
+                    state: presenceEvent.state
+                });
+
             }
             if(presenceEvent.action == "leave") {
                 onLeave(presenceEvent.uuid);
@@ -108,9 +115,12 @@ let map = (channel, config) => {
             if(presenceEvent.action == "state-change") {
 
                 if(this.users[presenceEvent.uuid]) {
-                    this.users[presenceEvent.uuid].update(presenceEvent.state);
+                    // this.users[presenceEvent.uuid].update(presenceEvent.state);
                 } else {
-                    this.userJoin(presenceEvent.uuid, presenceEvent.state, presenceEvent);
+                    // onJoin({
+                    //     uuid: presenceEvent.uuid, 
+                    //     state: presenceEvent.state
+                    // });
                 }
 
             }

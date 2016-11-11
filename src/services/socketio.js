@@ -1,8 +1,9 @@
 "use strict";
 
 
-let map = (channel, config) => {
+let map = (service, channel, config) => {
 
+    this.service = service;
     // initialize RLTM with pubnub keys
 
     let endpoint = config.endpoint + '/' + channel;
@@ -39,6 +40,7 @@ let map = (channel, config) => {
         onSubscribe = fn;
 
         if(!readyFired) {
+
             this.socket.emit('start', config.uuid, config.state);   
             onReady();
             readyFired = true;

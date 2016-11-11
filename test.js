@@ -1,5 +1,12 @@
 const assert = require('chai').assert;
 
+var fork = require('child_process').fork;
+var child = fork('./socket.io-server');
+
+process.on('exit', function () {
+    child.kill();
+});
+
 let rltm = require('./src/index');
 
 let testMessageData = {
@@ -10,141 +17,81 @@ let testStateData = {
     rand: Math.random()
 };
 
-describe('PubNub', function() {
+var agents = [
+    new rltm('pubnub', new Date(), {
+        publishKey: 'pub-c-f7d7be90-895a-4b24-bf99-5977c22c66c9',
+        subscribeKey: 'sub-c-bd013f24-9a24-11e6-a681-02ee2ddab7fe',
+        uuid: new Date(),
+        state: testStateData
+    }),
+    new rltm('socketio', 'test-channel', {
+        endpoint: 'http://localhost:8000',
+        uuid: new Date(),
+        state: testStateData
+    })    
+];
 
-    let p;
-    let s;
+let agent = null;
+agents.forEach(function(agent){
 
-    describe('init', function() {
+    describe(agent.service, function() {
 
-        p = new rltm('pubnub', new Date(), {
-            publishKey: 'pub-c-f7d7be90-895a-4b24-bf99-5977c22c66c9',
-            subscribeKey: 'sub-c-bd013f24-9a24-11e6-a681-02ee2ddab7fe',
-            uuid: new Date(),
-            state: testStateData
-        });
+        describe('init', function() {
 
-        it('should create agent object', function() {
-            assert.isObject(p, 'was successfully created');
-        });
-
-    });
-
-    describe('ready', function() {
-
-        it('should get called when ready', function(done) {
-
-            p.ready(done);
-
-            p.subscribe(function (data) {});
-
-        });
-
-    });
-
-    describe('publish subscribe', function() {
-
-        it('should send and receive message', function(done) {
-
-            p.subscribe(function(data) {
-                assert.deepEqual(data, testMessageData, 'input data matches output data');
-                done();
+            it('should create agent object', function() {
+                assert.isObject(agent, 'was successfully created');
             });
 
-            p.publish(testMessageData);
-
         });
 
-    });
+        describe('ready', function() {
 
-    describe('here now', function() {
+            it('should get called when ready', function(done) {
 
-        it('at least one user online', function(done) {
+                agent.ready(done);
 
-            p.hereNow(function(users) {
+                agent.subscribe(function (data) {});
 
-                assert.isOk(users, 'At least one user online now');
-                
-                done();
+            });
+
+            it('should get itself as a join event', function(done) {
+
+                agent.join(function(data) {
+                    assert.isObject(data, 'event received');
+                    done();
+                });
 
             });
 
         });
 
-    });
+        describe('publish subscribe', function() {
 
-});
+            it('should send and receive message', function(done) {
 
-describe('Socket.io', function() {
+                agent.subscribe(function(data) {
+                    assert.deepEqual(data, testMessageData, 'input data matches output data');
+                    done();
+                });
 
-    var fork = require('child_process').fork;
-    var child = fork('./socket.io-server');
+                agent.publish(testMessageData);
 
-    process.on('exit', function () {
-        child.kill();
-    });
-
-    describe('init', function() {
-
-        s = new rltm('socketio', 'test-channel', {
-            endpoint: 'http://localhost:8000',
-            uuid: new Date(),
-            state: testStateData
-        });
-        it('should create agent object', function(done) {
-            assert.isObject(s, 'was successfully created');
-            done();
-        });
-
-    });
-
-    describe('ready', function() {
-
-        it('should get called when ready', function(done) {
-
-            s.ready(function(){
-                done();
-            });
-
-            s.subscribe(function (data) {});
-
-        });
-
-        it('should get itself as a join event', function(done) {
-            
-            s.join(function(data) {
-                assert.isObject(data, 'event received');
-                done();
             });
 
         });
 
+        describe('here now', function() {
 
-    });
+            it('at least one user online', function(done) {
 
+                agent.hereNow(function(users) {
 
-    describe('publish subscribe', function() {
+                    assert.isOk(users, 'At least one user online now');
+                    
+                    done();
 
-        it('should send and receive message', function(done) {
+                });
 
-            s.subscribe(function (data) {
-                assert.deepEqual(data, testMessageData, 'input data matches output data');
-                done();
-            });
-
-            s.publish(testMessageData);
-
-        });
-
-    });
-
-    describe('here now', function() {
-
-        it('at least one user online', function(done) {
-
-            s.hereNow(function(users) {
-                assert.isOk(users, 'At least one user online now');
-                done();
             });
 
         });
@@ -152,4 +99,3 @@ describe('Socket.io', function() {
     });
 
 });
-
