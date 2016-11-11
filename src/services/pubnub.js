@@ -123,16 +123,13 @@ let map = (service, channel, config) => {
         this.pubnub.history({
             channel: channel,
             reverse: true, // Setting to true will traverse the time line in reverse starting with the oldest message first.
-            count: 100, // how many items to fetch
-            stringifiedTimeToken: true, // false is the default
+            count: 100 // how many items to fetch
         }, function (status, response) {
 
             var data = [];
             for(var i in response.messages) {
                 data.push(response.messages[i].entry)
             }
-
-            console.log(data.length + ' messages returned')
 
             cb(data);
 

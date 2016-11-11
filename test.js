@@ -129,22 +129,18 @@ agents.forEach(function(agent){
 
             it('should recall history', function(done) {
 
-                this.timeout(5000);
+                this.timeout(8000);
 
-                let i = 0;
-                while(i < 20) {
-                    agent.publish({i: i});
-                    i++;
-                }
+                setTimeout(function() {
+                    agent.history(function(history) {
 
-                agent.history(function(history) {
+                        assert.deepEqual(history[0].data, testMessageData, 'latest message is correct');
+                        assert.isAbove(history.length, 1, 'at least one messages received');
 
-                    assert.equal(history[0].data.i, 19, 'latest message is correct');
-                    assert.isAbove(history.length, 10, 'at least 10 messages received');
+                        done();
 
-                    done();
-
-                });
+                    });
+                }, 2500);
 
             });
 
