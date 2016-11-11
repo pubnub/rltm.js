@@ -6,9 +6,11 @@ let channel = 'test-channel';
 
 let room = io.of(channel);
 
+let messageHistory = [];
+
 room.on('connection', function (socket) {
   
-  // when the client emits 'add user', this listens and executes
+  // when the client emits 'subscribe', this listens and executes
   socket.on('start', function (uuid, state) {
 
     // store user in object
@@ -32,15 +34,22 @@ room.on('connection', function (socket) {
 
   // when the client emits 'add user', this listens and executes
   socket.on('publish', function (uuid, data, fn) {
+    
     io.of(channel).emit('message', uuid, data);
+    messageHistory.push({uuid: uuid, data: data});
+
   });
 
-  // when the client emits 'add user', this listens and executes
   socket.on('whosonline', function (data, fn) {
 
     // callback with user data
     fn(users);
 
+  });
+  
+  // 
+  socket.on('history', function (data, fn) {
+    fn(messageHistory);
   });
 
   // when the user disconnects.. perform this

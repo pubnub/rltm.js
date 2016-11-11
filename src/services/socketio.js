@@ -61,13 +61,24 @@ let map = (service, channel, config) => {
         this.socket.emit('publish', config.uuid, data);
     };
 
-
     this.hereNow = (cb) => {
         
         this.socket.emit('whosonline', null, function(users) {
           cb(users);
         });
 
+    }
+
+    this.history = (cb) => {
+        
+        this.socket.emit('history', null, function(data) {
+          cb(data);
+        });
+
+    }
+
+    this.unsubscribe = (cb) => {
+        this.socket.removeAllListeners(channel);
     }
 
     this.socket.on('connect', () => {

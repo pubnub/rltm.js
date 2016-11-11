@@ -118,6 +118,14 @@ let map = (service, channel, config) => {
 
     }
 
+    this.unsubscribe = () => {
+        
+        this.pubnub.unsubscribe({
+            channel: channel,
+        });
+
+    }
+
     this.pubnub.addListener({
         presence: (presenceEvent) => {
 

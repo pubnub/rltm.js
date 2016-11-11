@@ -53,7 +53,6 @@ agents.forEach(function(agent){
             it('should get called when ready', function(done) {
 
                 agent.ready(done);
-
                 agent.subscribe(function (data) {});
 
             });
@@ -112,6 +111,29 @@ agents.forEach(function(agent){
                 });
 
                 agent.setState(testNewStateData);
+
+            });
+
+        });
+
+        describe('unsubscribe', function() {
+
+            it('should disconnect', function() {
+
+                agent.unsubscribe();
+
+            });
+
+        });
+
+        describe('history', function() {
+
+            it('should recall history', function(done) {
+
+                agent.history(function(history) {
+                    console.log(history);
+                    done();
+                });
 
             });
 
