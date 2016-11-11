@@ -1,10 +1,14 @@
-var assert = require('chai').assert;
+const assert = require('chai').assert;
 
-var rltm = require('./src/index');
+let rltm = require('./src/index');
+
+let testMessageData = {
+    rand: Math.random()
+};
 
 describe('PubNub', function() {
 
-    var agent;
+    let agent;
 
     describe('init', function() {
 
@@ -37,12 +41,11 @@ describe('PubNub', function() {
         it('should send and receive message', function(done) {
 
             agent.subscribe(function(data) {
-                console.log(data)
-                assert.isTrue(data.works, 'data was received');
+                assert.deepEqual(data, testMessageData);
                 done();
             });
 
-            agent.publish({works: true});
+            agent.publish(testMessageData);
 
         });
 
@@ -91,11 +94,11 @@ describe('Socket.io', function() {
         it('should send and receive message', function(done) {
 
             agent.subscribe(function (data) {
-                assert.isTrue(data.works, 'data was received');
+                assert.deepEqual(data, testMessageData);
                 done();
             });
 
-            agent.publish({works: true});
+            agent.publish(testMessageData);
 
         });
 
