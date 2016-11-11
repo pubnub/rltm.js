@@ -9,16 +9,19 @@ let room = io.of(channel);
 room.on('connection', function (socket) {
   
   // when the client emits 'add user', this listens and executes
-  socket.on('subscribe', function (data) {
+  socket.on('start', function (uuid, state) {
 
     // store user in object
-    users[data.uuid] = data.state;
+    users[uuid] = state;
 
-    socket.uuid = data.uuid;
-    socket.state = data.state;
-    
+    socket.uuid = uuid;
+    socket.state = state;
+
     // echo globally (all clients) that a person has connected
-    room.sockets.emit('join', data);
+    room.emit('join', {
+      uuid: uuid,
+      state: state
+    });
 
   });
 

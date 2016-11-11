@@ -35,15 +35,31 @@ let map = (channel, config) => {
     }
 
     this.subscribe = (fn) => {
+
         onSubscribe = fn;
+
+        if(!readyFired) {
+            this.socket.emit('start', config.uuid, config.state);   
+            onReady();
+            readyFired = true;
+        }
+
     };
 
     this.publish = (message) => {
         this.socket.emit('publish', message);
     };
 
+
+    this.hereNow = (cb) => {
+        
+        this.socket.emit('whosonline', null, function(users) {
+          cb(users);
+        });
+
+    }
+
     this.socket.on('connect', () => {
-        onReady();
     });
 
     this.socket.on('join', (data) => {
@@ -73,12 +89,5 @@ module.exports = map;
 // });
 
 // setInterval(function(){
-
-// socket.emit('whosonline', null, function(users) {
-  
-//   console.log('whos online');
-//   console.log(users);
-
-// });
 
 // }, 5000);

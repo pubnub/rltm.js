@@ -76,7 +76,15 @@ let map = (channel, config) => {
         }, (status, response) => {
 
             if(!status.error) {
-                cb(response.channels[channel].occupants);
+
+                var userList = {};
+                
+                for(var i in response.channels[channel].occupants) {
+                    userList[response.channels[channel].occupants[i].uuid] = response.channels[channel].occupants[i].state;
+                }
+
+                cb(userList);
+
             } else {
                 console.log(status, response);
             }

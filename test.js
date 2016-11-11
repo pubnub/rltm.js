@@ -12,11 +12,12 @@ let testStateData = {
 
 describe('PubNub', function() {
 
-    let agent;
+    let p;
+    let s;
 
     describe('init', function() {
 
-        agent = new rltm('pubnub', 'test-channel', {
+        p = new rltm('pubnub', new Date(), {
             publishKey: 'pub-c-f7d7be90-895a-4b24-bf99-5977c22c66c9',
             subscribeKey: 'sub-c-bd013f24-9a24-11e6-a681-02ee2ddab7fe',
             uuid: new Date(),
@@ -24,7 +25,7 @@ describe('PubNub', function() {
         });
 
         it('should create agent object', function() {
-            assert.isObject(agent, 'was successfully created');
+            assert.isObject(p, 'was successfully created');
         });
 
     });
@@ -33,9 +34,9 @@ describe('PubNub', function() {
 
         it('should get called when ready', function(done) {
 
-            agent.ready(done);
+            p.ready(done);
 
-            agent.subscribe(function (data) {});
+            p.subscribe(function (data) {});
 
         });
 
@@ -45,12 +46,12 @@ describe('PubNub', function() {
 
         it('should send and receive message', function(done) {
 
-            agent.subscribe(function(data) {
+            p.subscribe(function(data) {
                 assert.deepEqual(data, testMessageData, 'input data matches output data');
                 done();
             });
 
-            agent.publish(testMessageData);
+            p.publish(testMessageData);
 
         });
 
@@ -60,9 +61,12 @@ describe('PubNub', function() {
 
         it('at least one user online', function(done) {
 
-            agent.hereNow(function(users) {
-                assert.isAtLeast(users.length, 1, 'At least one user online now');
+            p.hereNow(function(users) {
+
+                assert.isOk(users, 'At least one user online now');
+                
                 done();
+
             });
 
         });
@@ -80,18 +84,15 @@ describe('Socket.io', function() {
         child.kill();
     });
 
-    var agent;
-
     describe('init', function() {
 
-        agent = new rltm('socketio', 'test-channel', {
+        s = new rltm('socketio', 'test-channel', {
             endpoint: 'http://localhost:8000',
             uuid: new Date(),
             state: testStateData
         });
-
         it('should create agent object', function(done) {
-            assert.isObject(agent, 'was successfully created');
+            assert.isObject(s, 'was successfully created');
             done();
         });
 
@@ -101,26 +102,50 @@ describe('Socket.io', function() {
 
         it('should get called when ready', function(done) {
 
-            agent.ready(function(){
+            s.ready(function(){
                 done();
             });
 
-            agent.subscribe(function (data) {});
+            s.subscribe(function (data) {});
 
         });
 
+        it('should get itself as a join event', function(done) {
+            
+            s.join(function(data) {
+                assert.isObject(data, 'event received');
+                done();
+            });
+
+        });
+
+
     });
+
 
     describe('publish subscribe', function() {
 
         it('should send and receive message', function(done) {
 
-            agent.subscribe(function (data) {
+            s.subscribe(function (data) {
                 assert.deepEqual(data, testMessageData, 'input data matches output data');
                 done();
             });
 
-            agent.publish(testMessageData);
+            s.publish(testMessageData);
+
+        });
+
+    });
+
+    describe('here now', function() {
+
+        it('at least one user online', function(done) {
+
+            s.hereNow(function(users) {
+                assert.isOk(users, 'At least one user online now');
+                done();
+            });
 
         });
 
