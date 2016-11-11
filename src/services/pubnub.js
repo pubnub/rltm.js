@@ -54,7 +54,7 @@ let map = (service, channel, config) => {
 
             },
             message: (m) => {
-                fn(m.message);
+                fn(m.message.uuid, m.message.data);
             }
         });
 
@@ -65,11 +65,14 @@ let map = (service, channel, config) => {
 
     };
 
-    this.publish = (message) => {
+    this.publish = (data) => {
         
         this.pubnub.publish({
             channel: channel,
-            message: message
+            message: {
+                uuid: config.uuid,
+                data: data
+            }
         });
 
     };
@@ -109,7 +112,6 @@ let map = (service, channel, config) => {
                 channels: [channel]
             },
             function (status) {
-
                 // handle state setting response
             }
         );
@@ -129,13 +131,7 @@ let map = (service, channel, config) => {
                 onTimeout(presenceEvent.uuid);
             }
             if(presenceEvent.action == "state-change") {
-
-                console.log('state called')
-
-                onState({
-                    uuid: presenceEvent.uuid, 
-                    state: presenceEvent.state
-                });
+                onState(presenceEvent.uuid, presenceEvent.state);
             }
 
         }

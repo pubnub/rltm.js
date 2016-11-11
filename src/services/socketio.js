@@ -57,8 +57,8 @@ let map = (service, channel, config) => {
 
     };
 
-    this.publish = (message) => {
-        this.socket.emit('publish', message);
+    this.publish = (data) => {
+        this.socket.emit('publish', config.uuid, data);
     };
 
 
@@ -73,20 +73,20 @@ let map = (service, channel, config) => {
     this.socket.on('connect', () => {
     });
 
-    this.socket.on('join', (data) => {
-        onJoin(data);
+    this.socket.on('join', (uuid, state) => {
+        onJoin(uuid, state);
     });
 
-    this.socket.on('leave', (data) => {
-        onLeave(data);
+    this.socket.on('leave', (uuid) => {
+        onLeave(uuid);
     });
 
-    this.socket.on('message', (data) => {
-        onSubscribe(data);
+    this.socket.on('message', (uuid, data) => {
+        onSubscribe(uuid, data);
     });
 
-    this.socket.on('state', (data) => {
-        onState(data);
+    this.socket.on('state', (uuid, state) => {
+        onState(uuid, state);
     });
 
     return this;
@@ -94,15 +94,3 @@ let map = (service, channel, config) => {
 };
 
 module.exports = map;
-
-// socket.emit('subscribe', {
-//     room: 'a-new-room',
-//     uuid: new Date().getTime(),
-//     state: {
-//         hello: 'world'
-//     }
-// });
-
-// setInterval(function(){
-
-// }, 5000);

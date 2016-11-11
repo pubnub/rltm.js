@@ -18,10 +18,7 @@ room.on('connection', function (socket) {
     socket.state = state;
 
     // echo globally (all clients) that a person has connected
-    room.emit('join', {
-      uuid: uuid,
-      state: state
-    });
+    room.emit('join', uuid, state);
 
   });
   
@@ -29,16 +26,13 @@ room.on('connection', function (socket) {
     
     users[uuid] = state;
 
-    room.emit('state', {
-      uuid: uuid, 
-      state: state
-    });    
+    room.emit('state', uuid, state);    
 
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on('publish', function (data, fn) {
-    io.of(channel).emit('message', data);
+  socket.on('publish', function (uuid, data, fn) {
+    io.of(channel).emit('message', uuid, data);
   });
 
   // when the client emits 'add user', this listens and executes
@@ -55,10 +49,7 @@ room.on('connection', function (socket) {
     delete users[socket.uuid];
 
     // echo globally that this client has left
-    socket.broadcast.emit('leave', {
-      state: socket.state,
-      uuid: socket.uuid
-    });
+    socket.broadcast.emit('leave', socket.uuid);
 
   });
 

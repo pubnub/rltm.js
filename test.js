@@ -73,7 +73,8 @@ agents.forEach(function(agent){
 
             it('should send and receive message', function(done) {
 
-                agent.subscribe(function(data) {
+                agent.subscribe(function(uuid, data) {
+                    assert.isOk(uuid, 'uuid is set')
                     assert.deepEqual(data, testMessageData, 'input data matches output data');
                     done();
                 });
@@ -104,9 +105,9 @@ agents.forEach(function(agent){
 
             it('should set state', function(done) {
 
-                agent.state(function(data) {
-                    assert.isOk(data.uuid, 'uuid supplied');
-                    assert.isObject(data.state, 'state is object');
+                agent.state(function(uuid, state) {
+                    assert.isOk(uuid, 'uuid supplied');
+                    assert.isObject(state, 'state is object');
                     done();
                 });
 
