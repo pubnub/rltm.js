@@ -1,6 +1,5 @@
 "use strict";
 
-
 let map = (service, channel, config) => {
 
     this.service = service;
