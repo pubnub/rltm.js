@@ -22,12 +22,12 @@ let testNewStateData = {
 };
 
 var agents = [
-    rltm('pubnub', new Date(), {
-        publishKey: 'pub-c-191d5212-dd99-4f2e-a8cf-fb63775232bc',
-        subscribeKey: 'sub-c-aa1d9fe8-a85b-11e6-a397-02ee2ddab7fe',
-        uuid: new Date(),
-        state: testStateData
-    }),
+    // rltm('pubnub', new Date(), {
+    //     publishKey: 'pub-c-191d5212-dd99-4f2e-a8cf-fb63775232bc',
+    //     subscribeKey: 'sub-c-aa1d9fe8-a85b-11e6-a397-02ee2ddab7fe',
+    //     uuid: new Date(),
+    //     state: testStateData
+    // }),
     rltm('socketio', {
         endpoint: 'http://localhost:8000',
         uuid: new Date(),
@@ -52,7 +52,7 @@ agents.forEach(function(agent){
         describe('ready', function() {
             
             it('should get called when ready', function(done) {
-                socket.ready(function(){
+                socket.emitter.on('ready', function(){
                     done();
                 });
 
@@ -60,7 +60,7 @@ agents.forEach(function(agent){
 
             it('should get itself as a join event', function(done) {
 
-                socket.join(function(uuid, state) {
+                socket.emitter.on('join', function(uuid, state) {
 
                     assert.isOk(uuid, 'uuid is set');
                     done();
@@ -69,7 +69,7 @@ agents.forEach(function(agent){
 
             });
 
-            socket = agent.subscribe('test-channel');
+            socket = agent.join('test-channel');
 
         });
 
@@ -77,7 +77,7 @@ agents.forEach(function(agent){
 
             it('should send and receive message', function(done) {
 
-                socket.message(function(message){
+                socket.emitter.on('message', function(message){
                     done();
                 });
 
@@ -107,7 +107,7 @@ agents.forEach(function(agent){
 
             it('should set state', function(done) {
 
-                socket.state(function(uuid, state) {
+                socket.emitter.on('state', function(uuid, state) {
                     assert.isOk(uuid, 'uuid supplied');
                     assert.isObject(state, 'state is object');
                     done();

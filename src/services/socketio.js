@@ -1,7 +1,9 @@
 "use strict";
-let io = require('socket.io-client');
+const EventEmitter = require('events');
 
 let map = (service, config) => {
+
+    let io = require('socket.io-client');
 
     this.service = service;
 
@@ -10,59 +12,29 @@ let map = (service, config) => {
     class Socket {
         constructor(channel) {
 
+            this.emitter = new EventEmitter();
+
             this.socket = io.connect(endpoint + '/' + channel, {multiplex: true})
 
-            this.onReady = () => {};
-            this.onJoin = () => {};
-            this.onLeave = () => {};
-            this.onTimeout = () => {};
-            this.onState = () => {};
-            this.onMessage = () => {};
-
-            this.ready = (fn) => {
-                this.onReady = fn;
-            };
-
-            this.join = (fn) => {
-                this.onJoin = fn;
-            }
-
-            this.leave = (fn) => {
-                this.onLeave = fn;
-            }
-
-            this.timeout = (fn) => {
-                this.onTimeout = fn;
-            }
-
-            this.state = (fn) => {
-                this.onState = fn;
-            }
-
-            this.message = (fn) => {
-                this.onMessage = fn;
-            }
-
             this.socket.on('connect', () => {
-                this.onReady();
-                this.socket.emit('start', config.uuid, config.state);   
-
+                this.socket.emit('start', config.uuid, config.state);
+                this.emitter.emit('ready');
             });
 
             this.socket.on('join', (uuid, state) => {
-                this.onJoin(uuid, state);
+                this.emitter.emit('join', uuid, state);
             });
 
             this.socket.on('leave', (uuid) => {
-                this.onLeave(uuid);
+                this.emitter.emit('leave', uuid);
             });
 
             this.socket.on('message', (uuid, data) => {
-                this.onMessage(uuid, data);
+                this.emitter.emit('message', uuid, data);
             });
 
             this.socket.on('state', (uuid, state) => {
-                this.onState(uuid, state);
+                this.emitter.emit('state', uuid, state);
             });
 
             this.publish = (data) => {
@@ -75,11 +47,11 @@ let map = (service, config) => {
                   cb(users);
                 });
 
-            }
+            };
 
             this.setState = (state) => {
                 this.socket.emit('setState', config.uuid, state);
-            }
+            };
 
             this.history = (cb) => {
                 
@@ -87,16 +59,16 @@ let map = (service, config) => {
                   cb(data);
                 });
 
-            }
+            };
 
             this.unsubscribe = (cb) => {
                 this.socket.off('message');
-            }
+            };
 
         }
     }
 
-    this.subscribe = (channel) => {
+    this.join = (channel) => {
 
         console.log('new socket', endpoint + '/' + channel)
         return new Socket(channel);
