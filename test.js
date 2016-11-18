@@ -52,21 +52,21 @@ describe(agent.service, function() {
     describe('ready', function() {
         
         it('should get called when ready', function(done) {
-            socket.on('ready', function(){
+            room.on('ready', function(){
                 done();
             });
         });
 
         it('should get itself as a join event', function(done) {
 
-            socket.on('join', function(uuid, state) {
+            room.on('join', function(uuid, state) {
                 assert.isOk(uuid, 'uuid is set');
                 done();
             });
 
         });
 
-        socket = agent.join('test-channel');
+        room = agent.join('test-channel');
 
     });
 
@@ -74,11 +74,11 @@ describe(agent.service, function() {
 
         it('should send and receive message', function(done) {
 
-            socket.on('message', function(message){
+            room.on('message', function(message){
                 done();
             });
 
-            socket.publish(testMessageData);
+            room.publish(testMessageData);
 
         });
 
@@ -88,7 +88,7 @@ describe(agent.service, function() {
 
         it('at least one user online', function(done) {
 
-            socket.hereNow(function(users) {
+            room.hereNow(function(users) {
 
                 assert.isOk(users, 'At least one user online now');
                 
@@ -104,13 +104,13 @@ describe(agent.service, function() {
 
         it('should set state', function(done) {
 
-            socket.on('state', function(uuid, state) {
+            room.on('state', function(uuid, state) {
                 assert.isOk(uuid, 'uuid supplied');
                 assert.isObject(state, 'state is object');
                 done();
             });
 
-            socket.setState(testNewStateData);
+            room.setState(testNewStateData);
 
         });
 
@@ -119,8 +119,8 @@ describe(agent.service, function() {
     describe('unsubscribe', function() {
 
         it('should disconnect', function() {
-            socket.unsubscribe();
-            socket.publish(testMessageData);
+            room.unsubscribe();
+            room.publish(testMessageData);
         });
 
     });
@@ -132,7 +132,7 @@ describe(agent.service, function() {
             this.timeout(8000);
 
             setTimeout(function() {
-                socket.history(function(history) {
+                room.history(function(history) {
 
                     assert.deepEqual(history[0].data, testMessageData, 'latest message is correct');
                     assert.isAbove(history.length, 1, 'at least one messages received');
