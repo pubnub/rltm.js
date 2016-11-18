@@ -37,34 +37,29 @@ let map = (service, config) => {
                 this.emitter.emit('state', uuid, state);
             });
 
-            this.publish = (data) => {
-                this.socket.emit('publish', config.uuid, data);
-            };
+        }
+        publish(data) {
+            this.socket.emit('publish', config.uuid, data);
+        }
+        hereNow(cb) {
+            
+            this.socket.emit('whosonline', null, function(users) {
+              cb(users);
+            });
 
-            this.hereNow = (cb) => {
-                
-                this.socket.emit('whosonline', null, function(users) {
-                  cb(users);
-                });
+        }
+        setState (state) {
+            this.socket.emit('setState', config.uuid, state);
+        }
+        history(cb) {
+                        
+            this.socket.emit('history', null, function(data) {
+              cb(data);
+            });
 
-            };
-
-            this.setState = (state) => {
-                this.socket.emit('setState', config.uuid, state);
-            };
-
-            this.history = (cb) => {
-                
-                this.socket.emit('history', null, function(data) {
-                  cb(data);
-                });
-
-            };
-
-            this.unsubscribe = (cb) => {
-                this.socket.off('message');
-            };
-
+        }
+        unsubscribe(cb) {
+            this.socket.off('message');
         }
     }
 
