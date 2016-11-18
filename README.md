@@ -70,7 +70,7 @@ room.publish({hello: world});
 ### Set User
 
 ```js
-room.on('state', function(uuid, state) {
+room.on('state', (uuid, state) => {
     console.log('user with uuid', uuid, 'was given state', state);
 });
 
@@ -92,7 +92,7 @@ room.on('leave', (uuid) => {
 ```
 
 ```js
-room.hereNow(function(users) {
+room.hereNow((users) => {
     console.log('users are online', users);
 });
 ```
@@ -100,7 +100,7 @@ room.hereNow(function(users) {
 ### Get Old Messages
 
 ```js
-room.history(function(history) {
+room.history((history) => {
     console.log('got array of all messages in channel', history);
 });
 ```
