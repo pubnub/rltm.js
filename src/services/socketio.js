@@ -9,32 +9,32 @@ let map = (service, config) => {
 
     let endpoint = config.endpoint;
 
-    class Socket {
+    class Socket extends EventEmitter{
         constructor(channel) {
 
-            this.emitter = new EventEmitter();
+            super();
 
             this.socket = io.connect(endpoint + '/' + channel, {multiplex: true})
 
             this.socket.on('connect', () => {
                 this.socket.emit('start', config.uuid, config.state);
-                this.emitter.emit('ready');
+                this.emit('ready');
             });
 
             this.socket.on('join', (uuid, state) => {
-                this.emitter.emit('join', uuid, state);
+                this.emit('join', uuid, state);
             });
 
             this.socket.on('leave', (uuid) => {
-                this.emitter.emit('leave', uuid);
+                this.emit('leave', uuid);
             });
 
             this.socket.on('message', (uuid, data) => {
-                this.emitter.emit('message', uuid, data);
+                this.emit('message', uuid, data);
             });
 
             this.socket.on('state', (uuid, state) => {
-                this.emitter.emit('state', uuid, state);
+                this.emit('state', uuid, state);
             });
 
         }
@@ -64,10 +64,7 @@ let map = (service, config) => {
     }
 
     this.join = (channel) => {
-
-        console.log('new socket', endpoint + '/' + channel)
         return new Socket(channel);
-
     };
 
     return this;

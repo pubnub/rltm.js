@@ -52,7 +52,7 @@ agents.forEach(function(agent){
         describe('ready', function() {
             
             it('should get called when ready', function(done) {
-                socket.emitter.on('ready', function(){
+                socket.on('ready', function(){
                     done();
                 });
 
@@ -60,7 +60,7 @@ agents.forEach(function(agent){
 
             it('should get itself as a join event', function(done) {
 
-                socket.emitter.on('join', function(uuid, state) {
+                socket.on('join', function(uuid, state) {
 
                     assert.isOk(uuid, 'uuid is set');
                     done();
@@ -77,7 +77,7 @@ agents.forEach(function(agent){
 
             it('should send and receive message', function(done) {
 
-                socket.emitter.on('message', function(message){
+                socket.on('message', function(message){
                     done();
                 });
 
@@ -107,7 +107,7 @@ agents.forEach(function(agent){
 
             it('should set state', function(done) {
 
-                socket.emitter.on('state', function(uuid, state) {
+                socket.on('state', function(uuid, state) {
                     assert.isOk(uuid, 'uuid supplied');
                     assert.isObject(state, 'state is object');
                     done();
