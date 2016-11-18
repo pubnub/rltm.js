@@ -1,6 +1,6 @@
 {
   "name": "rltm",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "abstraction for realtime frameworks",
   "main": "src/index.js",
   "scripts": {
@@ -25,11 +25,14 @@
   "homepage": "https://github.com/pubnub/rltm#readme",
   "devDependencies": {
     "browserify": "^13.1.0",
+    "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
     "browserify": "^13.1.0",
-    "pubnub": "^4.0.13"
+    "pubnub": "^4.0.13",
+    "socket.io": "^1.5.1",
+    "socket.io-client": "^1.5.1"
   }
 }
