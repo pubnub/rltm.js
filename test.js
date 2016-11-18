@@ -22,13 +22,13 @@ let testNewStateData = {
 };
 
 var agents = [
-    // new rltm('pubnub', new Date(), {
-    //     publishKey: 'pub-c-191d5212-dd99-4f2e-a8cf-fb63775232bc',
-    //     subscribeKey: 'sub-c-aa1d9fe8-a85b-11e6-a397-02ee2ddab7fe',
-    //     uuid: new Date(),
-    //     state: testStateData
-    // }),
-    new rltm('socketio', {
+    rltm('pubnub', new Date(), {
+        publishKey: 'pub-c-191d5212-dd99-4f2e-a8cf-fb63775232bc',
+        subscribeKey: 'sub-c-aa1d9fe8-a85b-11e6-a397-02ee2ddab7fe',
+        uuid: new Date(),
+        state: testStateData
+    }),
+    rltm('socketio', {
         endpoint: 'http://localhost:8000',
         uuid: new Date(),
         state: testStateData
@@ -69,7 +69,7 @@ agents.forEach(function(agent){
 
             });
 
-            socket = agent.subscribe('test-channel', function (data) {});
+            socket = agent.subscribe('test-channel');
 
         });
 

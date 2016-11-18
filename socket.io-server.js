@@ -15,9 +15,7 @@ room.on('connection', function (socket) {
   // when the client emits 'subscribe', this listens and executes
   socket.on('start', function (uuid, state) {
 
-    console.log('start called')
-
-    // store user in object
+    // statetore user in object
     users[uuid] = state;
 
     socket.uuid = uuid;

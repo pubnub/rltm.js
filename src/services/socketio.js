@@ -1,13 +1,11 @@
 "use strict";
+let io = require('socket.io-client');
 
 let map = (service, config) => {
 
     this.service = service;
 
     let endpoint = config.endpoint;
-    let io = require('socket.io-client');
-
-    let readyFired = false;
 
     class Socket {
         constructor(channel) {
@@ -98,7 +96,7 @@ let map = (service, config) => {
         }
     }
 
-    this.subscribe = (channel, fn) => {
+    this.subscribe = (channel) => {
 
         console.log('new socket', endpoint + '/' + channel)
         return new Socket(channel);
