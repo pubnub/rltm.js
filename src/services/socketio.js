@@ -7,9 +7,12 @@ let map = (service, config) => {
 
     this.service = service;
 
+    config.uuid = config.uuid || new Date();
+    config.state = config.state || {};
+
     let endpoint = config.endpoint;
 
-    class Socket extends EventEmitter{
+    class Socket extends EventEmitter {
         constructor(channel) {
 
             super();
