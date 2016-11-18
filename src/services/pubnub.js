@@ -146,7 +146,6 @@ let map = (service, config) => {
     }
 
     this.join = function(channel, uuid, state) {
-        console.log('new socket', channel)
         var s = new Socket(channel, uuid, state);
         return s;
     }
