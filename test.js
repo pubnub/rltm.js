@@ -22,13 +22,13 @@ let testNewStateData = {
 };
 
 var agents = [
-    new rltm('pubnub', new Date(), {
-        publishKey: 'pub-c-191d5212-dd99-4f2e-a8cf-fb63775232bc',
-        subscribeKey: 'sub-c-aa1d9fe8-a85b-11e6-a397-02ee2ddab7fe',
-        uuid: new Date(),
-        state: testStateData
-    }),
-    new rltm('socketio', 'test-channel', {
+    // new rltm('pubnub', new Date(), {
+    //     publishKey: 'pub-c-191d5212-dd99-4f2e-a8cf-fb63775232bc',
+    //     subscribeKey: 'sub-c-aa1d9fe8-a85b-11e6-a397-02ee2ddab7fe',
+    //     uuid: new Date(),
+    //     state: testStateData
+    // }),
+    new rltm('socketio', {
         endpoint: 'http://localhost:8000',
         uuid: new Date(),
         state: testStateData
@@ -36,6 +36,7 @@ var agents = [
 ];
 
 let agent = null;
+let socket = null;
 agents.forEach(function(agent){
 
     describe(agent.service, function() {
@@ -49,22 +50,26 @@ agents.forEach(function(agent){
         });
 
         describe('ready', function() {
-
+            
             it('should get called when ready', function(done) {
-
-                agent.ready(done);
-                agent.subscribe(function (data) {});
+                socket.ready(function(){
+                    done();
+                });
 
             });
 
             it('should get itself as a join event', function(done) {
 
-                agent.join(function(uuid, state) {
+                socket.join(function(uuid, state) {
+
                     assert.isOk(uuid, 'uuid is set');
                     done();
+
                 });
 
             });
+
+            socket = agent.subscribe('test-channel', function (data) {});
 
         });
 
@@ -72,13 +77,11 @@ agents.forEach(function(agent){
 
             it('should send and receive message', function(done) {
 
-                agent.subscribe(function(uuid, data) {
-                    assert.isOk(uuid, 'uuid is set')
-                    assert.deepEqual(data, testMessageData, 'input data matches output data');
+                socket.message(function(message){
                     done();
                 });
 
-                agent.publish(testMessageData);
+                socket.publish(testMessageData);
 
             });
 
@@ -88,7 +91,7 @@ agents.forEach(function(agent){
 
             it('at least one user online', function(done) {
 
-                agent.hereNow(function(users) {
+                socket.hereNow(function(users) {
 
                     assert.isOk(users, 'At least one user online now');
                     
@@ -104,13 +107,13 @@ agents.forEach(function(agent){
 
             it('should set state', function(done) {
 
-                agent.state(function(uuid, state) {
+                socket.state(function(uuid, state) {
                     assert.isOk(uuid, 'uuid supplied');
                     assert.isObject(state, 'state is object');
                     done();
                 });
 
-                agent.setState(testNewStateData);
+                socket.setState(testNewStateData);
 
             });
 
@@ -119,8 +122,8 @@ agents.forEach(function(agent){
         describe('unsubscribe', function() {
 
             it('should disconnect', function() {
-                agent.unsubscribe();
-                agent.publish(testMessageData);
+                socket.unsubscribe();
+                socket.publish(testMessageData);
             });
 
         });
@@ -132,7 +135,7 @@ agents.forEach(function(agent){
                 this.timeout(8000);
 
                 setTimeout(function() {
-                    agent.history(function(history) {
+                    socket.history(function(history) {
 
                         assert.deepEqual(history[0].data, testMessageData, 'latest message is correct');
                         assert.isAbove(history.length, 1, 'at least one messages received');

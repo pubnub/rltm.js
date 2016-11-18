@@ -1,3 +1,5 @@
+console.log('starting socket io server')
+
 var io = require('socket.io')(8000);
 
 var users = {};
@@ -12,6 +14,8 @@ room.on('connection', function (socket) {
   
   // when the client emits 'subscribe', this listens and executes
   socket.on('start', function (uuid, state) {
+
+    console.log('start called')
 
     // store user in object
     users[uuid] = state;

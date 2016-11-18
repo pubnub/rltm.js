@@ -1,103 +1,109 @@
 "use strict";
 
-let map = (service, channel, config) => {
+let map = (service, config) => {
 
     this.service = service;
-    // initialize RLTM with pubnub keys
 
-    let endpoint = config.endpoint + '/' + channel;
-
-    this.socket = require('socket.io-client')(endpoint);
+    let endpoint = config.endpoint;
+    let io = require('socket.io-client');
 
     let readyFired = false;
 
-    let onReady = () => {};
-    let onJoin = () => {};
-    let onLeave = () => {};
-    let onTimeout = () => {};
-    let onSubscribe = () => {};
-    let onMessage = () => {};
-    let onState = () => {};
+    class Socket {
+        constructor(channel) {
 
-    this.ready = (fn) => {
-        onReady = fn;
-    };
+            this.socket = io.connect(endpoint + '/' + channel, {multiplex: true})
 
-    this.join = (fn) => {
-        onJoin = fn;
-    }
+            this.onReady = () => {};
+            this.onJoin = () => {};
+            this.onLeave = () => {};
+            this.onTimeout = () => {};
+            this.onState = () => {};
+            this.onMessage = () => {};
 
-    this.leave = (fn) => {
-        onLeave = fn;
-    }
+            this.ready = (fn) => {
+                this.onReady = fn;
+            };
 
-    this.timeout = (fn) => {
-        onTimeout = fn;
-    }
+            this.join = (fn) => {
+                this.onJoin = fn;
+            }
 
-    this.state = (fn) => {
-        onState = fn;
-    }
+            this.leave = (fn) => {
+                this.onLeave = fn;
+            }
 
-    this.subscribe = (fn) => {
+            this.timeout = (fn) => {
+                this.onTimeout = fn;
+            }
 
-        onSubscribe = fn;
+            this.state = (fn) => {
+                this.onState = fn;
+            }
 
-        if(!readyFired) {
+            this.message = (fn) => {
+                this.onMessage = fn;
+            }
 
-            this.socket.emit('start', config.uuid, config.state);   
-            onReady();
-            readyFired = true;
+            this.socket.on('connect', () => {
+                this.onReady();
+                this.socket.emit('start', config.uuid, config.state);   
+
+            });
+
+            this.socket.on('join', (uuid, state) => {
+                this.onJoin(uuid, state);
+            });
+
+            this.socket.on('leave', (uuid) => {
+                this.onLeave(uuid);
+            });
+
+            this.socket.on('message', (uuid, data) => {
+                this.onMessage(uuid, data);
+            });
+
+            this.socket.on('state', (uuid, state) => {
+                this.onState(uuid, state);
+            });
+
+            this.publish = (data) => {
+                this.socket.emit('publish', config.uuid, data);
+            };
+
+            this.hereNow = (cb) => {
+                
+                this.socket.emit('whosonline', null, function(users) {
+                  cb(users);
+                });
+
+            }
+
+            this.setState = (state) => {
+                this.socket.emit('setState', config.uuid, state);
+            }
+
+            this.history = (cb) => {
+                
+                this.socket.emit('history', null, function(data) {
+                  cb(data);
+                });
+
+            }
+
+            this.unsubscribe = (cb) => {
+                this.socket.off('message');
+            }
+
         }
+    }
+
+    this.subscribe = (channel, fn) => {
+
+        console.log('new socket', endpoint + '/' + channel)
+        return new Socket(channel);
 
     };
-
-    this.publish = (data) => {
-        this.socket.emit('publish', config.uuid, data);
-    };
-
-    this.hereNow = (cb) => {
-        
-        this.socket.emit('whosonline', null, function(users) {
-          cb(users);
-        });
-
-    }
-
-    this.setState = (state) => {
-        this.socket.emit('setState', config.uuid, state);
-    }
-
-    this.history = (cb) => {
-        
-        this.socket.emit('history', null, function(data) {
-          cb(data);
-        });
-
-    }
-
-    this.unsubscribe = (cb) => {
-        this.socket.off('message');
-    }
-
-    this.socket.on('connect', () => {
-    });
-
-    this.socket.on('join', (uuid, state) => {
-        onJoin(uuid, state);
-    });
-
-    this.socket.on('leave', (uuid) => {
-        onLeave(uuid);
-    });
-
-    this.socket.on('message', (uuid, data) => {
-        onSubscribe(uuid, data);
-    });
-
-    this.socket.on('state', (uuid, state) => {
-        onState(uuid, state);
-    });
 
     return this;
 
