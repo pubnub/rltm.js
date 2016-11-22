@@ -8,17 +8,16 @@ let map = (service, config) => {
     this.service = service;
     
     config.uuid = config.uuid || new Date();
-    config.state = config.state || {};
 
     // initialize RLTM with pubnub keys
     let pubnub = new PubNub(config);
 
     class Socket extends EventEmitter {
-        constructor(channel, uuid, state) {
+        
+        constructor(channel, state) {
 
             super();
 
-            this.uuid = uuid || new Date();
             this.state = state || {};
 
             this.channel = channel;
@@ -145,8 +144,8 @@ let map = (service, config) => {
         }
     }
 
-    this.join = function(channel, uuid, state) {
-        var s = new Socket(channel, uuid, state);
+    this.join = function(channel, state) {
+        var s = new Socket(channel, state);
         return s;
     }
 
