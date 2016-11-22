@@ -74,7 +74,7 @@ room.on('state', (uuid, state) => {
     console.log('user with uuid', uuid, 'was given state', state);
 });
 
-socket.setState({idle: true});
+room.setState({idle: true});
 ```
 
 ### Who's in room
