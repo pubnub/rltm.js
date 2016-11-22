@@ -1,7 +1,8 @@
 const assert = require('chai').assert;
 
-var fork = require('child_process').fork;
-var child = fork('./socket.io-server');
+const fork = require('child_process').fork;
+const child = fork('./socket.io-server');
+const async = require('async');
 
 process.on('exit', function () {
     child.kill();
@@ -64,7 +65,7 @@ describe(agent.service, function() {
 
         });
         
-        room = agent.join('test-channel', testStateData);
+        room = agent.join(new Date(), testStateData);
 
     });
 
@@ -72,7 +73,9 @@ describe(agent.service, function() {
 
         it('should send and receive message', function(done) {
 
-            room.on('message', function(message){
+            room.on('message', function(uuid, message){
+
+                assert.deepEqual(message, testMessageData);
                 done();
             });
 
@@ -132,6 +135,7 @@ describe(agent.service, function() {
             setTimeout(function() {
                 room.history(function(history) {
 
+                    assert.isOk(history[0]);
                     assert.deepEqual(history[0].data, testMessageData, 'latest message is correct');
                     assert.isAbove(history.length, 1, 'at least one messages received');
 
@@ -139,6 +143,48 @@ describe(agent.service, function() {
 
                 });
             }, 2500);
+
+        });
+
+    });
+
+    describe('many rooms', function() {
+
+        it('should keep rooms seperate', function(done) {
+
+            async.parallel({
+                one: function(callback) {
+                    
+                    let input = {room: 1};
+
+                    let room1 = agent.join('room-1');
+
+                    room1.on('message', function(uuid, output) {
+                        assert.deepEqual(input, output);
+                        callback();
+                    });
+
+                    room1.publish(input);
+
+                },
+                two: function(callback) {
+
+                    let input = {room: 2};
+
+                    let room2 = agent.join('room-2');
+
+                    room2.on('message', function(uuid, output) {
+                        assert.deepEqual(input, output);
+                        callback();
+                    });
+
+                    room2.publish(input);
+                }
+            }, function(err, results) {
+
+                done();
+
+            });
 
         });
 

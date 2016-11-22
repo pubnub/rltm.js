@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/pubnub/rltm#readme",
   "devDependencies": {
+    "async": "^2.1.4",
     "browserify": "^13.1.0",
     "chai": "^3.5.0",
     "gulp": "^3.9.1",

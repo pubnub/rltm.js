@@ -54,6 +54,8 @@ io.on('connection', function (socket) {
   socket.on('publish', function (channel, uuid, data, fn) {
     saveHistory(channel, uuid, data);
     io.to(channel).emit('message', uuid, data);
+
+    console.log('publish', channel, uuid, data)
   });
 
   socket.on('whosonline', function (channel, data, fn) {
@@ -78,13 +80,8 @@ io.on('connection', function (socket) {
   });
 
   // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
-
-    delete users[socket.uuid];
-
-    // echo globally that this client has left
-    socket.broadcast.emit('leave', socket.uuid);
-
+  socket.on('leave', function (channel) {
+    socket.leave(channel);
   });
 
 

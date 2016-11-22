@@ -30,24 +30,31 @@ let map = (service, config) => {
 
                 },
                 message: (m) => {
-                    this.emit('message', m.message.uuid, m.message.data);
+
+                    if(channel == m.channel) {
+                        this.emit('message', m.message.uuid, m.message.data);   
+                    }
                 }
             });
 
             pubnub.addListener({
                 presence: (presenceEvent) => {
 
-                    if(presenceEvent.action == "join") {
-                        this.emit('join', presenceEvent.uuid, presenceEvent.state);
-                    }
-                    if(presenceEvent.action == "leave") {
-                        this.emit('leave', presenceEvent.uuid);
-                    }
-                    if(presenceEvent.action == "timeout") {
-                        this.emit('timeout', presenceEvent.uuid);
-                    }
-                    if(presenceEvent.action == "state-change") {
-                        this.emit('state', presenceEvent.uuid, presenceEvent.state);
+                    if(channel == presenceEvent.channel) {
+
+                        if(presenceEvent.action == "join") {
+                            this.emit('join', presenceEvent.uuid, presenceEvent.state);
+                        }
+                        if(presenceEvent.action == "leave") {
+                            this.emit('leave', presenceEvent.uuid);
+                        }
+                        if(presenceEvent.action == "timeout") {
+                            this.emit('timeout', presenceEvent.uuid);
+                        }
+                        if(presenceEvent.action == "state-change") {
+                            this.emit('state', presenceEvent.uuid, presenceEvent.state);
+                        }
+                           
                     }
 
                 }
@@ -144,8 +151,7 @@ let map = (service, config) => {
     }
 
     this.join = function(channel, state) {
-        var s = new Socket(channel, state);
-        return s;
+        return new Socket(channel, state);
     }
 
     return this;

@@ -19,7 +19,7 @@ let map = (service, config) => {
 
             this.channel = channel;
 
-            this.socket = io.connect(endpoint, {multiplex: true})
+            this.socket = io.connect(endpoint, {multiplex: true});
 
             this.socket.on('connect', () => {
                 this.socket.emit('channel', channel, config.uuid, config.state);
@@ -63,8 +63,8 @@ let map = (service, config) => {
             });
 
         }
-        unsubscribe(cb) {
-            this.socket.off('message');
+        unsubscribe(channel, cb) {
+            this.socket.emit('leave', channel);
         }
     }
 
