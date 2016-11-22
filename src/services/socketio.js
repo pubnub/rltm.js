@@ -17,8 +17,6 @@ let map = (service, config) => {
 
             super();
 
-            console.log('new socket')
-
             this.channel = channel;
 
             this.socket = io.connect(endpoint, {multiplex: true})
