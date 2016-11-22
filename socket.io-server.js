@@ -1,71 +1,87 @@
-console.log('starting socket io server')
+var io = require('socket.io')(9000);
 
-var io = require('socket.io')(8000);
+var states = {};
+var history = {};
 
-var users = {};
+var saveState = function(channel, uuid, state) {
 
-let channel = 'test-channel';
+  if(!states[channel]) {
+    states[channel] = {};
+  }
+  states[channel][uuid] = state;
 
-let room = io.of(channel);
+  return state;
 
-let messageHistory = [];
+}
 
-room.on('connection', function (socket) {
+var saveHistory = function(channel, uuid, data) {
+
+  if(!history[channel]) {
+    history[channel] = [];
+  }
+
+  history[channel].unshift({uuid: uuid, data: data});
+  if(history[channel].length > 100) {
+    history[channel].pop();
+  }
+
+  return history[channel];
+
+}
+
+io.on('connection', function (socket) {
   
   // when the client emits 'subscribe', this listens and executes
-  socket.on('start', function (uuid, state) {
+  socket.on('channel', function (channel, uuid, state) {
 
-    // statetore user in object
-    users[uuid] = state;
+    let room = io.of(channel);
+    socket.join(channel);
 
-    socket.uuid = uuid;
-    socket.state = state;
+    saveState(channel, uuid, state);
 
-    // echo globally (all clients) that a person has connected
-    room.emit('join', uuid, state);
-
-  });
-  
-  socket.on('setState', function (uuid, state) {
+    io.to(channel).emit('join', channel, uuid, state);
     
-    users[uuid] = state;
+    socket.on('setState', function (channel, uuid, state) {
 
-    room.emit('state', uuid, state);    
+      saveState(channel, uuid, state);
+      io.to(channel).emit('state', channel, uuid, state);
+
+    });
 
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on('publish', function (uuid, data, fn) {
-    
-    io.of(channel).emit('message', uuid, data);
+  socket.on('publish', function (channel, uuid, data, fn) {
 
-    messageHistory.unshift({uuid: uuid, data: data});
-    if(messageHistory.length > 100) {
-      messageHistory.pop();
-    }
+    saveHistory(channel, uuid, data);
+    io.to(channel).emit('message', channel, uuid, data);
 
   });
 
-  socket.on('whosonline', function (data, fn) {
+  socket.on('whosonline', function (channel, data, fn) {
 
-    // callback with user data
-    fn(users);
+    if(!states[channel]) {
+      fn({});
+    } else {
+      fn(states[channel]); 
+    }
 
   });
   
   // 
-  socket.on('history', function (data, fn) {
-    fn(messageHistory);
+  socket.on('history', function (channel, data, fn) {
+    
+    if(!history[channel]) {
+      fn([]);
+    } else {
+      fn(history[channel]); 
+    }
+
   });
 
   // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
-
-    delete users[socket.uuid];
-
-    // echo globally that this client has left
-    socket.broadcast.emit('leave', socket.uuid);
-
+  socket.on('leave', function(uuid, channel) {
+    socket.leave(channel);
   });
 
 
