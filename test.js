@@ -48,7 +48,7 @@ describe(agent.service, function() {
     });
 
     describe('ready', function() {
-        
+
         it('should get called when ready', function(done) {
             room.on('ready', function(){
                 done();
@@ -63,7 +63,7 @@ describe(agent.service, function() {
             });
 
         });
-
+        
         room = agent.join('test-channel', testStateData);
 
     });

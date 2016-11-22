@@ -13,7 +13,6 @@ let map = (service, config) => {
     let pubnub = new PubNub(config);
 
     class Socket extends EventEmitter {
-        
         constructor(channel, state) {
 
             super();

@@ -1,61 +1,80 @@
-console.log('starting socket io server')
-
 var io = require('socket.io')(8000);
 
-var users = {};
+var states = {};
+var history = {};
 
-let channel = 'test-channel';
+var saveState = function(channel, uuid, state) {
 
-let room = io.of(channel);
+  if(!states[channel]) {
+    states[channel] = {};
+  }
+  states[channel][uuid] = state;
 
-let messageHistory = [];
+  return state;
 
-room.on('connection', function (socket) {
+}
+
+var saveHistory = function(channel, uuid, data) {
+
+  if(!history[channel]) {
+    history[channel] = [];
+  }
+
+  history[channel].unshift({uuid: uuid, data: data});
+  if(history[channel].length > 100) {
+    history[channel].pop();
+  }
+
+  return history[channel];
+
+}
+
+io.on('connection', function (socket) {
   
   // when the client emits 'subscribe', this listens and executes
-  socket.on('start', function (uuid, state) {
+  socket.on('channel', function (channel, uuid, state) {
 
-    // statetore user in object
-    users[uuid] = state;
+    let room = io.of(channel);
+    socket.join(channel);
 
-    socket.uuid = uuid;
-    socket.state = state;
+    saveState(channel, uuid, state);
 
-    // echo globally (all clients) that a person has connected
-    room.emit('join', uuid, state);
-
-  });
-  
-  socket.on('setState', function (uuid, state) {
+    io.to(channel).emit('join', uuid, state);
     
-    users[uuid] = state;
+    socket.on('setState', function (channel, uuid, state) {
 
-    room.emit('state', uuid, state);    
+      saveState(channel, uuid, state);
+      io.to(channel).emit('state', uuid, state);
+
+    });
 
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on('publish', function (uuid, data, fn) {
-    
-    io.of(channel).emit('message', uuid, data);
-
-    messageHistory.unshift({uuid: uuid, data: data});
-    if(messageHistory.length > 100) {
-      messageHistory.pop();
-    }
-
+  socket.on('publish', function (channel, uuid, data, fn) {
+    saveHistory(channel, uuid, data);
+    io.to(channel).emit('message', uuid, data);
   });
 
-  socket.on('whosonline', function (data, fn) {
+  socket.on('whosonline', function (channel, data, fn) {
 
-    // callback with user data
-    fn(users);
+    if(!states[channel]) {
+      fn({});
+    } else {
+      fn(states[channel]); 
+    }
 
   });
   
   // 
-  socket.on('history', function (data, fn) {
-    fn(messageHistory);
+  socket.on('history', function (channel, data, fn) {
+    
+    if(!history[channel]) {
+      fn([]);
+    } else {
+      fn(history[channel]); 
+    }
+
   });
 
   // when the user disconnects.. perform this

@@ -17,10 +17,14 @@ let map = (service, config) => {
 
             super();
 
-            this.socket = io.connect(endpoint + '/' + channel, {multiplex: true})
+            console.log('new socket')
+
+            this.channel = channel;
+
+            this.socket = io.connect(endpoint, {multiplex: true})
 
             this.socket.on('connect', () => {
-                this.socket.emit('start', config.uuid, config.state);
+                this.socket.emit('channel', channel, config.uuid, config.state);
                 this.emit('ready');
             });
 
@@ -42,21 +46,21 @@ let map = (service, config) => {
 
         }
         publish(data) {
-            this.socket.emit('publish', config.uuid, data);
+            this.socket.emit('publish', this.channel, config.uuid, data);
         }
         hereNow(cb) {
             
-            this.socket.emit('whosonline', null, function(users) {
+            this.socket.emit('whosonline', this.channel, null, function(users) {
               cb(users);
             });
 
         }
         setState (state) {
-            this.socket.emit('setState', config.uuid, state);
+            this.socket.emit('setState', this.channel, config.uuid, state);
         }
         history(cb) {
                         
-            this.socket.emit('history', null, function(data) {
+            this.socket.emit('history', this.channel, null, function(data) {
               cb(data);
             });
 
