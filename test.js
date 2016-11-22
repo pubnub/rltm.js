@@ -31,7 +31,7 @@ var agents = {
         uuid: new Date().getTime()
     }),
     socketio: rltm('socketio', {
-        endpoint: 'http://localhost:8000',
+        endpoint: 'http://localhost:9000',
         uuid: new Date().getTime()
     })    
 };
