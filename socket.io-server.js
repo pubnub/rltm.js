@@ -39,12 +39,12 @@ io.on('connection', function (socket) {
 
     saveState(channel, uuid, state);
 
-    io.to(channel).emit('join', uuid, state);
+    io.to(channel).emit('join', channel, uuid, state);
     
     socket.on('setState', function (channel, uuid, state) {
 
       saveState(channel, uuid, state);
-      io.to(channel).emit('state', uuid, state);
+      io.to(channel).emit('state', channel, uuid, state);
 
     });
 
@@ -52,10 +52,10 @@ io.on('connection', function (socket) {
 
   // when the client emits 'add user', this listens and executes
   socket.on('publish', function (channel, uuid, data, fn) {
-    saveHistory(channel, uuid, data);
-    io.to(channel).emit('message', uuid, data);
 
-    console.log('publish', channel, uuid, data)
+    saveHistory(channel, uuid, data);
+    io.to(channel).emit('message', channel, uuid, data);
+
   });
 
   socket.on('whosonline', function (channel, data, fn) {
@@ -80,7 +80,7 @@ io.on('connection', function (socket) {
   });
 
   // when the user disconnects.. perform this
-  socket.on('leave', function (channel) {
+  socket.on('leave', function(uuid, channel) {
     socket.leave(channel);
   });
 

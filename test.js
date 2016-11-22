@@ -28,11 +28,11 @@ var agents = {
     pubnub: rltm('pubnub', {
         publishKey: 'pub-c-191d5212-dd99-4f2e-a8cf-fb63775232bc',
         subscribeKey: 'sub-c-aa1d9fe8-a85b-11e6-a397-02ee2ddab7fe',
-        uuid: new Date()
+        uuid: new Date().getTime()
     }),
     socketio: rltm('socketio', {
         endpoint: 'http://localhost:8000',
-        uuid: new Date()
+        uuid: new Date().getTime()
     })    
 };
 
@@ -65,7 +65,7 @@ describe(agent.service, function() {
 
         });
         
-        room = agent.join(new Date(), testStateData);
+        room = agent.join(new Date().getTime(), testStateData);
 
     });
 
@@ -74,7 +74,6 @@ describe(agent.service, function() {
         it('should send and receive message', function(done) {
 
             room.on('message', function(uuid, message){
-
                 assert.deepEqual(message, testMessageData);
                 done();
             });
@@ -121,7 +120,6 @@ describe(agent.service, function() {
 
         it('should disconnect', function() {
             room.unsubscribe();
-            room.publish(testMessageData);
         });
 
     });
@@ -137,12 +135,12 @@ describe(agent.service, function() {
 
                     assert.isOk(history[0]);
                     assert.deepEqual(history[0].data, testMessageData, 'latest message is correct');
-                    assert.isAbove(history.length, 1, 'at least one messages received');
+                    assert.isAbove(history.length, 0, 'at least one messages received');
 
                     done();
 
                 });
-            }, 2500);
+            }, 1000);
 
         });
 

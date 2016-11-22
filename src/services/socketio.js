@@ -7,7 +7,7 @@ let map = (service, config) => {
 
     this.service = service;
 
-    config.uuid = config.uuid || new Date();
+    config.uuid = config.uuid || new Date().getTime();
     config.state = config.state || {};
 
     let endpoint = config.endpoint;
@@ -26,20 +26,29 @@ let map = (service, config) => {
                 this.emit('ready');
             });
 
-            this.socket.on('join', (uuid, state) => {
-                this.emit('join', uuid, state);
+            this.socket.on('join', (channel, uuid, state) => {
+
+                if(this.channel == channel) {
+                    this.emit('join', uuid, state);   
+                }
             });
 
-            this.socket.on('leave', (uuid) => {
-                this.emit('leave', uuid);
+            this.socket.on('leave', (channel, uuid) => {
+                if(this.channel == channel) {
+                    this.emit('leave', uuid);
+                }
             });
 
-            this.socket.on('message', (uuid, data) => {
-                this.emit('message', uuid, data);
+            this.socket.on('message', (channel, uuid, data) => {
+                if(this.channel == channel) {
+                    this.emit('message', uuid, data);
+                }
             });
 
-            this.socket.on('state', (uuid, state) => {
-                this.emit('state', uuid, state);
+            this.socket.on('state', (channel, uuid, state) => {
+                if(this.channel == channel) {
+                    this.emit('state', uuid, state);
+                }
             });
 
         }
@@ -64,8 +73,9 @@ let map = (service, config) => {
 
         }
         unsubscribe(channel, cb) {
-            this.socket.emit('leave', channel);
+            this.socket.emit('leave', config.uuid, channel);
         }
+        
     }
 
     this.join = (channel) => {
