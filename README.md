@@ -7,8 +7,8 @@ Provides handy methods for rooms, clients, message history, and information abou
 Supported realtime hosts:
 
 ![](./assets/socketio.png)
-![](./assets/pubnub.png)
 
+![](./assets/pubnub.png)
 
 # Setup
 
