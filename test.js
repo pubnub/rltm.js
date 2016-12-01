@@ -8,23 +8,23 @@ process.on('exit', function () {
     child.kill();
 });
 
-let rltm = require('./src/index');
+const rltm = require('./src/index');
 
-let testMessageData = {
+const testMessageData = {
     rand: Math.random()
 };
 
-let testStateData = {
+const testStateData = {
     rand: Math.random()
 };
 
-let testNewStateData = {
+const testNewStateData = {
     rand: Math.random()
 };
 
-let connectionInput = process.env.CONNECTION || 'pubnub';
+const connectionInput = process.env.CONNECTION || 'pubnub';
 
-let connections = {
+const connections = {
     pubnub: rltm('pubnub', {
         publishKey: 'demo',
         subscribeKey: 'demo',
@@ -36,7 +36,7 @@ let connections = {
     })    
 };
 
-let connection = connections[connectionInput];
+const connection = connections[connectionInput];
 
 describe(connection.service, function() {
 

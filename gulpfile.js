@@ -8,7 +8,7 @@ gulp.task('compile', function () {
     browserify({
         entries: 'src/index.js',
         debug: true,
-        standalone: 'Rltm'
+        standalone: 'rltm'
     })
     .bundle()
     .pipe(source('rltm.js'))

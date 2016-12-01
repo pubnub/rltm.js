@@ -1,20 +1,55 @@
-# rltm.js
+![](./assets/rltm.js-logo.png)
 
-Universal API for integrating realtime providers. 
+Universal API realtime services. Integrate once and easily swap realtime infrastructure. 
 
-## Setup
+Provides handy methods for rooms, users, message history, and information about connected client.
 
-```js
-let rltm = require('rltm');
-```
+Supported realtime hosts:
 
-### Config
+![](./assets/socketio.png)
+![](./assets/pubnub.png)
+
+
+# Setup
+
+## NPM
+
+Install via NPM.
 
 ```sh
 npm install rltm --save
 ```
 
-#### PubNub
+Include library via require.
+
+```js
+const rltm = require('rltm');
+```
+
+## Web
+
+Install via bower or NPM
+
+```
+npm install rltm --save
+bower install rltm --save
+```
+
+Include library in HTML.
+
+```html
+<script src="./bower_components/web/rltm.js"></script>
+```
+
+# Configure
+
+Both the NodeJS and web libraries are configured with the ```rltm``` variable. The first parameter is the name of the realtime provider to use (```pubnub``` or ```socketio```) and the second parameter is a Javascript object with a config for that provider.
+
+```js
+let connection = rltm(provider, config);
+```
+
+## PubNub
 
 ```js
 let connection = rltm('pubnub', {
@@ -23,7 +58,9 @@ let connection = rltm('pubnub', {
 });
 ```
 
-#### Socket.io
+You can read about more config options on the official [PubNub Documentation](https://www.pubnub.com/docs/javascript/api-reference-sdk-v4#init).
+
+## Socket.io
 
 ```js
 let connection = rltm('socketio', {
@@ -31,11 +68,13 @@ let connection = rltm('socketio', {
 });
 ```
 
+You can read more about config options on the [Socket.io Documentation](http://socket.io/docs/client-api/#manager(url:string,-opts:object))
+
 See socket.io-server.js for an example socket.io implementation.
 
-## Usage
+# Usage
 
-### Identify User
+## Identify User
 
 ```js
 let connection = rltm('socketio', {
@@ -45,7 +84,7 @@ let connection = rltm('socketio', {
 });
 ```
 
-### Join a room
+## Join a room
 
 ```js
 room = connection.join('some-room');
@@ -57,7 +96,7 @@ room.on('ready', () => {
 });
 ```
 
-### Publish Subscribe
+## Publish Subscribe
 
 ```js
 room.on('message', (uuid, data) => {
@@ -67,7 +106,7 @@ room.on('message', (uuid, data) => {
 room.publish({hello: world});
 ```
 
-### Set User
+## Set User
 
 ```js
 room.on('state', (uuid, state) => {
@@ -77,7 +116,7 @@ room.on('state', (uuid, state) => {
 room.setState({idle: true});
 ```
 
-### Who's in room
+## Who's in room
 
 ```js
 room.on('join', (uuid, state) => {
@@ -97,7 +136,7 @@ room.hereNow((users) => {
 });
 ```
 
-### Get Old Messages
+## Get Old Messages
 
 ```js
 room.history((history) => {
