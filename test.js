@@ -22,9 +22,9 @@ let testNewStateData = {
     rand: Math.random()
 };
 
-let agentInput = process.env.AGENT || 'pubnub';
+let connectionInput = process.env.connection || 'pubnub';
 
-let agents = {
+let connections = {
     pubnub: rltm('pubnub', {
         publishKey: 'demo',
         subscribeKey: 'demo',
@@ -36,14 +36,14 @@ let agents = {
     })    
 };
 
-let agent = agents[agentInput];
+let connection = connections[connectionInput];
 
-describe(agent.service, function() {
+describe(connection.service, function() {
 
     describe('init', function() {
 
-        it('should create agent object', function() {
-            assert.isObject(agent, 'was successfully created');
+        it('should create connection object', function() {
+            assert.isObject(connection, 'was successfully created');
         });
 
     });
@@ -67,7 +67,7 @@ describe(agent.service, function() {
 
         });
         
-        room = agent.join(new Date().getTime(), testStateData);
+        room = connection.join(new Date().getTime(), testStateData);
 
     });
 
@@ -159,7 +159,7 @@ describe(agent.service, function() {
                     
                     let input = {room: 1};
 
-                    let room1 = agent.join('room-1');
+                    let room1 = connection.join('room-1');
 
                     room1.on('message', function(uuid, output) {
                         assert.deepEqual(input, output);
@@ -173,7 +173,7 @@ describe(agent.service, function() {
 
                     let input = {room: 2};
 
-                    let room2 = agent.join('room-2');
+                    let room2 = connection.join('room-2');
 
                     room2.on('message', function(uuid, output) {
                         assert.deepEqual(input, output);

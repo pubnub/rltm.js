@@ -17,7 +17,7 @@ npm install rltm --save
 #### PubNub
 
 ```js
-let agent = rltm('pubnub', {
+let connection = rltm('pubnub', {
     publishKey: 'YOUR_PUBNUB_PUBLISH_KEY',
     subscribeKey: 'YOUR_PUBNUB_SUBSCRIBE_KEY'
 });
@@ -26,7 +26,7 @@ let agent = rltm('pubnub', {
 #### Socket.io
 
 ```js
-let agent = rltm('socketio', {
+let connection = rltm('socketio', {
     endpoint: 'http://localhost:8000'
 });
 ```
@@ -38,7 +38,7 @@ See socket.io-server.js for an example socket.io implementation.
 ### Identify User
 
 ```js
-let agent = rltm('socketio', {
+let connection = rltm('socketio', {
     endpoint: 'http://localhost:8000',
     uuid: 'MY_USER_ID',
     state: {admin: true}
@@ -48,7 +48,7 @@ let agent = rltm('socketio', {
 ### Join a room
 
 ```js
-room = agent.join('some-room');
+room = connection.join('some-room');
 ```
 
 ```js
@@ -114,12 +114,12 @@ npm install mocha -g
 npm install chai -g
 ```
 
-Set environment variable ```AGENT``` to test service.
+Set environment variable ```connection``` to test service.
 
 ```sh
-env AGENT=pubnub mocha
+env connection=pubnub mocha
 ```
 
 ```sh
-env AGENT=socketio mocha
+env connection=socketio mocha
 ```
