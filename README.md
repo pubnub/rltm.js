@@ -2,7 +2,7 @@
 
 Universal API realtime services. Integrate once and easily swap realtime infrastructure. 
 
-Provides handy methods for rooms, users, message history, and information about connected client.
+Provides handy methods for rooms, clients, message history, and information about connected client.
 
 Supported realtime hosts:
 
@@ -43,16 +43,21 @@ Include library in HTML.
 
 # Configure
 
-Both the NodeJS and web libraries are configured with the ```rltm``` variable. The first parameter is the name of the realtime provider to use (```pubnub``` or ```socketio```) and the second parameter is a Javascript object with a config for that provider.
+Both the NodeJS and web libraries are configured with the ```rltm``` variable. 
 
 ```js
-let connection = rltm(provider, config);
+let client = rltm(provider, config);
 ```
+
+* ```provider``` is the name of the realtime provider to use (```pubnub``` or ```socketio```) 
+* ```config``` is a Javascript object with a config for that provider.
 
 ## PubNub
 
+PubNub is a cloud realtime provider. You only need to supply your PubNub publish and subscribe keys.
+
 ```js
-let connection = rltm('pubnub', {
+let client = rltm('pubnub', {
     publishKey: 'YOUR_PUBNUB_PUBLISH_KEY',
     subscribeKey: 'YOUR_PUBNUB_SUBSCRIBE_KEY'
 });
@@ -62,86 +67,173 @@ You can read about more config options on the official [PubNub Documentation](ht
 
 ## Socket.io
 
+You must run a Socket.io server yourself for this to work.
+
+```
+node ./socket.io-server.js
+```
+
+Then you can configure rltm to look for the server at that endpoint.
+
 ```js
-let connection = rltm('socketio', {
+let client = rltm('socketio', {
     endpoint: 'http://localhost:8000'
 });
 ```
 
 You can read more about config options on the [Socket.io Documentation](http://socket.io/docs/client-api/#manager(url:string,-opts:object))
 
-See socket.io-server.js for an example socket.io implementation.
-
 # Usage
 
-## Identify User
+## Clients
+
+Every ```client``` connected to rltm.js has two properties:
+
+1. ```uuid``` - a unique way to identify this ```client```
+1. ```state``` - arbitrary data associated with this ```client```
+
+You can provide these as parameters during lionization.
 
 ```js
-let connection = rltm('socketio', {
+let client = rltm('socketio', {
     endpoint: 'http://localhost:8000',
-    uuid: 'MY_USER_ID',
+    uuid: 'MY_UNIQUE_ID',
     state: {admin: true}
 });
 ```
 
-## Join a room
+## Rooms
+
+Realtime communication happens over ```rooms```. Rooms are like chat rooms, everybody in a room receives events sent by every other ```client``` in the room.
+
+A ```client``` can join a room by using the ```join``` method and supplying a room name. ```client```s who provide the same room name will be able to communicate with each other.
 
 ```js
-room = connection.join('some-room');
+room = client.join('room-name');
 ```
 
+This returns a ```room``` object which we can use to communicate with other ```client```s.
+
+### Join Event
+
+A room can subscribe to the ```join``` event to find out when other ```client```s join the room.
+
 ```js
-room.on('ready', () => {
-    console.log('connected to room');
+room.on('join', (uuid, state) => {
+    console.log('client with uuid', uuid, 'joined with state', state);
 });
 ```
 
-## Publish Subscribe
+## Messages
+
+### Subscribe
+
+When another ```client``` sends a message to the room, it will trigger the ```message``` event. The ```room``` can subscribe to that event with the ```on``` method.
 
 ```js
 room.on('message', (uuid, data) => {
     console.log('message received from uuid', uuid, 'with data', data);
 });
+```
 
+### Publish
+
+To send a message to the entire room, use the ```publish``` method.
+
+```js
 room.publish({hello: world});
 ```
 
-## Set User
+## Online ```client```s
+
+### Here Now
+
+A room can get a list of other ```client```s who have in the room by using the ```hereNow``` method.
 
 ```js
-room.on('state', (uuid, state) => {
-    console.log('user with uuid', uuid, 'was given state', state);
+room.hereNow((clients) => {
+    console.log('clients online', clients);
 });
-
-room.setState({idle: true});
 ```
 
-## Who's in room
+It will return a object of ```client```s who are currently connected to the room. The keys are the ```client```'s ```uuid```s and the values are their current ```state```.
 
 ```js
-room.on('join', (uuid, state) => {
-    console.log('user with uuid', uuid, 'joined with state', state);
-});
+{ 
+    uuid1: {
+        username: 'ianjennings'
+    },
+    uuid2: {
+        username: 'stephenblum'
+    }
+}
 ```
+
+### Leave Event
+
+A room can subscribe to the ```leave``` event to find out when a ```client``` leaves the room.
 
 ```js
 room.on('leave', (uuid) => {
-    console.log('user with uuid', uuid, 'has left');
+    console.log('client with uuid', uuid, 'has left');
 });
 ```
 
+### Leave
+
+A ```client``` can manually leave a room by using the ```leave``` method.
+
 ```js
-room.hereNow((users) => {
-    console.log('users are online', users);
+room.leave();
+```
+
+This will fire the ```leave``` event.
+
+## Set Client State
+
+A ```client``` state can be updated at any time by using the ```setState``` method. Supply the new ```state``` as the only parameter.
+
+```js
+room.setState({idle: true});
+```
+
+This will fire the ```state``` event which you can subscribe to with the ``on``` method. When fired you will get the ```uuid``` of the ```client``` and the new ```state```.
+
+```js
+room.on('state', (uuid, state) => {
+    console.log('client with uuid', uuid, 'was given state', state);
 });
 ```
 
 ## Get Old Messages
 
+A ```client``` can retrieve previously published messages in the ```room` by using the ```history``` method. 
+
 ```js
-room.history((history) => {
+room.history(() => {
     console.log('got array of all messages in channel', history);
 });
+```
+
+It will return the last 100 messages as an array of objects containing the ```uuid``` and ```data``` of every message. The array is sorted newest to oldest.
+
+```js
+[ 
+    { 
+        uuid: uuid2, 
+        data: { 
+            sentTime: '2pm',
+            text: 'boy howdy' 
+        } 
+    }, 
+    { 
+        uuid: uuid1, 
+        data: { 
+            sentTime: '1pm',
+            text: 'hello there' 
+        } 
+    }, 
+]
 ```
 
 ## Test
@@ -153,12 +245,12 @@ npm install mocha -g
 npm install chai -g
 ```
 
-Set environment variable ```connection``` to test service.
+Set environment variable ```CLIENT``` to test either provider.
 
 ```sh
-env connection=pubnub mocha
+env CLIENT=pubnub mocha
 ```
 
 ```sh
-env connection=socketio mocha
+env CLIENT=socketio mocha
 ```

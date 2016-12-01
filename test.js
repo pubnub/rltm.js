@@ -22,7 +22,7 @@ const testNewStateData = {
     rand: Math.random()
 };
 
-const connectionInput = process.env.CONNECTION || 'pubnub';
+const connectionInput = process.env.CLIENT || 'pubnub';
 
 const connections = {
     pubnub: rltm('pubnub', {
