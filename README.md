@@ -30,7 +30,7 @@ const rltm = require('rltm');
 
 Install via bower or NPM
 
-```
+```sh
 npm install rltm --save
 bower install rltm --save
 ```
@@ -144,7 +144,7 @@ To send a message to the entire room, use the ```publish``` method.
 room.publish({hello: world});
 ```
 
-## Online ```client```s
+## Online Clients
 
 ### Here Now
 
@@ -210,7 +210,7 @@ room.on('state', (uuid, state) => {
 A ```client``` can retrieve previously published messages in the ```room` by using the ```history``` method. 
 
 ```js
-room.history(() => {
+room.history((history) => {
     console.log('got array of all messages in channel', history);
 });
 ```
