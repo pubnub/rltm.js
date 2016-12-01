@@ -90,9 +90,9 @@ You can read more about config options on the [Socket.io Documentation](http://s
 Every ```client``` connected to rltm.js has two properties:
 
 1. ```uuid``` - a unique way to identify this ```client```
-1. ```state``` - arbitrary data associated with this ```client```
+1. ```state``` - data associated with this ```client```
 
-You can provide these as parameters during lionization.
+You can provide these as parameters during initialization.
 
 ```js
 let client = rltm('socketio', {
@@ -104,9 +104,9 @@ let client = rltm('socketio', {
 
 ## Rooms
 
-Realtime communication happens over ```rooms```. Rooms are like chat rooms, everybody in a room receives events sent by every other ```client``` in the room.
+Realtime communication happens over ```room```s. ```room```s are like chat rooms, everybody in a ```room``` receives events sent by every other ```client```.
 
-A ```client``` can join a room by using the ```join``` method and supplying a room name. ```client```s who provide the same room name will be able to communicate with each other.
+A ```client``` can join a ```room``` by using the ```join()``` method and supplying a ```room``` identifier. ```client```s who provide the same  identifier will be able to communicate with each other.
 
 ```js
 room = client.join('room-name');
@@ -128,7 +128,7 @@ room.on('join', (uuid, state) => {
 
 ### Subscribe
 
-When another ```client``` sends a message to the room, it will trigger the ```message``` event. The ```room``` can subscribe to that event with the ```on``` method.
+When another ```client``` sends a message to the room, it will trigger the ```message``` event. The ```room``` can subscribe to that event with the ```on()``` method.
 
 ```js
 room.on('message', (uuid, data) => {
@@ -138,7 +138,7 @@ room.on('message', (uuid, data) => {
 
 ### Publish
 
-To send a message to the entire room, use the ```publish``` method.
+To send a message to the entire room, use the ```publish()``` method.
 
 ```js
 room.publish({hello: world});
@@ -148,7 +148,7 @@ room.publish({hello: world});
 
 ### Here Now
 
-A room can get a list of other ```client```s who have in the room by using the ```hereNow``` method.
+A ```room``` can get a list of other ```client```s who have in the ```room``` by using the ```hereNow()``` method.
 
 ```js
 room.hereNow((clients) => {
@@ -156,7 +156,7 @@ room.hereNow((clients) => {
 });
 ```
 
-It will return a object of ```client```s who are currently connected to the room. The keys are the ```client```'s ```uuid```s and the values are their current ```state```.
+It will return a object of ```client```s who are currently connected to the ```room```. The keys are the ```client```'s ```uuid```s and the values are their current ```state```.
 
 ```js
 { 
@@ -171,7 +171,7 @@ It will return a object of ```client```s who are currently connected to the room
 
 ### Leave Event
 
-A room can subscribe to the ```leave``` event to find out when a ```client``` leaves the room.
+A ```room``` can subscribe to the ```leave``` event to find out when a ```client``` leaves.
 
 ```js
 room.on('leave', (uuid) => {
@@ -181,7 +181,7 @@ room.on('leave', (uuid) => {
 
 ### Leave
 
-A ```client``` can manually leave a room by using the ```leave``` method.
+A ```client``` can manually leave a ```room``` by using the ```leave()``` method.
 
 ```js
 room.leave();
@@ -191,13 +191,13 @@ This will fire the ```leave``` event.
 
 ## Set Client State
 
-A ```client``` state can be updated at any time by using the ```setState``` method. Supply the new ```state``` as the only parameter.
+A ```client``` state can be updated at any time by using the ```setState()``` method. Supply the new ```state``` as the only parameter.
 
 ```js
 room.setState({idle: true});
 ```
 
-This will fire the ```state``` event which you can subscribe to with the ``on``` method. When fired you will get the ```uuid``` of the ```client``` and the new ```state```.
+This will fire the ```state``` event which you can subscribe to with the ``on()``` method. When fired you will get the ```uuid``` of the ```client``` and the new ```state```.
 
 ```js
 room.on('state', (uuid, state) => {
@@ -207,7 +207,7 @@ room.on('state', (uuid, state) => {
 
 ## Get Old Messages
 
-A ```client``` can retrieve previously published messages in the ```room` by using the ```history``` method. 
+A ```client``` can retrieve previously published messages in the ```room` by using the ```history()``` method. 
 
 ```js
 room.history((history) => {
