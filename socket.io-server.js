@@ -1,65 +1,92 @@
-var io = require('socket.io')(9000);
+// require socket.io module
+const io = require('socket.io')(9000);
 
-var states = {};
-var history = {};
+// stores user states per room
+const states = {};
 
-var saveState = function(channel, uuid, state) {
+// stores published messages per room
+const history = {};
 
+// saves state to ```states``` variable
+const saveState = function(channel, uuid, state) {
+
+  // since this is per channel, create channel object if doesn't exist
   if(!states[channel]) {
     states[channel] = {};
   }
+
+  // save state to the channel based on user uuid
   states[channel][uuid] = state;
 
+  // return given state
   return state;
 
 }
 
-var saveHistory = function(channel, uuid, data) {
+// saves published messages to ```history``` variable
+const saveHistory = function(channel, uuid, data) {
 
+  // create an array for this channel if it doesn't exist
   if(!history[channel]) {
     history[channel] = [];
   }
 
+  // push the newest uuid and data to the front of the array
   history[channel].unshift({uuid: uuid, data: data});
+
+  // if we have more than 100 messages for this channel, remove the first
   if(history[channel].length > 100) {
     history[channel].pop();
   }
 
+  // return the entire history
   return history[channel];
 
 }
 
+// when a new rltm.js client connects
 io.on('connection', function (socket) {
   
-  // when the client emits 'subscribe', this listens and executes
+  // when the client calls rltm.join() this is called
   socket.on('channel', function (channel, uuid, state) {
 
-    let room = io.of(channel);
+    // have the socket join the channel
     socket.join(channel);
 
+    // save the initial state sent with the client
     saveState(channel, uuid, state);
 
+    // send the 'join' event to everyone else in the channel
     io.to(channel).emit('join', channel, uuid, state);
-    
-    socket.on('setState', function (channel, uuid, state) {
-
-      saveState(channel, uuid, state);
-      io.to(channel).emit('state', channel, uuid, state);
-
-    });
 
   });
 
-  // when the client emits 'add user', this listens and executes
+  // client sets the state
+  socket.on('setState', function (channel, uuid, state) {
+
+    // save the set state into the server memory
+    saveState(channel, uuid, state);
+
+    // tell all other clients state was set
+    io.to(channel).emit('state', channel, uuid, state);
+
+  });
+
+  // client emits a message
   socket.on('publish', function (channel, uuid, data, fn) {
 
+    // save the message to the history array in memory
     saveHistory(channel, uuid, data);
+
+    // tell all other clients of the new message
     io.to(channel).emit('message', channel, uuid, data);
 
   });
 
+  // client wants to know whos online
   socket.on('whosonline', function (channel, data, fn) {
 
+    // respond with what we know about the current clients for this channel
     if(!states[channel]) {
       fn({});
     } else {
@@ -68,9 +95,10 @@ io.on('connection', function (socket) {
 
   });
   
-  // 
+  // client wants the history for this channel
   socket.on('history', function (channel, data, fn) {
     
+    // respond with history array if it exists
     if(!history[channel]) {
       fn([]);
     } else {
@@ -79,9 +107,12 @@ io.on('connection', function (socket) {
 
   });
 
-  // when the user disconnects.. perform this
+  // client disconnects manually
   socket.on('leave', function(uuid, channel) {
+
+    // call tell socket.io to disconnect
     socket.leave(channel);
+
   });
 
 

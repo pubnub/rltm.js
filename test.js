@@ -8,23 +8,23 @@ process.on('exit', function () {
     child.kill();
 });
 
-let rltm = require('./src/index');
+const rltm = require('./src/index');
 
-let testMessageData = {
+const testMessageData = {
     rand: Math.random()
 };
 
-let testStateData = {
+const testStateData = {
     rand: Math.random()
 };
 
-let testNewStateData = {
+const testNewStateData = {
     rand: Math.random()
 };
 
-var agentInput = process.env.AGENT || 'pubnub';
+const connectionInput = process.env.CLIENT || 'pubnub';
 
-var agents = {
+const connections = {
     pubnub: rltm('pubnub', {
         publishKey: 'demo',
         subscribeKey: 'demo',
@@ -36,14 +36,14 @@ var agents = {
     })    
 };
 
-var agent = agents[agentInput];
+const connection = connections[connectionInput];
 
-describe(agent.service, function() {
+describe(connection.service, function() {
 
     describe('init', function() {
 
-        it('should create agent object', function() {
-            assert.isObject(agent, 'was successfully created');
+        it('should create connection object', function() {
+            assert.isObject(connection, 'was successfully created');
         });
 
     });
@@ -58,6 +58,8 @@ describe(agent.service, function() {
 
         it('should get itself as a join event', function(done) {
 
+            this.timeout(6000);
+
             room.on('join', function(uuid, state) {
                 assert.isOk(uuid, 'uuid is set');
                 done();
@@ -65,7 +67,7 @@ describe(agent.service, function() {
 
         });
         
-        room = agent.join(new Date().getTime(), testStateData);
+        room = connection.join(new Date().getTime(), testStateData);
 
     });
 
@@ -148,14 +150,15 @@ describe(agent.service, function() {
 
     describe('many rooms', function() {
 
-        it('should keep rooms seperate', function(done) {
+        it('should keep rooms separate', function(done) {
+
+            this.timeout(6000);
 
             async.parallel({
                 one: function(callback) {
                     
                     let input = {room: 1};
-
-                    let room1 = agent.join('room-1');
+                    let room1 = connection.join('room-1');
 
                     room1.on('message', function(uuid, output) {
                         assert.deepEqual(input, output);
@@ -168,8 +171,7 @@ describe(agent.service, function() {
                 two: function(callback) {
 
                     let input = {room: 2};
-
-                    let room2 = agent.join('room-2');
+                    let room2 = connection.join('room-2');
 
                     room2.on('message', function(uuid, output) {
                         assert.deepEqual(input, output);
