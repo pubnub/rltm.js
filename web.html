@@ -1,38 +1,54 @@
 <!DOCTYPE html>
 <html>
-<body>
-    <script src="./web/rltm.js"></script>
-    <script type="text/javascript">
-        var a = new Rltm({
-            subscribeKey: 'sub-c-28e05466-8c18-11e6-a68c-0619f8945a4f',
-            publishKey: 'pub-c-72832def-4ca3-4802-971d-68112db1b30a'
-        });
+    <head>
+        <title>Rltm.js Tester</title>
+    </head>
+    <body>
+        <script src="./web/rltm.js"></script>
+        <script type="text/javascript">
 
-        pubnub = new Rltm({
-            publishKey : 'demo',
-            subscribeKey : 'demo'
-        })
-         
-        setInterval(function(){
+            const connections = {
+                pubnub: new Rltm('pubnub', {
+                    publishKey: 'demo',
+                    subscribeKey: 'demo',
+                    uuid: new Date().getTime()
+                }),
+                socketio: new Rltm('socketio', {
+                    // must run socketio-server.js 
+                    endpoint: 'http://localhost:9000',
+                    uuid: new Date().getTime()
+                })    
+            };
 
-            a.publish({
-                channel : "hello_world",
-                message : "Hello from PubNub Docs!"
-            }, function(status, response) {
-                console.log('published', status);
+            const connection = connections['pubnub'];
+
+            console.log(connection)
+
+            room = connection.join(new Date().getTime());
+
+            let i = 1;
+     
+            setInterval(function(){
+
+                room.publish({
+                    i: i,
+                    sentTime: new Date().getTime()
+                });
+
+                i++;
+
+            }, 1000);
+     
+            room.on('message', function(uuid, message){
+
+                let latency = new Date().getTime() - message.sentTime;
+
+                document.body.innerHTML = 
+                    document.body.innerHTML + message.i + ' Latency: ' 
+                    + latency + 'ms <br/>';
+
             });
 
-        }, 1000);
-               
-        a.addListener({
-            message: function(message) {
-                console.log("subscribed", message);
-            }
-        });
-
-        a.subscribe({
-            channels: ['hello_world'] 
-        });
-    </script>
-</body>
+        </script>
+    </body>
 </html>

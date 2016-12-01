@@ -1,7 +1,7 @@
 "use strict";
 const EventEmitter = require('events');
 
-let map = (service, config) => {
+module.exports = function (service, config) {
 
     let io = require('socket.io-client');
 
@@ -85,5 +85,3 @@ let map = (service, config) => {
     return this;
 
 };
-
-module.exports = map;

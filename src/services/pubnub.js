@@ -3,7 +3,7 @@ const EventEmitter = require('events');
 
 let PubNub = require('pubnub');
 
-let map = (service, config) => {
+module.exports = function(service, config) {
 
     this.service = service;
     
@@ -157,5 +157,3 @@ let map = (service, config) => {
     return this;
 
 };
-
-module.exports = map;
