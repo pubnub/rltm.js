@@ -8,6 +8,7 @@ const PubNub = require('pubnub');
 
 // represents a connection to a single channel
 class Room extends EventEmitter {
+
     constructor(pubnub, channel, uuid, state) {
 
         // call the EventEmitter constructor
@@ -27,6 +28,7 @@ class Room extends EventEmitter {
 
         // use the PubNub library to listen for messages
         this.pubnub.addListener({
+
             status: (statusEvent) => {
 
                 // detect if this is a connection event on this channel
@@ -38,6 +40,7 @@ class Room extends EventEmitter {
 
                 }
             },
+
             message: (m) => {
 
                 // if message is sent to this specific channel
@@ -52,6 +55,7 @@ class Room extends EventEmitter {
 
         // add listeners for other PubNub events
         this.pubnub.addListener({
+            
             presence: (presenceEvent) => {
 
                 // make sure channel matches this channel
