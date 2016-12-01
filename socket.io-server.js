@@ -50,8 +50,7 @@ io.on('connection', function (socket) {
   // when the client calls rltm.join() this is called
   socket.on('channel', function (channel, uuid, state) {
 
-    //  add the client to the socket.io channel
-    let room = io.of(channel);
+    // have the socket join the channel
     socket.join(channel);
 
     // save the initial state sent with the client
@@ -76,11 +75,14 @@ io.on('connection', function (socket) {
   // client emits a message
   socket.on('publish', function (channel, uuid, data, fn) {
 
+    console.log('server-publish', channel, uuid, data)
+
     // save the message to the history array in memory
     saveHistory(channel, uuid, data);
 
     // tell all other clients of the new message
     io.to(channel).emit('message', channel, uuid, data);
+    console.log('letting cleints know on channel', channel)
 
   });
 

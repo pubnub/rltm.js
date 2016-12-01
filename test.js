@@ -22,7 +22,7 @@ let testNewStateData = {
     rand: Math.random()
 };
 
-let connectionInput = process.env.connection || 'pubnub';
+let connectionInput = process.env.CONNECTION || 'pubnub';
 
 let connections = {
     pubnub: rltm('pubnub', {
@@ -150,7 +150,7 @@ describe(connection.service, function() {
 
     describe('many rooms', function() {
 
-        it('should keep rooms seperate', function(done) {
+        it('should keep rooms separate', function(done) {
 
             this.timeout(6000);
 
@@ -158,12 +158,15 @@ describe(connection.service, function() {
                 one: function(callback) {
                     
                     let input = {room: 1};
-
                     let room1 = connection.join('room-1');
 
                     room1.on('message', function(uuid, output) {
                         assert.deepEqual(input, output);
                         callback();
+                    });
+
+                    room1.on('ready', function(){
+                        console.log('room 1 ready');
                     });
 
                     room1.publish(input);
@@ -172,12 +175,15 @@ describe(connection.service, function() {
                 two: function(callback) {
 
                     let input = {room: 2};
-
                     let room2 = connection.join('room-2');
 
                     room2.on('message', function(uuid, output) {
                         assert.deepEqual(input, output);
                         callback();
+                    });
+
+                    room2.on('ready', function(){
+                        console.log('room 2 ready');
                     });
 
                     room2.publish(input);
