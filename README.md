@@ -197,7 +197,7 @@ A ```client``` state can be updated at any time by using the ```setState()``` me
 room.setState({idle: true});
 ```
 
-This will fire the ```state``` event which you can subscribe to with the ``on()``` method. When fired you will get the ```uuid``` of the ```client``` and the new ```state```.
+This will fire the ```state``` event which you can subscribe to with the ```on()``` method. When fired you will get the ```uuid``` of the ```client``` and the new ```state```.
 
 ```js
 room.on('state', (uuid, state) => {
