@@ -8,7 +8,7 @@ const io = require('socket.io-client');
 
 // represents a connection to a single channel
 class Room extends EventEmitter {
-    constructor(socket, channel, uuid, state) {
+    constructor(endpoint, channel, uuid, state) {
 
         // call the EventEmitter constructor
         super();
@@ -20,7 +20,10 @@ class Room extends EventEmitter {
         this.channel = channel;
 
         // save socket in the instance of room
-        this.socket = socket;
+        // this.socket = socket;
+
+        // create a connection to the socketio endpoint
+        this.socket = io.connect(endpoint, {multiplex: true});
 
         // subscribe to the socket.io connection event
         this.socket.on('connect', () => {
@@ -61,8 +64,6 @@ class Room extends EventEmitter {
         // a message is sent from the srever
         this.socket.on('message', (channel, uuid, data) => {
 
-            console.log('channel message', channel)
-
             // make sure it is on this channel
             if(this.channel == channel) {
 
@@ -86,8 +87,6 @@ class Room extends EventEmitter {
 
     }
     publish(data) {
-
-        console.log('publish', this.channel, data)
 
         // publish the data to the socket.io server
         this.socket.emit('publish', this.channel, this.uuid, data);
@@ -138,14 +137,8 @@ module.exports = function (service, config) {
     // set this uuid if it is not set
     config.state = config.state || {};
 
-    // create a connection to the socketio endpoint
-    let socket = io.connect(config.endpoint, {multiplex: true});
-
     this.join = (channel, state) => {
-
-        console.log("new room created", channel)
-
-        return new Room(socket, channel, config.uuid, config.state);
+        return new Room(config.endpoint, channel, config.uuid, config.state);
     };
 
     return this;

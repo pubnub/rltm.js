@@ -165,10 +165,6 @@ describe(connection.service, function() {
                         callback();
                     });
 
-                    room1.on('ready', function(){
-                        console.log('room 1 ready');
-                    });
-
                     room1.publish(input);
 
                 },
@@ -180,10 +176,6 @@ describe(connection.service, function() {
                     room2.on('message', function(uuid, output) {
                         assert.deepEqual(input, output);
                         callback();
-                    });
-
-                    room2.on('ready', function(){
-                        console.log('room 2 ready');
                     });
 
                     room2.publish(input);

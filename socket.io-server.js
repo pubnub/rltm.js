@@ -75,14 +75,11 @@ io.on('connection', function (socket) {
   // client emits a message
   socket.on('publish', function (channel, uuid, data, fn) {
 
-    console.log('server-publish', channel, uuid, data)
-
     // save the message to the history array in memory
     saveHistory(channel, uuid, data);
 
     // tell all other clients of the new message
     io.to(channel).emit('message', channel, uuid, data);
-    console.log('letting cleints know on channel', channel)
 
   });
 
