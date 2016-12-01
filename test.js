@@ -22,9 +22,9 @@ let testNewStateData = {
     rand: Math.random()
 };
 
-var agentInput = process.env.AGENT || 'pubnub';
+let agentInput = process.env.AGENT || 'pubnub';
 
-var agents = {
+let agents = {
     pubnub: rltm('pubnub', {
         publishKey: 'demo',
         subscribeKey: 'demo',
@@ -36,7 +36,7 @@ var agents = {
     })    
 };
 
-var agent = agents[agentInput];
+let agent = agents[agentInput];
 
 describe(agent.service, function() {
 
@@ -57,6 +57,8 @@ describe(agent.service, function() {
         });
 
         it('should get itself as a join event', function(done) {
+
+            this.timeout(6000);
 
             room.on('join', function(uuid, state) {
                 assert.isOk(uuid, 'uuid is set');
@@ -149,6 +151,8 @@ describe(agent.service, function() {
     describe('many rooms', function() {
 
         it('should keep rooms seperate', function(done) {
+
+            this.timeout(6000);
 
             async.parallel({
                 one: function(callback) {
