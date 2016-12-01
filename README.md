@@ -232,7 +232,7 @@ It will return the last 100 messages as an array of objects containing the ```uu
             sentTime: '1pm',
             text: 'hello there' 
         } 
-    }, 
+    }
 ]
 ```
 
