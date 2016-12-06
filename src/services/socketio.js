@@ -20,6 +20,8 @@ class Room extends EventEmitter {
         // assign the channel parameter as a property
         this.channel = channel;
 
+        this.isReady = false;
+
         // create a connection to the socketio endpoint
         this.socket = io.connect(endpoint, {multiplex: true});
 
@@ -30,7 +32,8 @@ class Room extends EventEmitter {
             this.socket.emit('channel', channel, this.uuid, state);
 
             // tell the client the server is ready
-            this.emit('ready');
+            this.onReady();
+            this.isReady = true;
 
         });
 
@@ -83,6 +86,19 @@ class Room extends EventEmitter {
 
         });
 
+    }
+    ready(fn) {
+        
+        this.onReady = fn;
+        
+        if(this.isReady) {
+            this.onReady();
+        }
+
+    }
+    onReady() {
+        // waiting to be assigned by client
+        return;
     }
     publish(data) {
 

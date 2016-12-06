@@ -51,14 +51,14 @@ describe(connection.service, function() {
     describe('ready', function() {
 
         it('should get called when ready', function(done) {
-            room.on('ready', function(){
+            room.ready(() => {
                 done();
             });
         });
 
         it('should get itself as a join event', function(done) {
 
-            this.timeout(6000);
+            this.timeout(20000);
 
             room.on('join', function(uuid, state) {
                 assert.isOk(uuid, 'uuid is set');

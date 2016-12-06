@@ -5,6 +5,7 @@ const EventEmitter = require('events');
 
 // include the PubNub javascript sdk v4
 const PubNub = require('pubnub');
+let globalReady = false;
 
 // represents a connection to a single channel
 class Room extends EventEmitter {
@@ -26,6 +27,8 @@ class Room extends EventEmitter {
         // save pubnub in the instance of room
         this.pubnub = pubnub;
 
+        this.isReady = false;
+        
         // use the PubNub library to listen for messages
         this.pubnub.addListener({
 
@@ -33,14 +36,18 @@ class Room extends EventEmitter {
 
                 // detect if this is a connection event on this channel
                 if (statusEvent.category === "PNConnectedCategory" 
+                    && !this.isReady
                     && statusEvent.affectedChannels.indexOf(channel) > -1) {
-                 
+
                     // tell the client that first connection made
-                    this.emit('ready');
+                    this.onReady();
+                    globalReady = true;
 
                 }
-            },
+            }
+        });
 
+        this.pubnub.addListener({
             message: (m) => {
 
                 // if message is sent to this specific channel
@@ -50,12 +57,7 @@ class Room extends EventEmitter {
                     this.emit('message', m.message.uuid, m.message.data);   
 
                 }
-            }
-        });
-
-        // add listeners for other PubNub events
-        this.pubnub.addListener({
-            
+            },
             presence: (presenceEvent) => {
 
                 // make sure channel matches this channel
@@ -95,6 +97,25 @@ class Room extends EventEmitter {
             withPresence: true,
             state: state
         });
+
+    }
+
+    // ready is a callback and not an event because pubnub may be ready
+    // immediately, which doesn't allow time to register an event handler
+    // this can be solved with setTimeout(() => {}, 10) to let the 
+    onReady() {
+        // waiting to be assigned by client
+        return;
+    }
+
+    ready (fn) {
+        
+        this.onReady = fn;
+        
+        if(globalReady) {
+            this.onReady()
+            this.isReady = true;
+        }
 
     }
 
@@ -163,7 +184,7 @@ class Room extends EventEmitter {
     }
 
     history(cb) {
-        
+
         // retrieved the message history with PubNub
         this.pubnub.history({
             channel: this.channel,
@@ -176,7 +197,7 @@ class Room extends EventEmitter {
             // loop through response and push data to array
             for(let i in response.messages) {
                 data.push(response.messages[i].entry)
-            }
+            }   
 
             // reverse the array so newest are first
             data = data.reverse();
