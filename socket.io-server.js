@@ -62,13 +62,15 @@ io.on('connection', function (socket) {
   });
 
   // client sets the state
-  socket.on('setState', function (channel, uuid, state) {
+  socket.on('setState', function (channel, uuid, state, fn) {
 
     // save the set state into the server memory
     saveState(channel, uuid, state);
 
     // tell all other clients state was set
     io.to(channel).emit('state', channel, uuid, state);
+
+    fn();
 
   });
 
@@ -80,6 +82,8 @@ io.on('connection', function (socket) {
 
     // tell all other clients of the new message
     io.to(channel).emit('message', channel, uuid, data);
+
+    fn();
 
   });
 
@@ -96,8 +100,8 @@ io.on('connection', function (socket) {
   });
   
   // client wants the history for this channel
-  socket.on('history', function (channel, data, fn) {
-    
+  socket.on('history', function (channel, fn) {
+
     // respond with history array if it exists
     if(!history[channel]) {
       fn([]);
@@ -108,10 +112,12 @@ io.on('connection', function (socket) {
   });
 
   // client disconnects manually
-  socket.on('leave', function(uuid, channel) {
+  socket.on('leave', function(uuid, channel, fn) {
 
     // call tell socket.io to disconnect
     socket.leave(channel);
+
+    fn();
 
   });
 

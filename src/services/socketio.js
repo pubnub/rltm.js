@@ -102,60 +102,82 @@ class Room extends EventEmitter {
     }
     publish(data) {
 
-        // publish the data to the socket.io server
-        this.socket.emit('publish', this.channel, this.uuid, data);
+        return new Promise((resolve, reject) => {
+
+            // publish the data to the socket.io server
+            this.socket.emit('publish', this.channel, this.uuid, data, () =>{
+                resolve();
+            });
+
+        });
 
     }
-    hereNow(cb) {
+    hereNow() {
         
         // ask socket.io-server for a list of online users
-        this.socket.emit('whosonline', this.channel, null, function(users) {
+        return new Promise((resolve, reject) => {
+            
+            this.socket.emit('whosonline', this.channel, null, function(users) {
 
-            // callback with an object of users
-            cb(users);
+                // callback with an object of users
+                resolve(users);
+
+            });
 
         });
 
     }
     setState (state) {
+        
+        return new Promise((resolve, reject) => {
 
-        // tell socket.io-server to update this user's state
-        this.socket.emit('setState', this.channel, this.uuid, state);
-
-    }
-    history(cb) {
-                    
-        // ask socket.io-server for the history of messages published
-        this.socket.emit('history', this.channel, null, function(data) {
-            
-            // callback with an array of messages
-            cb(data);
+            // tell socket.io-server to update this user's state
+            this.socket.emit('setState', this.channel, this.uuid, state, () => {
+                resolve();
+            });
 
         });
 
     }
-    unsubscribe(channel, cb) {
+    history() {
+        
+        return new Promise((resolve, reject) => {
+                        
+            // ask socket.io-server for the history of messages published
+            this.socket.emit('history', this.channel, (data) => {
 
-        // manually disconnect from socket.io-server
-        this.socket.emit('leave', this.uuid, channel);
+                // callback with an array of messages
+                resolve(data);
+
+            });
+
+        });
+
+    }
+    unsubscribe(channel) {
+        
+        return new Promise((resolve, reject) => {
+
+            // manually disconnect from socket.io-server
+            this.socket.emit('leave', this.uuid, channel, () => {
+
+                resolve();
+
+            });
+
+        });
 
     }
     
 }
 
-module.exports = function (service, config) {
+module.exports = function (setup) {
 
     // convenience method to assign the service string name to itself
-    this.service = service;
-
-    // set a uuid if it is not set already
-    config.uuid = config.uuid || new Date().getTime();
-
-    // set this uuid if it is not set
-    config.state = config.state || {};
+    this.service = setup.service;
 
     this.join = (channel, state) => {
-        return new Room(config.endpoint, channel, config.uuid, config.state);
+        return new Room(setup.config.endpoint, channel, setup.config.uuid, setup.config.state);
     };
 
     return this;

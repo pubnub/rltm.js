@@ -25,14 +25,20 @@ const testNewStateData = {
 const connectionInput = process.env.CLIENT || 'pubnub';
 
 const connections = {
-    pubnub: rltm('pubnub', {
-        publishKey: 'demo',
-        subscribeKey: 'demo',
-        uuid: new Date().getTime()
+    pubnub: rltm({
+        service: 'pubnub', 
+        config: {
+            publishKey: 'demo',
+            subscribeKey: 'demo',
+            uuid: new Date().getTime()
+        }
     }),
-    socketio: rltm('socketio', {
-        endpoint: 'http://localhost:9000',
-        uuid: new Date().getTime()
+    socketio: rltm({
+        service: 'socketio', 
+        config: {
+            endpoint: 'http://localhost:9000',
+            uuid: new Date().getTime()
+        }
     })    
 };
 
@@ -51,14 +57,18 @@ describe(connection.service, function() {
     describe('ready', function() {
 
         it('should get called when ready', function(done) {
+            
+            room = connection.join(new Date().getTime(), testStateData);
+
             room.ready(() => {
                 done();
             });
+
         });
 
         it('should get itself as a join event', function(done) {
 
-            this.timeout(20000);
+            room = connection.join(new Date().getTime(), testStateData);
 
             room.on('join', function(uuid, state) {
                 assert.isOk(uuid, 'uuid is set');
@@ -66,8 +76,6 @@ describe(connection.service, function() {
             });
 
         });
-        
-        room = connection.join(new Date().getTime(), testStateData);
 
     });
 
@@ -90,12 +98,13 @@ describe(connection.service, function() {
 
         it('at least one user online', function(done) {
 
-            room.hereNow(function(users) {
+            room.hereNow().then(function(users) {
 
                 assert.isOk(users, 'At least one user online now');
-                
                 done();
 
+            }, function(err) {
+                assert.fail();
             });
 
         });
@@ -112,7 +121,11 @@ describe(connection.service, function() {
                 done();
             });
 
-            room.setState(testNewStateData);
+            room.setState(testNewStateData).then(function() {
+                // it worked
+            }, function(err) {
+                assert.fail();
+            });
 
         });
 
@@ -120,8 +133,10 @@ describe(connection.service, function() {
 
     describe('unsubscribe', function() {
 
-        it('should disconnect', function() {
-            room.unsubscribe();
+        it('should disconnect', function(done) {
+            room.unsubscribe().then(function(){
+                done();
+            });
         });
 
     });
@@ -133,7 +148,8 @@ describe(connection.service, function() {
             this.timeout(8000);
 
             setTimeout(function() {
-                room.history(function(history) {
+
+                room.history().then(function(history) {
 
                     assert.isOk(history[0]);
                     assert.deepEqual(history[0].data, testMessageData, 'latest message is correct');
@@ -141,7 +157,10 @@ describe(connection.service, function() {
 
                     done();
 
+                }, function() {
+                    assert.fail();
                 });
+
             }, 1000);
 
         });
