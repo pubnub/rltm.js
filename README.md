@@ -140,7 +140,7 @@ room.on('join', (uuid, state) => {
 
 ## Messages
 
-### Subscribe Event
+### Message Event
 
 When another ```client``` sends a message to the room, it will trigger the ```message``` event. The ```room``` can subscribe to that event with the ```on()``` method.
 
@@ -157,8 +157,6 @@ To send a message to the entire room, use the ```publish()``` method. Returns a 
 ```js
 room.publish({hello: world}).then(() => {
     console.log('message published');
-}, (err) => {
-    console.error(err);
 });
 ```
 
@@ -171,8 +169,6 @@ A ```room``` can get a list of other ```client```s who have in the ```room``` by
 ```js
 room.hereNow().then((clients) => {
     console.log('clients online', clients);
-}, function(err) => {
-    console.error(err);
 });
 ```
 
@@ -206,8 +202,6 @@ A ```client``` can manually leave a ```room``` by using the ```leave()``` method
 ```js
 room.leave().then(() => {
     console.log('left the room.');
-}, (err) => {
-    console.error(err);
 });
 ```
 
@@ -220,8 +214,6 @@ A ```client``` state can be updated at any time by using the ```setState()``` me
 ```js
 room.setState({idle: true}).then(() => {
     console.log('state set');
-}, function(err) {
-    console.error(err);
 });
 ```
 
@@ -240,8 +232,6 @@ A ```client``` can retrieve previously published messages in the ```room``` by u
 ```js
 room.history().then((history) => {
     console.log('got array of all messages in channel', history);
-}, (err) => {
-    console.error(err);
 });
 ```
 
