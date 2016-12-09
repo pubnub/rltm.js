@@ -143,19 +143,13 @@ class Room extends EventEmitter {
     
 }
 
-module.exports = function (service, config) {
+module.exports = function (setup) {
 
     // convenience method to assign the service string name to itself
-    this.service = service;
-
-    // set a uuid if it is not set already
-    config.uuid = config.uuid || new Date().getTime();
-
-    // set this uuid if it is not set
-    config.state = config.state || {};
+    this.service = setup.service;
 
     this.join = (channel, state) => {
-        return new Room(config.endpoint, channel, config.uuid, config.state);
+        return new Room(config.endpoint, channel, setup.config.uuid, setup.config.state);
     };
 
     return this;

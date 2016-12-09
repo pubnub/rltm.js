@@ -121,89 +121,124 @@ class Room extends EventEmitter {
 
     publish (data) {
 
-        // publish the given data over PubNub channel
-        this.pubnub.publish({
-            channel: this.channel,
-            message: {
-                uuid: this.uuid,
-                data: data
+        return new Promise((resolve, reject) => {
+          
+          // publish the given data over PubNub channel
+          this.pubnub.publish({
+              channel: this.channel,
+              message: {
+                  uuid: this.uuid,
+                  data: data
+              }
+          }, function(status, response) {
+
+            if(status.error) {
+                // if there's a problem publishing, reject
+                reject(status);
+            } else {
+                resolve();
             }
+
+          });
+
         });
 
     };
 
     hereNow(cb) {
+
+        return new Promise((resolve, reject) => {
         
-        // ask PubNub for information about connected clients in this channel
-        this.pubnub.hereNow({
-            channels: [this.channel],
-            includeUUIDs: true,
-            includeState: true
-        }, (status, response) => {
+            // ask PubNub for information about connected clients in this channel
+            this.pubnub.hereNow({
+                channels: [this.channel],
+                includeUUIDs: true,
+                includeState: true
+            }, (status, response) => {
 
-            if(status.error) {
-                // if there's a problem with the request log it
-                console.error(status, response);
-            } else {
+                if(status.error) {
+                    // if there's a problem with the request, reject
+                    reject(status)
+                } else {
 
-                // build a userlist in rltm.js format
-                let userList = {};
+                    // build a userlist in rltm.js format
+                    let userList = {};
 
-                // get the list of occupants in this channel
-                let occupants = response.channels[this.channel].occupants;
+                    // get the list of occupants in this channel
+                    let occupants = response.channels[this.channel].occupants;
 
-                // format the userList for rltm.js standard
-                for(let i in occupants) {
-                    userList[occupants[i].uuid] = occupants[i].state;
+                    // format the userList for rltm.js standard
+                    for(let i in occupants) {
+                        userList[occupants[i].uuid] = occupants[i].state;
+                    }
+
+                    // respond with formatted list
+                    resolve(userList);
+
                 }
 
-                // respond with the formatted list
-                cb(userList);
-            }
+            });
 
         });
 
     }
 
     setState(state) {
-        
-        // use PubNub state function to update state for channel
-        this.pubnub.setState({
-            state: state,
-            uuid: this.uuid,
-            channels: [this.channel]
-        }, function (status) {
+
+        return new Promise((resolve, reject) => {
             
-            if(status.error) {
-                // if there's a problem with the request log it
-                console.error(status, response);
-            }
+            // use PubNub state function to update state for channel
+            this.pubnub.setState({
+                state: state,
+                uuid: this.uuid,
+                channels: [this.channel]
+            }, function (status, response) {
+                
+                if(status.error) {
+                    // if there's a problem with the request log it
+                    reject(status);            
+                } else {
+                    resolve();
+                }
+
+            });
 
         });
 
     }
 
     history(cb) {
+        
+        return new Promise((resolve, reject) => {
 
-        // retrieved the message history with PubNub
-        this.pubnub.history({
-            channel: this.channel,
-            count: 100 // how many items to fetch
-        }, function (status, response) {
+            // retrieved the message history with PubNub
+            this.pubnub.history({
+                channel: this.channel,
+                count: 100 // how many items to fetch
+            }, function (status, response) {
 
-            // create our return array
-            let data = [];
+                if(status.error) {
+                    // if there's a problem with the request log it
+                    reject(status);            
+                } else {
+                    
+                    // create our return array
+                    let data = [];
 
-            // loop through response and push data to array
-            for(let i in response.messages) {
-                data.push(response.messages[i].entry)
-            }   
+                    // loop through response and push data to array
+                    for(let i in response.messages) {
+                        data.push(response.messages[i].entry)
+                    }   
 
-            // reverse the array so newest are first
-            data = data.reverse();
+                    // reverse the array so newest are first
+                    data = data.reverse();
 
-            // respond with the history data
-            cb(data);
+                    // respond with the history data
+                    resolve(data);
+
+                }
+
+            });
 
         });
 
@@ -211,29 +246,32 @@ class Room extends EventEmitter {
 
     unsubscribe() {
 
-        // tell PubNub to manually unsubscribe from this channel        
-        this.pubnub.unsubscribe({
-            channels: [this.channel],
+        return new Promise((resolve, reject) => {
+            
+            // tell PubNub to manually unsubscribe from this channel        
+            this.pubnub.unsubscribe({
+                channels: [this.channel],
+            });
+
+            resolve();
+
         });
 
     }
 }
 
 // export a generic function expected by rltm.js
-module.exports = function(service, config) {
+module.exports = function(setup) {
 
     // convenience method to assign the service string name to itself
-    this.service = service;
-    
-    // set a default uuid if it has not been set for this client
-    config.uuid = config.uuid || new Date();
+    this.service = setup.service;
 
     // initialize PubNub with supplied config information
-    let pubnub = new PubNub(config);
+    let pubnub = new PubNub(setup.config);
 
     // expose the join method to create new room connections
     this.join = function(channel, state) {
-        return new Room(pubnub, channel, config.uuid, state);
+        return new Room(pubnub, channel, setup.config.uuid, state);
     }
 
     // return the instance of this service
