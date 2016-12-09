@@ -39,9 +39,10 @@ class Room extends EventEmitter {
                     && !this.isReady
                     && statusEvent.affectedChannels.indexOf(channel) > -1) {
 
+                    globalReady = true;
+
                     // tell the client that first connection made
                     this.onReady();
-                    globalReady = true;
 
                 }
             }
@@ -104,14 +105,16 @@ class Room extends EventEmitter {
     // immediately, which doesn't allow time to register an event handler
     // this can be solved with setTimeout(() => {}, 10) to let the 
     onReady() {
+
         // waiting to be assigned by client
         return;
+
     }
 
     ready (fn) {
         
         this.onReady = fn;
-        
+
         if(globalReady) {
             this.onReady()
             this.isReady = true;

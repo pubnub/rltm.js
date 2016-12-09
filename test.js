@@ -57,12 +57,18 @@ describe(connection.service, function() {
     describe('ready', function() {
 
         it('should get called when ready', function(done) {
+            
+            room = connection.join(new Date().getTime(), testStateData);
+
             room.ready(() => {
                 done();
             });
+
         });
 
         it('should get itself as a join event', function(done) {
+
+            room = connection.join(new Date().getTime(), testStateData);
 
             room.on('join', function(uuid, state) {
                 assert.isOk(uuid, 'uuid is set');
@@ -70,8 +76,6 @@ describe(connection.service, function() {
             });
 
         });
-        
-        room = connection.join(new Date().getTime(), testStateData);
 
     });
 
