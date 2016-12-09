@@ -149,7 +149,7 @@ describe(connection.service, function() {
 
             setTimeout(function() {
 
-                room.history(function(history) {
+                room.history().then(function(history) {
 
                     assert.isOk(history[0]);
                     assert.deepEqual(history[0].data, testMessageData, 'latest message is correct');

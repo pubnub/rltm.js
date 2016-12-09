@@ -133,7 +133,7 @@ class Room extends EventEmitter {
                   uuid: this.uuid,
                   data: data
               }
-          }, function(status, response) {
+          }, (status, response) => {
 
             if(status.error) {
                 // if there's a problem publishing, reject
@@ -195,7 +195,7 @@ class Room extends EventEmitter {
                 state: state,
                 uuid: this.uuid,
                 channels: [this.channel]
-            }, function (status, response) {
+            }, (status, response) => {
                 
                 if(status.error) {
                     // if there's a problem with the request log it
@@ -218,7 +218,7 @@ class Room extends EventEmitter {
             this.pubnub.history({
                 channel: this.channel,
                 count: 100 // how many items to fetch
-            }, function (status, response) {
+            }, (status, response) => {
 
                 if(status.error) {
                     // if there's a problem with the request log it
@@ -273,7 +273,7 @@ module.exports = function(setup) {
     let pubnub = new PubNub(setup.config);
 
     // expose the join method to create new room connections
-    this.join = function(channel, state) {
+    this.join = (channel, state) => {
         return new Room(pubnub, channel, setup.config.uuid, state);
     }
 
