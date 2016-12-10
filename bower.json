@@ -20,8 +20,5 @@
     "bower_components",
     "test",
     "tests"
-  ],
-  "dependencies": {
-    "pubnub": "^4.0.13"
-  }
+  ]
 }
