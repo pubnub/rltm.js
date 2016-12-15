@@ -1,0 +1,124 @@
+# Getting started with rltm.js
+
+We're proud to announce the release of rltm.js, a universal API for realtime communication. Rltm.js allows you to integrate realtime once and easily switch to PubNub from open source protocols.
+
+Rltm.js provides handy methods for rooms, clients, message history, and information about connected client. All of this information is available from generic methods and you can switch between realtime hosts with one small config. Oh yeah, and it works on both front and backend javascript.
+
+At PubNub we write tons of open source examples, tutorials, and libraries for PubNub. Rltm.js allows us to share this work with all of the other realtime communities out there.
+
+Most of our customers begin by implementing an open source realtime solution. As they grow, they realize how difficult and costly it is to scale and support their network.
+
+PubNub is built on the shoulders of open source software. Rltm.js is here to support open source implementations, giving developers an easy way to transition to our cloud service when you're ready to scale.
+
+The first framework we'll be supporting is Socket.io, one of the most popular open source realtime frameworks out there.
+
+The first demo we've built using rltm.js is an angular chat plugin that works with both socket.io and PubNub. That can be found at http://angularjs.chat. 
+
+Let's dive into how rltm.js actually works.
+
+First, install the library with npm or bower. If 
+
+```sh
+npm install rltm --save
+bower install rltm --save
+```
+
+Include library in HTML or in your NodeJS app.
+
+```html
+<script src="./bower_components/web/rltm.js"></script>
+```
+
+```js
+const rltm = require('rltm');
+```
+
+Then, configure the rltm library in your javascript code. Both the NodeJS and web libraries are configured with the ```rltm``` variable. 
+
+```js
+let client = rltm({
+    service: 'pubnub',
+    config: {
+        // ...
+    }
+});
+```
+
+* ```service``` is the name of the realtime service to use (```pubnub``` or ```socketio```) 
+* ```config``` is a Javascript object with a config for that service.
+
+To use PubNub, supply your publish and subscribe keys from your account:
+
+```js
+let client = rltm({
+    service: 'pubnub', 
+    config: {
+        publishKey: 'YOUR_PUBNUB_PUBLISH_KEY',
+        subscribeKey: 'YOUR_PUBNUB_SUBSCRIBE_KEY'
+    }
+});
+```
+
+To use Socket.io, run the socket.io server and supply your socket.io endpoint.
+
+```
+node ./socket.io-server.js
+```
+
+Then you can configure rltm to look for the server at that endpoint.
+
+```js
+let client = rltm({
+    service: 'socketio', 
+    config: {
+        endpoint: 'http://localhost:8000'
+    }
+});
+```
+
+Then, you can connect to a chatroom using the ```join``` method.
+
+```js
+room = client.join('room-name');
+```
+
+Now you can subscribe to messages for that room.
+
+```js
+room.on('message', (uuid, data) => {
+    console.log('message received from uuid', uuid, 'with data', data);
+});
+```
+
+To publish a message to the room, just call ```room.publish()```.
+
+```js
+room.publish({hello: world}).then(() => {
+    console.log('message published');
+});
+```
+
+The subscribe code above will fire.
+
+You can also get a list of who's in the room by calling the ```hereNow()``` endpoint.
+
+```js
+room.hereNow().then((clients) => {
+    console.log('clients online', clients);
+});
+```
+
+This will return an object of all connected users.
+
+```js
+{ 
+    uuid1: {
+        username: 'ianjennings'
+    },
+    uuid2: {
+        username: 'stephenblum'
+    }
+}
+```
+
+You can get the full documentation and download the code from [github](https://github.com/pubnub/rltm).
