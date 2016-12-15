@@ -1,10 +1,10 @@
 ![](./assets/rltm.js-logo.png)
 
-Universal API realtime services. Integrate once and easily swap realtime infrastructure. 
+Universal API realtime services. Integrate once and easily swap PubNub and open source infrastructure. 
 
 Provides handy methods for rooms, clients, message history, and information about connected client.
 
-Supported realtime hosts:
+Supported realtime services:
 
 ![](./assets/socketio.png)
 
