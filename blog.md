@@ -1,29 +1,27 @@
 # Getting started with rltm.js
 
-We're proud to announce the release of rltm.js, a universal API for realtime communication. Rltm.js allows you to integrate realtime once and easily switch to PubNub from open source protocols.
+We're proud to announce the release of rltm.js, a universal API for realtime communication. Rltm.js allows you to build real-time apps with one codebase and easily switch between backends.
 
-Rltm.js provides handy methods for rooms, clients, message history, and information about connected client. All of this information is available from generic methods and you can switch between realtime hosts with one small config. Oh yeah, and it works on both front and backend javascript.
+Rltm.js provides handy methods for rooms, clients, message history, and finding out who's online. It works for both front end web and NodeJs. All of this information is available from generic methods and you can switch between realtime hosts with one small config.
 
-At PubNub we write tons of open source examples, tutorials, and libraries for PubNub. Rltm.js allows us to share this work with all of the other realtime communities out there.
+At PubNub we write tons of open source libraries, examples, tutorials. Rltm.js allows us to share this work with all of the other realtime communities out there.
 
-Most of our customers begin by implementing an open source realtime solution. As they grow, they realize how difficult and costly it is to scale and support their network.
-
-PubNub is built on the shoulders of open source software. Rltm.js is here to support open source implementations, giving developers an easy way to transition to our cloud service when you're ready to scale.
+Most of our customers begin by implementing an open source realtime solution themselves. As they grow, they realize how difficult and costly it is to scale and support their network. Rltm.js is here to support open source implementations and give developers an easy way to transition to our cloud service when they're ready to scale.
 
 The first framework we'll be supporting is Socket.io, one of the most popular open source realtime frameworks out there.
 
-The first demo we've built using rltm.js is an angular chat plugin that works with both socket.io and PubNub. That can be found at http://angularjs.chat. 
+Besides the library itself, we've also updated our angular chat plugin to work with rltm.js. Now that plugin supports socket.io or PubNub. That can be found at http://angularjs.chat. 
 
 Let's dive into how rltm.js actually works.
 
-First, install the library with npm or bower. If 
+First, install the library with npm or bower.
 
 ```sh
 npm install rltm --save
 bower install rltm --save
 ```
 
-Include library in HTML or in your NodeJS app.
+Then include library in HTML or in your NodeJS app.
 
 ```html
 <script src="./bower_components/web/rltm.js"></script>
