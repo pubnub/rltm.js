@@ -1,6 +1,8 @@
-## PubNub
+## Setting up Rltm.js with PubNub
 
-PubNub is a cloud realtime service. You only need to supply your PubNub publish and subscribe keys.
+PubNub is a cloud realtime service. You only need to supply your PubNub publish and subscribe keys. PubNub will handle scaling, message delivery, etc.
+
+You can get your publish and subscribe keys from [the pubnub admin panel](https://admin.pubnub.com/).
 
 ```js
 let client = rltm({
