@@ -270,11 +270,11 @@ module.exports = function(setup) {
     this.service = setup.service;
 
     // initialize PubNub with supplied config information
-    let pubnub = new PubNub(setup.config);
+    this.pubnub = new PubNub(setup.config);
 
     // expose the join method to create new room connections
     this.join = (channel, state) => {
-        return new Room(pubnub, channel, setup.config.uuid, state);
+        return new Room(this.pubnub, channel, setup.config.uuid, state);
     }
 
     // return the instance of this service

@@ -15,3 +15,5 @@ let client = rltm({
 ```
 
 You can read about more config options on the official [PubNub Documentation](https://www.pubnub.com/docs/javascript/api-reference-sdk-v4#init).
+
+This service exposes PubNub only features within ```client.pubnub``` or ```room.pubnub```.
