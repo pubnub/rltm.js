@@ -57,42 +57,16 @@ let client = rltm({
 * ```service``` is the name of the realtime service to use (```pubnub``` or ```socketio```) 
 * ```config``` is a Javascript object with a config for that service.
 
-## PubNub
+## PubNub or Socket.io
 
-PubNub is a cloud realtime service. You only need to supply your PubNub publish and subscribe keys.
+#### [Set Up With Socket.io](/guides/socketio.md)
 
-```js
-let client = rltm({
-    service: 'pubnub', 
-    config: {
-        publishKey: 'YOUR_PUBNUB_PUBLISH_KEY',
-        subscribeKey: 'YOUR_PUBNUB_SUBSCRIBE_KEY'
-    }
-});
-```
+Socket.io is an open source websocket framework. To use socket.io, you'll run
+your own socket.io server on the back end. 
 
-You can read about more config options on the official [PubNub Documentation](https://www.pubnub.com/docs/javascript/api-reference-sdk-v4#init).
+#### [Set Up With PubNub](/guides/pubnub.md)
 
-## Socket.io
-
-You must run a Socket.io server yourself for this to work.
-
-```
-node ./socket.io-server.js
-```
-
-Then you can configure rltm to look for the server at that endpoint.
-
-```js
-let client = rltm({
-    service: 'socketio', 
-    config: {
-        endpoint: 'http://localhost:8000'
-    }
-});
-```
-
-You can read more about config options on the [Socket.io Documentation](http://socket.io/docs/client-api/#manager(url:string,-opts:object))
+PubNub is a hosted realtime solution that doesn't require you to run or maintain any servers.
 
 # Usage
 
