@@ -13,11 +13,11 @@ module.exports = function(setup) {
     let service = services[setup.service];
 
     if(!setup.service) {
-        console.error('You must supply a service property.');
+        throw new Error('You must supply a service property.');
     }
     
     if(!service) {
-        console.error('The service you supplied is invalid.');
+        throw new Error('The service you supplied is invalid.');
     } 
     
     // add config if doesn't exist
