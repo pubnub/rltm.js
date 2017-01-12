@@ -83,7 +83,7 @@ You can provide these as parameters during initialization.
 let client = rltm({
     service: 'socketio', 
     config: {
-        endpoint: 'http://localhost:8000',
+        endpoint: 'http://localhost:9000',
         uuid: 'MY_UNIQUE_ID',
         state: {admin: true}
     }

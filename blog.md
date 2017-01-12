@@ -69,7 +69,7 @@ Then you can configure rltm to look for the server at that endpoint.
 let client = rltm({
     service: 'socketio', 
     config: {
-        endpoint: 'http://localhost:8000'
+        endpoint: 'http://localhost:9000'
     }
 });
 ```

@@ -29,8 +29,7 @@ const connections = {
         service: 'pubnub', 
         config: {
             publishKey: 'demo',
-            subscribeKey: 'demo',
-            uuid: new Date().getTime()
+            subscribeKey: 'demo'
         }
     }),
     socketio: rltm({
