@@ -171,10 +171,10 @@ room.on('leave', (uuid) => {
 
 ### Disconnect
 
-A ```client``` can manually leave a ```room``` by using the ```leave()``` method. Returns a promise.
+A ```client``` can manually leave a ```room``` by using the ```unsubscribe()``` method. Returns a promise.
 
 ```js
-room.leave().then(() => {
+room.unsubscribe().then(() => {
     console.log('left the room.');
 });
 ```
