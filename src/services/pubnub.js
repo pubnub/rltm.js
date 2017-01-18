@@ -148,7 +148,7 @@ class Room extends EventEmitter {
 
     };
 
-    hereNow(cb) {
+    hereNow() {
 
         return new Promise((resolve, reject) => {
         
@@ -210,7 +210,7 @@ class Room extends EventEmitter {
 
     }
 
-    history(cb) {
+    history() {
         
         return new Promise((resolve, reject) => {
 
