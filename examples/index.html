@@ -79,6 +79,8 @@
 
         log(`Joining ${roomName}...`, 'Join', 'muted');
 
+        // history goes here
+
         room.ready(() => {
             log(`Joined ${roomName}`, 'Connect', 'success');
         });
@@ -91,9 +93,13 @@
             log(`<strong>${uuid}:</strong> ${message} `, 'Message');
         });
 
-        $('form').submit(() => {
+        // state get goes here
 
-            console.log('publishign to ', room)
+        // state set goes here
+
+        // disconnect goes here
+
+        $('form').submit(() => {
 
             room.publish($('#message').val());
             
