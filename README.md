@@ -114,16 +114,6 @@ room.on('join', (uuid, state) => {
 
 ## Messages
 
-### Message Event
-
-When another ```client``` sends a message to the room, it will trigger the ```message``` event. The ```room``` can subscribe to that event with the ```on()``` method.
-
-```js
-room.on('message', (uuid, data) => {
-    console.log('message received from uuid', uuid, 'with data', data);
-});
-```
-
 ### Publish
 
 To send a message to the entire room, use the ```publish()``` method. Returns a promise.
@@ -134,11 +124,21 @@ room.publish({hello: world}).then(() => {
 });
 ```
 
+### Message Event
+
+When another ```client``` sends a message to the room, it will trigger the ```message``` event. The ```room``` can subscribe to that event with the ```on()``` method.
+
+```js
+room.on('message', (uuid, data) => {
+    console.log('message received from uuid', uuid, 'with data', data);
+});
+```
+
 ## Online Clients
 
 ### Here Now
 
-A ```room``` can get a list of other ```client```s who have in the ```room``` by using the ```hereNow()``` method. Returns a promise.
+A ```room``` can get a list of other ```client```s who are in the ```room``` by using the ```hereNow()``` method. Returns a promise.
 
 ```js
 room.hereNow().then((clients) => {
@@ -161,16 +161,6 @@ Successful responses will return a object of ```client```s who are currently con
 
 ### Leave Event
 
-A ```room``` can subscribe to the ```leave``` event to find out when a ```client``` leaves.
-
-```js
-room.on('leave', (uuid) => {
-    console.log('client with uuid', uuid, 'has left');
-});
-```
-
-### Disconnect
-
 A ```client``` can manually leave a ```room``` by using the ```unsubscribe()``` method. Returns a promise.
 
 ```js
@@ -179,7 +169,14 @@ room.unsubscribe().then(() => {
 });
 ```
 
-This will fire the ```leave``` event.
+A ```room``` can subscribe to the ```leave``` event to find out when a ```client``` leaves.
+
+```js
+room.on('leave', (uuid) => {
+    console.log('client with uuid', uuid, 'has left');
+});
+```
+
 
 ## Set Client State
 

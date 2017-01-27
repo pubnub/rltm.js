@@ -76,13 +76,13 @@
     <header>
         <div class="container">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-sm-12">
                     <img src="/assets/rltm.js-logo-white.svg" id="main-logo" class="img-responsive">
                     <div class="intro-text">
                         <hr class="star-light">
                         <span class="name">Uniform API for Realtime</span>
                         <span class="skills">Use a single code base to connect to multiple realtime services.</span>
-                        <div class="col-lg-8 col-lg-offset-2 text-center">
+                        <div class="col-sm-8 col-sm-offset-2 text-center">
                             <a href="https://github.com/pubnub/rltm.js" class="btn btn-lg btn-outline">
                                 <i class="fa fa-github"></i> Get Rltm.js
                             </a>
@@ -97,13 +97,13 @@
     <section id="about">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 text-center">
+                <div class="col-sm-12 text-center">
                     <h2>Why rltm.js?</h2>
                     <hr class="star-primary">
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12 text-center">
+                <div class="col-sm-12 text-center">
                     <p>Swap between Socket.io and PubNub with a single API.</p>
                     <p>Feature parity for different realtime services.</p>
                     <p>Works on web and NodeJS.</p>
@@ -116,13 +116,13 @@
     <section class="success" id="config">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 text-center">
+                <div class="col-sm-12 text-center">
                     <h2>Config Examples</h2>
                     <hr class="star-light">
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-5 col-lg-offset-1">
+                <div class="col-sm-5 col-sm-offset-1">
                     <p class="text-center">Socket.io</p>
                     <pre>let client = rltm({
     service: 'socketio', 
@@ -131,7 +131,7 @@
     }
 });</pre>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-sm-5">
                     <p class="text-center">PubNub</p>
                     <pre>let client = rltm({
     service: 'pubnub', 
@@ -146,19 +146,190 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="docs">
+    <section>
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2>Actual Docs</h2>
+            <div id="docs-header" class="row">
+                <div class="col-sm-12 text-center">
+                    <h2>Documentation</h2>
                     <hr class="star-primary">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
+        </div>
+        <div id="doc-links">
+            <div>
+                <a href="#clients">Clients</a>
+                <a href="#rooms">Rooms</a>
+                <a href="#join">Join</a>
+                <a href="#messages">Messages</a>
+                <a href="#history">History</a>
+                <a href="#state">State</a>
+                <a href="#herenow">Here Now</a>
+                <a href="#leave">Leave</a>
+            </div>
+        </div>
+        <div class="container" id="docs">
+            <div class="row" id="clients">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="/assets/user.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Clients</h1>
+                    <p>Every <code>client</code> connected to rltm.js has two properties:</p>
 
-                    <p>Docs go here</p>
+                    <ol>
+                    <li><code>uuid</code> - a unique way to identify this <code>client</code></li>
 
+                    <li><code>state</code> - data associated with this <code>client</code></li>
+                    </ol>
+
+                    <p>You can provide these as parameters during initialization.</p>
+
+                    <pre class="js language-js">let client = rltm({
+    service: 'socketio', 
+    config: {
+        endpoint: 'http://localhost:9000',
+        uuid: 'MY_UNIQUE_ID',
+        state: {admin: true}
+    }
+});</pre>
+                </div>
+            </div>
+            <div class="row" id="rooms">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="/assets/room.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Rooms</h1>
+                    <p>Realtime communication happens over <code>room</code>s. <code>room</code>s are like chat rooms, everybody in a <code>room</code> receives events sent by every other <code>client</code>.</p>
+                </div>
+            </div>
+            <div class="row" id="join">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="/assets/join.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Join</h1>
+                    <p>A <code>client</code> can join a <code>room</code> by using the <code>join()</code> method and supplying a <code>room</code> identifier. <code>client</code>s who provide the same  identifier will be able to communicate with each other.</p>
+                    <pre><code class="js language-js">room = client.join('room-name');</code></pre>
+                    <p>This returns a <code>room</code> object which we can use to communicate with other <code>client</code>s.</p>
+                    <p>A client can subscribe to the <code>join</code> event to find out when other <code>client</code>s join the room.</p>
+                    <pre><code class="js language-js">room.on('join', (uuid, state) =&gt; {
+    console.log('client with uuid', uuid, 'joined with state', state);
+});</code></pre>
+                </div>
+            </div>
+            <div class="row" id="publish">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="/assets/publish.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Messages</h1>
+
+                    <p>To send a message to the entire room, use the <code>publish()</code> method. Returns a promise.</p>
+
+                    <pre><code class="js language-js">room.publish({hello: world}).then(() =&gt; {
+    console.log('message published');
+});</code></pre>
+                    <p>When another <code>client</code> sends a message to the room, it will trigger the <code>message</code> event. The <code>room</code> can subscribe to that event with the <code>on()</code> method.</p>
+
+                    <pre><code class="js language-js">room.on('message', (uuid, data) =&gt; {
+    console.log('message received from uuid', uuid, 'with data', data);
+});</code></pre>
+
+                </div>
+            </div>
+            <div class="row" id="history">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="/assets/history.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>History</h1>
+                    <p>A <code>client</code> can retrieve previously published messages in the <code>room</code> by using the <code>()</code> method. Returns a promise.</p>
+
+                    <pre><code class="js language-js">room.history().then((history) =&gt; {
+    console.log('got array of all messages in channel', history);
+});</code></pre>
+
+                    <p>It will return the last 100 messages as an array of objects containing the <code>uuid</code> and <code>data</code> of every message. The array is sorted newest to oldest.</p>
+
+                    <pre>[ 
+    { 
+        uuid: uuid2, 
+        data: { 
+            sentTime: '2pm',
+            text: 'boy howdy' 
+        } 
+    }, 
+    { 
+        uuid: uuid1, 
+        data: { 
+            sentTime: '1pm',
+            text: 'hello there' 
+        } 
+    }
+]</pre>
+                </div>
+            </div>
+            <div class="row" id="state">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="/assets/state.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>State</h1>
+                    <p>A <code>client</code> state can be updated at any time by using the <code>setState()</code> method. Supply the new <code>state</code> as the only parameter. Return a promise.</p>
+
+                    <pre><code class="js language-js">room.setState({idle: true}).then(() =&gt; {
+    console.log('state set');
+});</code></pre>
+
+                    <p>This will fire the <code>state</code> event which you can subscribe to with the <code>on()</code> method. When fired you will get the <code>uuid</code> of the <code>client</code> and the new <code>state</code>.</p>
+
+                    <pre><code class="js language-js">room.on('state', (uuid, state) =&gt; {
+    console.log('client with uuid', uuid, 'was given state', state);
+});</code></pre>
+                </div>
+            </div>
+            <div class="row" id="herenow">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="/assets/herenow.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Here Now</h1>
+                    <p>A <code>room</code> can get a list of other <code>client</code>s who are in the <code>room</code> by using the <code>hereNow()</code> method. Returns a promise.</p>
+
+                    <pre>room.hereNow().then((clients) =&gt; {
+    console.log('clients online', clients);
+});</pre>
+
+                    <p>Successful responses will return a object of <code>client</code>s who are currently connected to the <code>room</code>. The keys are the <code>client</code>'s <code>uuid</code>s and the values are their current <code>state</code>.</p>
+
+                    <pre>{ 
+    uuid1: {
+        username: 'ianjennings'
+    },
+    uuid2: {
+        username: 'stephenblum'
+    }
+}</pre>
+                </div>
+            </div>
+            <div class="row" id="leave">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="/assets/leave.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Leave</h1>
+
+                    <p>A <code>client</code> can manually leave a <code>room</code> by using the <code>unsubscribe()</code> method. Returns a promise.</p>
+
+                    <pre>room.unsubscribe().then(() =&gt; {
+    console.log('left the room.');
+});</pre>
+                    <p>A <code>room</code> can subscribe to the <code>leave</code> event to find out when a <code>client</code> leaves.</p>
+
+                    <pre>room.on('leave', (uuid) =&gt; {
+    console.log('client with uuid', uuid, 'has left');
+});</pre>
                 </div>
             </div>
         </div>
@@ -201,7 +372,7 @@
         <div class="footer-below">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-sm-12">
                         Copyright &copy; PubNub 2017
                     </div>
                 </div>
@@ -225,12 +396,28 @@
     <!-- Plugin JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 
-    <!-- Contact Form JavaScript -->
-    <script src="js/jqBootstrapValidation.js"></script>
-    <script src="js/contact_me.js"></script>
-
     <!-- Theme JavaScript -->
     <script src="js/freelancer.min.js"></script>
+
+    <script type="text/javascript">
+        var $cache = $('#doc-links');
+        var keyPos = $cache.position().top - 70;
+        function fixDiv() {
+           if ($(window).scrollTop() > keyPos)
+             $cache.css({
+               'position': 'fixed',
+               'top': '70px'
+             });
+           else
+             $cache.css({
+               'position': 'relative',
+               'top': 'auto'
+             });
+         }
+         $(window).scroll(fixDiv);
+         fixDiv();
+    </script>
+
 
 </body>
 
