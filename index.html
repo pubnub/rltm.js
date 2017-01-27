@@ -124,22 +124,22 @@
             <div class="row">
                 <div class="col-sm-5 col-sm-offset-1">
                     <p class="text-center">Socket.io</p>
-                    <pre>let client = rltm({
+                    <pre><code class="javascript">let client = rltm({
     service: 'socketio', 
     config: {
         endpoint: 'http://localhost:8000'
     }
-});</pre>
+});</code></pre>
                 </div>
                 <div class="col-sm-5">
                     <p class="text-center">PubNub</p>
-                    <pre>let client = rltm({
+                    <pre><code class="javascript">let client = rltm({
     service: 'pubnub', 
     config: {
         publishKey: 'YOUR_PUBNUB_PUBLISH_KEY',
         subscribeKey: 'YOUR_PUBNUB_SUBSCRIBE_KEY'
     }
-});</pre>
+});</code></pre>
                 </div>
             </div>
         </div>
@@ -184,14 +184,14 @@
 
                     <p>You can provide these as parameters during initialization.</p>
 
-                    <pre class="js language-js">let client = rltm({
+                    <pre><code>let client = rltm({
     service: 'socketio', 
     config: {
         endpoint: 'http://localhost:9000',
         uuid: 'MY_UNIQUE_ID',
         state: {admin: true}
     }
-});</pre>
+});</code></pre>
                 </div>
             </div>
             <div class="row" id="rooms">
@@ -210,10 +210,10 @@
                 <div class="col-sm-7">
                     <h1>Join</h1>
                     <p>A <code>client</code> can join a <code>room</code> by using the <code>join()</code> method and supplying a <code>room</code> identifier. <code>client</code>s who provide the same  identifier will be able to communicate with each other.</p>
-                    <pre><code class="js language-js">room = client.join('room-name');</code></pre>
+                    <pre><code class="javascript">room = client.join('room-name');</code></pre>
                     <p>This returns a <code>room</code> object which we can use to communicate with other <code>client</code>s.</p>
                     <p>A client can subscribe to the <code>join</code> event to find out when other <code>client</code>s join the room.</p>
-                    <pre><code class="js language-js">room.on('join', (uuid, state) =&gt; {
+                    <pre><code class="javascript">room.on('join', (uuid, state) =&gt; {
     console.log('client with uuid', uuid, 'joined with state', state);
 });</code></pre>
                 </div>
@@ -227,12 +227,12 @@
 
                     <p>To send a message to the entire room, use the <code>publish()</code> method. Returns a promise.</p>
 
-                    <pre><code class="js language-js">room.publish({hello: world}).then(() =&gt; {
+                    <pre><code class="javascript">room.publish({hello: world}).then(() =&gt; {
     console.log('message published');
 });</code></pre>
                     <p>When another <code>client</code> sends a message to the room, it will trigger the <code>message</code> event. The <code>room</code> can subscribe to that event with the <code>on()</code> method.</p>
 
-                    <pre><code class="js language-js">room.on('message', (uuid, data) =&gt; {
+                    <pre><code class="javascript">room.on('message', (uuid, data) =&gt; {
     console.log('message received from uuid', uuid, 'with data', data);
 });</code></pre>
 
@@ -246,13 +246,13 @@
                     <h1>History</h1>
                     <p>A <code>client</code> can retrieve previously published messages in the <code>room</code> by using the <code>()</code> method. Returns a promise.</p>
 
-                    <pre><code class="js language-js">room.history().then((history) =&gt; {
+                    <pre><code class="javascript">room.history().then((history) =&gt; {
     console.log('got array of all messages in channel', history);
 });</code></pre>
 
                     <p>It will return the last 100 messages as an array of objects containing the <code>uuid</code> and <code>data</code> of every message. The array is sorted newest to oldest.</p>
 
-                    <pre>[ 
+                    <pre><code class="javascript">[ 
     { 
         uuid: uuid2, 
         data: { 
@@ -267,7 +267,7 @@
             text: 'hello there' 
         } 
     }
-]</pre>
+]</code></pre>
                 </div>
             </div>
             <div class="row" id="state">
@@ -278,13 +278,13 @@
                     <h1>State</h1>
                     <p>A <code>client</code> state can be updated at any time by using the <code>setState()</code> method. Supply the new <code>state</code> as the only parameter. Return a promise.</p>
 
-                    <pre><code class="js language-js">room.setState({idle: true}).then(() =&gt; {
+                    <pre><code class="javascript">room.setState({idle: true}).then(() =&gt; {
     console.log('state set');
 });</code></pre>
 
                     <p>This will fire the <code>state</code> event which you can subscribe to with the <code>on()</code> method. When fired you will get the <code>uuid</code> of the <code>client</code> and the new <code>state</code>.</p>
 
-                    <pre><code class="js language-js">room.on('state', (uuid, state) =&gt; {
+                    <pre><code class="javascript">room.on('state', (uuid, state) =&gt; {
     console.log('client with uuid', uuid, 'was given state', state);
 });</code></pre>
                 </div>
@@ -297,20 +297,20 @@
                     <h1>Here Now</h1>
                     <p>A <code>room</code> can get a list of other <code>client</code>s who are in the <code>room</code> by using the <code>hereNow()</code> method. Returns a promise.</p>
 
-                    <pre>room.hereNow().then((clients) =&gt; {
+                    <pre><code class="javascript">room.hereNow().then((clients) =&gt; {
     console.log('clients online', clients);
-});</pre>
+});</code></pre>
 
                     <p>Successful responses will return a object of <code>client</code>s who are currently connected to the <code>room</code>. The keys are the <code>client</code>'s <code>uuid</code>s and the values are their current <code>state</code>.</p>
 
-                    <pre>{ 
+                    <pre><code class="javascript">{ 
     uuid1: {
         username: 'ianjennings'
     },
     uuid2: {
         username: 'stephenblum'
     }
-}</pre>
+}</code></pre>
                 </div>
             </div>
             <div class="row" id="leave">
@@ -322,14 +322,14 @@
 
                     <p>A <code>client</code> can manually leave a <code>room</code> by using the <code>unsubscribe()</code> method. Returns a promise.</p>
 
-                    <pre>room.unsubscribe().then(() =&gt; {
+                    <pre><code class="javascript">room.unsubscribe().then(() =&gt; {
     console.log('left the room.');
-});</pre>
+});</code></pre>
                     <p>A <code>room</code> can subscribe to the <code>leave</code> event to find out when a <code>client</code> leaves.</p>
 
-                    <pre>room.on('leave', (uuid) =&gt; {
+                    <pre><code class="javascript">room.on('leave', (uuid) =&gt; {
     console.log('client with uuid', uuid, 'has left');
-});</pre>
+});</code></pre>
                 </div>
             </div>
         </div>
@@ -417,6 +417,12 @@
          $(window).scroll(fixDiv);
          fixDiv();
     </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/github.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/languages/javascript.min.js" integrity="sha256-sZa6ttk3lwj5MNkWzq2VrQ6WFB965Gn0uLe3oUBH2Iw=" crossorigin="anonymous"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
 
 
 </body>
