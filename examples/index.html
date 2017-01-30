@@ -119,7 +119,9 @@
             log(`State set for <strong>${uuid}</strong> <pre><code>${JSON.stringify(state)}</code></pre> `, 'State', 'success');
         });
     
-        // disconnect goes here
+        room.on('leave', (uuid) => {
+            log(`${uuid} has left`, 'Leave', 'warning');
+        });
 
         $('form').submit(() => {
 
