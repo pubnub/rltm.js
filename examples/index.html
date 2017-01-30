@@ -73,37 +73,59 @@
 
         const client = rltm(rltmConfig);
         
-        log(`<pre><code>${JSON.stringify(rltmConfig, null, 4)}</pre></code>`, 'Configure', 'muted');
+        log(`<pre><code>${JSON.stringify(rltmConfig, null, 4)}</pre></code>`, 'Configure', 'info');
         
         let room = client.join(roomName);
 
-        log(`Joining ${roomName}...`, 'Join', 'muted');
+        log(`Joining ${roomName}...`, 'Join', 'info');
 
-        // history goes here
 
         room.ready(() => {
             log(`Joined ${roomName}`, 'Connect', 'success');
         });
 
+        room.history().then(function(history) {
+            
+            let i = 0;
+            
+            while(i < 5) {
+
+                log(`<pre><code>${JSON.stringify(history[i])}</pre></code>`, 'History', 'muted');
+
+                i++;
+            }
+
+        }, function() {
+        });
+        
+
         room.on('join', function(uuid, state) {
-            log(`Client joined ${roomName} with uuid ${uuid} and state ${JSON.stringify(state)}`, 'Join');
+            log(`Client joined ${roomName} with uuid ${uuid} and state <code>${JSON.stringify(state)}</code>`, 'Join');
         });
 
         room.on('message', function(uuid, message){
             log(`<strong>${uuid}:</strong> ${message} `, 'Message');
         });
 
-        // state get goes here
+
+        let state = {online: true};
 
         // state set goes here
+        room.setState(state).then(function() {
+            log(`Setting state as <pre><code>${JSON.stringify(state)}</code></pre> `, 'Setting State...', 'info');
+        });    
 
+        room.on('state', function(uuid, state) {
+            log(`State set for <strong>${uuid}</strong> <pre><code>${JSON.stringify(state)}</code></pre> `, 'State', 'success');
+        });
+    
         // disconnect goes here
 
         $('form').submit(() => {
 
             room.publish($('#message').val());
             
-            log($('#message').val(), 'Publishing...', 'muted');
+            log($('#message').val(), 'Sending...', 'info');
 
             $('#message').val('');
 
