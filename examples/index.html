@@ -71,11 +71,11 @@
             }
         };
 
-        const client = rltm(rltmConfig);
+        const user = rltm(rltmConfig);
         
         log(`<pre><code>${JSON.stringify(rltmConfig, null, 4)}</pre></code>`, 'Configure', 'info');
         
-        let room = client.join(roomName);
+        let room = user.join(roomName);
 
         log(`Joining ${roomName}...`, 'Join', 'info');
 

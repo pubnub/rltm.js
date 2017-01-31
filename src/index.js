@@ -23,7 +23,7 @@ module.exports = function(setup) {
     // add config if doesn't exist
     setup.config = setup.config || {};
 
-    // set a default uuid if it has not been set for this client
+    // set a default uuid if it has not been set for this user
     setup.config.uuid = setup.config.uuid || new Date();
 
     // set this uuid if it is not set

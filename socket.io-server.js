@@ -44,16 +44,16 @@ const saveHistory = function(channel, uuid, data) {
 
 }
 
-// when a new rltm.js client connects
+// when a new rltm.js user connects
 io.on('connection', function (socket) {
   
-  // when the client calls rltm.join() this is called
+  // when the user calls rltm.join() this is called
   socket.on('channel', function (channel, uuid, state) {
 
     // have the socket join the channel
     socket.join(channel);
 
-    // save the initial state sent with the client
+    // save the initial state sent with the user
     saveState(channel, uuid, state);
 
     // send the 'join' event to everyone else in the channel
@@ -61,36 +61,36 @@ io.on('connection', function (socket) {
 
   });
 
-  // client sets the state
+  // user sets the state
   socket.on('setState', function (channel, uuid, state, fn) {
 
     // save the set state into the server memory
     saveState(channel, uuid, state);
 
-    // tell all other clients state was set
+    // tell all other users state was set
     io.to(channel).emit('state', channel, uuid, state);
 
     fn();
 
   });
 
-  // client emits a message
+  // user emits a message
   socket.on('publish', function (channel, uuid, data, fn) {
 
     // save the message to the history array in memory
     saveHistory(channel, uuid, data);
 
-    // tell all other clients of the new message
+    // tell all other users of the new message
     io.to(channel).emit('message', channel, uuid, data);
 
     fn();
 
   });
 
-  // client wants to know whos online
+  // user wants to know whos online
   socket.on('whosonline', function (channel, data, fn) {
 
-    // respond with what we know about the current clients for this channel
+    // respond with what we know about the current users for this channel
     if(!states[channel]) {
       fn({});
     } else {
@@ -99,7 +99,7 @@ io.on('connection', function (socket) {
 
   });
   
-  // client wants the history for this channel
+  // user wants the history for this channel
   socket.on('history', function (channel, fn) {
 
     // respond with history array if it exists
@@ -111,7 +111,7 @@ io.on('connection', function (socket) {
 
   });
 
-  // client disconnects manually
+  // user disconnects manually
   socket.on('leave', function(uuid, channel, fn) {
 
     // call tell socket.io to disconnect

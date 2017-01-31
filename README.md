@@ -2,7 +2,7 @@
 
 Universal API realtime services. Integrate once and easily swap PubNub and open source infrastructure. 
 
-Provides handy methods for rooms, clients, message history, and information about connected client.
+Provides handy methods for rooms, users, message history, and information about connected user.
 
 Supported realtime services:
 
@@ -46,7 +46,7 @@ Include library in HTML.
 Both the NodeJS and web libraries are configured with the ```rltm``` variable. 
 
 ```js
-let client = rltm({
+let user = rltm({
     service: 'pubnub',
     config: {
         // ...
@@ -72,15 +72,15 @@ PubNub is a hosted realtime solution that doesn't require you to run or maintain
 
 ## Clients
 
-Every ```client``` connected to rltm.js has two properties:
+Every ```user``` connected to rltm.js has two properties:
 
-1. ```uuid``` - a unique way to identify this ```client```
-1. ```state``` - data associated with this ```client```
+1. ```uuid``` - a unique way to identify this ```user```
+1. ```state``` - data associated with this ```user```
 
 You can provide these as parameters during initialization.
 
 ```js
-let client = rltm({
+let user = rltm({
     service: 'socketio', 
     config: {
         endpoint: 'http://localhost:9000',
@@ -92,23 +92,23 @@ let client = rltm({
 
 ## Rooms
 
-Realtime communication happens over ```room```s. ```room```s are like chat rooms, everybody in a ```room``` receives events sent by every other ```client```.
+Realtime communication happens over ```room```s. ```room```s are like chat rooms, everybody in a ```room``` receives events sent by every other ```user```.
 
-A ```client``` can join a ```room``` by using the ```join()``` method and supplying a ```room``` identifier. ```client```s who provide the same  identifier will be able to communicate with each other.
+A ```user``` can join a ```room``` by using the ```join()``` method and supplying a ```room``` identifier. ```user```s who provide the same  identifier will be able to communicate with each other.
 
 ```js
-room = client.join('room-name');
+room = user.join('room-name');
 ```
 
-This returns a ```room``` object which we can use to communicate with other ```client```s.
+This returns a ```room``` object which we can use to communicate with other ```user```s.
 
 ### Join Event
 
-A room can subscribe to the ```join``` event to find out when other ```client```s join the room.
+A room can subscribe to the ```join``` event to find out when other ```user```s join the room.
 
 ```js
 room.on('join', (uuid, state) => {
-    console.log('client with uuid', uuid, 'joined with state', state);
+    console.log('user with uuid', uuid, 'joined with state', state);
 });
 ```
 
@@ -116,7 +116,7 @@ room.on('join', (uuid, state) => {
 
 ### Message Event
 
-When another ```client``` sends a message to the room, it will trigger the ```message``` event. The ```room``` can subscribe to that event with the ```on()``` method.
+When another ```user``` sends a message to the room, it will trigger the ```message``` event. The ```room``` can subscribe to that event with the ```on()``` method.
 
 ```js
 room.on('message', (uuid, data) => {
@@ -138,15 +138,15 @@ room.publish({hello: world}).then(() => {
 
 ### Here Now
 
-A ```room``` can get a list of other ```client```s who have in the ```room``` by using the ```hereNow()``` method. Returns a promise.
+A ```room``` can get a list of other ```user```s who have in the ```room``` by using the ```hereNow()``` method. Returns a promise.
 
 ```js
-room.hereNow().then((clients) => {
-    console.log('clients online', clients);
+room.hereNow().then((users) => {
+    console.log('users online', users);
 });
 ```
 
-Successful responses will return a object of ```client```s who are currently connected to the ```room```. The keys are the ```client```'s ```uuid```s and the values are their current ```state```.
+Successful responses will return a object of ```user```s who are currently connected to the ```room```. The keys are the ```user```'s ```uuid```s and the values are their current ```state```.
 
 ```js
 { 
@@ -161,17 +161,17 @@ Successful responses will return a object of ```client```s who are currently con
 
 ### Leave Event
 
-A ```room``` can subscribe to the ```leave``` event to find out when a ```client``` leaves.
+A ```room``` can subscribe to the ```leave``` event to find out when a ```user``` leaves.
 
 ```js
 room.on('leave', (uuid) => {
-    console.log('client with uuid', uuid, 'has left');
+    console.log('user with uuid', uuid, 'has left');
 });
 ```
 
 ### Disconnect
 
-A ```client``` can manually leave a ```room``` by using the ```unsubscribe()``` method. Returns a promise.
+A ```user``` can manually leave a ```room``` by using the ```unsubscribe()``` method. Returns a promise.
 
 ```js
 room.unsubscribe().then(() => {
@@ -183,7 +183,7 @@ This will fire the ```leave``` event.
 
 ## Set Client State
 
-A ```client``` state can be updated at any time by using the ```setState()``` method. Supply the new ```state``` as the only parameter. Return a promise.
+A ```user``` state can be updated at any time by using the ```setState()``` method. Supply the new ```state``` as the only parameter. Return a promise.
 
 ```js
 room.setState({idle: true}).then(() => {
@@ -191,17 +191,17 @@ room.setState({idle: true}).then(() => {
 });
 ```
 
-This will fire the ```state``` event which you can subscribe to with the ```on()``` method. When fired you will get the ```uuid``` of the ```client``` and the new ```state```.
+This will fire the ```state``` event which you can subscribe to with the ```on()``` method. When fired you will get the ```uuid``` of the ```user``` and the new ```state```.
 
 ```js
 room.on('state', (uuid, state) => {
-    console.log('client with uuid', uuid, 'was given state', state);
+    console.log('user with uuid', uuid, 'was given state', state);
 });
 ```
 
 ## Get Old Messages
 
-A ```client``` can retrieve previously published messages in the ```room``` by using the ```    ()``` method. Returns a promise.
+A ```user``` can retrieve previously published messages in the ```room``` by using the ```    ()``` method. Returns a promise.
 
 ```js
 room.history().then((history) => {
