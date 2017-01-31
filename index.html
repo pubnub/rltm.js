@@ -124,7 +124,7 @@
             <div class="row">
                 <div class="col-sm-5 col-sm-offset-1">
                     <p class="text-center">Socket.io</p>
-                    <pre><code class="javascript">let client = rltm({
+                    <pre><code class="javascript">let user = rltm({
     service: 'socketio', 
     config: {
         endpoint: 'http://localhost:8000'
@@ -133,7 +133,7 @@
                 </div>
                 <div class="col-sm-5">
                     <p class="text-center">PubNub</p>
-                    <pre><code class="javascript">let client = rltm({
+                    <pre><code class="javascript">let user = rltm({
     service: 'pubnub', 
     config: {
         publishKey: 'YOUR_PUBNUB_PUBLISH_KEY',
@@ -157,7 +157,7 @@
         </div>
         <div id="doc-links">
             <div>
-                <a href="#clients">Clients</a>
+                <a href="#users">Users</a>
                 <a href="#rooms">Rooms</a>
                 <a href="#join">Join</a>
                 <a href="#messages">Messages</a>
@@ -168,23 +168,23 @@
             </div>
         </div>
         <div class="container" id="docs">
-            <div class="row" id="clients">
+            <div class="row" id="users">
                 <div class="col-sm-3 col-sm-offset-1">
                     <img src="assets/user.png" class="img-responsive" />
                 </div>
                 <div class="col-sm-7">
-                    <h1>Clients</h1>
-                    <p>Every <code>client</code> connected to rltm.js has two properties:</p>
+                    <h1>Users</h1>
+                    <p>Every <code>user</code> connected to rltm.js has two properties:</p>
 
                     <ol>
-                    <li><code>uuid</code> - a unique way to identify this <code>client</code></li>
+                    <li><code>uuid</code> - a unique way to identify this <code>user</code></li>
 
-                    <li><code>state</code> - data associated with this <code>client</code></li>
+                    <li><code>state</code> - data associated with this <code>user</code></li>
                     </ol>
 
                     <p>You can provide these as parameters during initialization.</p>
 
-                    <pre><code>let client = rltm({
+                    <pre><code>let user = rltm({
     service: 'socketio', 
     config: {
         endpoint: 'http://localhost:9000',
@@ -200,7 +200,7 @@
                 </div>
                 <div class="col-sm-7">
                     <h1>Rooms</h1>
-                    <p>Realtime communication happens over <code>room</code>s. <code>room</code>s are like chat rooms, everybody in a <code>room</code> receives events sent by every other <code>client</code>.</p>
+                    <p>Realtime communication happens over <code>room</code>s. <code>room</code>s are like chat rooms, everybody in a <code>room</code> receives events sent by every other <code>user</code>.</p>
                 </div>
             </div>
             <div class="row" id="join">
@@ -209,12 +209,12 @@
                 </div>
                 <div class="col-sm-7">
                     <h1>Join</h1>
-                    <p>A <code>client</code> can join a <code>room</code> by using the <code>join()</code> method and supplying a <code>room</code> identifier. <code>client</code>s who provide the same  identifier will be able to communicate with each other.</p>
-                    <pre><code class="javascript">room = client.join('room-name');</code></pre>
-                    <p>This returns a <code>room</code> object which we can use to communicate with other <code>client</code>s.</p>
-                    <p>A client can subscribe to the <code>join</code> event to find out when other <code>client</code>s join the room.</p>
+                    <p>A <code>user</code> can join a <code>room</code> by using the <code>join()</code> method and supplying a <code>room</code> identifier. <code>user</code>s who provide the same  identifier will be able to communicate with each other.</p>
+                    <pre><code class="javascript">room = user.join('room-name');</code></pre>
+                    <p>This returns a <code>room</code> object which we can use to communicate with other <code>user</code>s.</p>
+                    <p>A user can subscribe to the <code>join</code> event to find out when other <code>user</code>s join the room.</p>
                     <pre><code class="javascript">room.on('join', (uuid, state) =&gt; {
-    console.log('client with uuid', uuid, 'joined with state', state);
+    console.log('user with uuid', uuid, 'joined with state', state);
 });</code></pre>
                 </div>
             </div>
@@ -230,7 +230,7 @@
                     <pre><code class="javascript">room.publish({hello: world}).then(() =&gt; {
     console.log('message published');
 });</code></pre>
-                    <p>When another <code>client</code> sends a message to the room, it will trigger the <code>message</code> event. The <code>room</code> can subscribe to that event with the <code>on()</code> method.</p>
+                    <p>When another <code>user</code> sends a message to the room, it will trigger the <code>message</code> event. The <code>room</code> can subscribe to that event with the <code>on()</code> method.</p>
 
                     <pre><code class="javascript">room.on('message', (uuid, data) =&gt; {
     console.log('message received from uuid', uuid, 'with data', data);
@@ -244,7 +244,7 @@
                 </div>
                 <div class="col-sm-7">
                     <h1>History</h1>
-                    <p>A <code>client</code> can retrieve previously published messages in the <code>room</code> by using the <code>()</code> method. Returns a promise.</p>
+                    <p>A <code>user</code> can retrieve previously published messages in the <code>room</code> by using the <code>()</code> method. Returns a promise.</p>
 
                     <pre><code class="javascript">room.history().then((history) =&gt; {
     console.log('got array of all messages in channel', history);
@@ -276,16 +276,16 @@
                 </div>
                 <div class="col-sm-7">
                     <h1>State</h1>
-                    <p>A <code>client</code> state can be updated at any time by using the <code>setState()</code> method. Supply the new <code>state</code> as the only parameter. Return a promise.</p>
+                    <p>A <code>user</code> state can be updated at any time by using the <code>setState()</code> method. Supply the new <code>state</code> as the only parameter. Return a promise.</p>
 
                     <pre><code class="javascript">room.setState({idle: true}).then(() =&gt; {
     console.log('state set');
 });</code></pre>
 
-                    <p>This will fire the <code>state</code> event which you can subscribe to with the <code>on()</code> method. When fired you will get the <code>uuid</code> of the <code>client</code> and the new <code>state</code>.</p>
+                    <p>This will fire the <code>state</code> event which you can subscribe to with the <code>on()</code> method. When fired you will get the <code>uuid</code> of the <code>user</code> and the new <code>state</code>.</p>
 
                     <pre><code class="javascript">room.on('state', (uuid, state) =&gt; {
-    console.log('client with uuid', uuid, 'was given state', state);
+    console.log('user with uuid', uuid, 'was given state', state);
 });</code></pre>
                 </div>
             </div>
@@ -295,13 +295,13 @@
                 </div>
                 <div class="col-sm-7">
                     <h1>Here Now</h1>
-                    <p>A <code>room</code> can get a list of other <code>client</code>s who are in the <code>room</code> by using the <code>hereNow()</code> method. Returns a promise.</p>
+                    <p>A <code>room</code> can get a list of other <code>user</code>s who are in the <code>room</code> by using the <code>hereNow()</code> method. Returns a promise.</p>
 
-                    <pre><code class="javascript">room.hereNow().then((clients) =&gt; {
-    console.log('clients online', clients);
+                    <pre><code class="javascript">room.hereNow().then((users) =&gt; {
+    console.log('users online', users);
 });</code></pre>
 
-                    <p>Successful responses will return a object of <code>client</code>s who are currently connected to the <code>room</code>. The keys are the <code>client</code>'s <code>uuid</code>s and the values are their current <code>state</code>.</p>
+                    <p>Successful responses will return a object of <code>user</code>s who are currently connected to the <code>room</code>. The keys are the <code>user</code>'s <code>uuid</code>s and the values are their current <code>state</code>.</p>
 
                     <pre><code class="javascript">{ 
     uuid1: {
@@ -320,15 +320,15 @@
                 <div class="col-sm-7">
                     <h1>Leave</h1>
 
-                    <p>A <code>client</code> can manually leave a <code>room</code> by using the <code>unsubscribe()</code> method. Returns a promise.</p>
+                    <p>A <code>user</code> can manually leave a <code>room</code> by using the <code>unsubscribe()</code> method. Returns a promise.</p>
 
                     <pre><code class="javascript">room.unsubscribe().then(() =&gt; {
     console.log('left the room.');
 });</code></pre>
-                    <p>A <code>room</code> can subscribe to the <code>leave</code> event to find out when a <code>client</code> leaves.</p>
+                    <p>A <code>room</code> can subscribe to the <code>leave</code> event to find out when a <code>user</code> leaves.</p>
 
                     <pre><code class="javascript">room.on('leave', (uuid) =&gt; {
-    console.log('client with uuid', uuid, 'has left');
+    console.log('user with uuid', uuid, 'has left');
 });</code></pre>
                 </div>
             </div>
