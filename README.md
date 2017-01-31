@@ -70,7 +70,7 @@ PubNub is a hosted realtime solution that doesn't require you to run or maintain
 
 # Usage
 
-## Clients
+## Users
 
 Every ```user``` connected to rltm.js has two properties:
 
@@ -134,7 +134,7 @@ room.publish({hello: world}).then(() => {
 });
 ```
 
-## Online Clients
+## Online Users
 
 ### Here Now
 
@@ -181,7 +181,7 @@ room.unsubscribe().then(() => {
 
 This will fire the ```leave``` event.
 
-## Set Client State
+## Set User State
 
 A ```user``` state can be updated at any time by using the ```setState()``` method. Supply the new ```state``` as the only parameter. Return a promise.
 

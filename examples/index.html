@@ -100,7 +100,7 @@
         
 
         room.on('join', function(uuid, state) {
-            log(`Client joined ${roomName} with uuid ${uuid} and state <code>${JSON.stringify(state)}</code>`, 'Join');
+            log(`User joined ${roomName} with uuid ${uuid} and state <code>${JSON.stringify(state)}</code>`, 'Join');
         });
 
         room.on('message', function(uuid, message){
