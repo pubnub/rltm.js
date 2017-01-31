@@ -70,7 +70,7 @@ PubNub is a hosted realtime solution that doesn't require you to run or maintain
 
 # Usage
 
-## Clients
+## Users
 
 Every ```user``` connected to rltm.js has two properties:
 
@@ -114,14 +114,6 @@ room.on('join', (uuid, state) => {
 
 ## Messages
 
-### Publish
-
-```js
-room.publish({hello: world}).then(() => {
-    console.log('message published');
-});
-```
-
 ### Message Event
 
 When another ```user``` sends a message to the room, it will trigger the ```message``` event. The ```room``` can subscribe to that event with the ```on()``` method.
@@ -132,7 +124,17 @@ room.on('message', (uuid, data) => {
 });
 ```
 
-## Online Clients
+### Publish
+
+To send a message to the entire room, use the ```publish()``` method. Returns a promise.
+
+```js
+room.publish({hello: world}).then(() => {
+    console.log('message published');
+});
+```
+
+## Online Users
 
 ### Here Now
 
@@ -172,12 +174,14 @@ room.on('leave', (uuid) => {
 A ```user``` can manually leave a ```room``` by using the ```unsubscribe()``` method. Returns a promise.
 
 ```js
-room.on('leave', (uuid) => {
-    console.log('user with uuid', uuid, 'has left');
+room.unsubscribe().then(() => {
+    console.log('left the room.');
 });
 ```
 
-## Set Client State
+This will fire the ```leave``` event.
+
+## Set User State
 
 A ```user``` state can be updated at any time by using the ```setState()``` method. Supply the new ```state``` as the only parameter. Return a promise.
 
