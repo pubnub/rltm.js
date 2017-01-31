@@ -98,10 +98,10 @@ room.publish({hello: world}).then(() => {
 
 The subscribe code above will fire.
 
-You can also get a list of who's in the room by calling the ```hereNow()``` endpoint.
+You can also get a list of who's in the room by calling the ```here()``` endpoint.
 
 ```js
-room.hereNow().then((users) => {
+room.here().then((users) => {
     console.log('users online', users);
 });
 ```
