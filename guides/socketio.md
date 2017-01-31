@@ -10,7 +10,7 @@ node ./socket.io-server.js
 Once the server is running, configure rltm to look for the server at that endpoint.
 
 ```js
-let client = rltm({
+let user = rltm({
     service: 'socketio', 
     config: {
         endpoint: 'http://localhost:8000'
@@ -18,4 +18,4 @@ let client = rltm({
 });
 ```
 
-You can read more about config options on the [Socket.io Documentation](http://socket.io/docs/client-api/#manager(url:string,-opts:object))
+You can read more about config options on the [Socket.io Documentation](http://socket.io/docs/user-api/#manager(url:string,-opts:object))

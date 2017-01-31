@@ -2,7 +2,7 @@
 
 We're proud to announce the release of rltm.js, a universal API for realtime communication. Rltm.js allows you to build real-time apps with one codebase and easily switch between backends.
 
-Rltm.js provides handy methods for rooms, clients, message history, and finding out who's online. It works for both front end web and NodeJs. All of this information is available from generic methods and you can switch between realtime hosts with one small config.
+Rltm.js provides handy methods for rooms, users, message history, and finding out who's online. It works for both front end web and NodeJs. All of this information is available from generic methods and you can switch between realtime hosts with one small config.
 
 At PubNub we write tons of open source libraries, examples, tutorials. Rltm.js allows us to share this work with all of the other realtime communities out there.
 
@@ -34,7 +34,7 @@ const rltm = require('rltm');
 Then, configure the rltm library in your javascript code. Both the NodeJS and web libraries are configured with the ```rltm``` variable. 
 
 ```js
-let client = rltm({
+let user = rltm({
     service: 'pubnub',
     config: {
         // ...
@@ -48,7 +48,7 @@ let client = rltm({
 To use PubNub, supply your publish and subscribe keys from your account:
 
 ```js
-let client = rltm({
+let user = rltm({
     service: 'pubnub', 
     config: {
         publishKey: 'YOUR_PUBNUB_PUBLISH_KEY',
@@ -66,7 +66,7 @@ node ./socket.io-server.js
 Then you can configure rltm to look for the server at that endpoint.
 
 ```js
-let client = rltm({
+let user = rltm({
     service: 'socketio', 
     config: {
         endpoint: 'http://localhost:9000'
@@ -77,7 +77,7 @@ let client = rltm({
 Then, you can connect to a chatroom using the ```join``` method.
 
 ```js
-room = client.join('room-name');
+room = user.join('room-name');
 ```
 
 Now you can subscribe to messages for that room.
@@ -101,8 +101,8 @@ The subscribe code above will fire.
 You can also get a list of who's in the room by calling the ```hereNow()``` endpoint.
 
 ```js
-room.hereNow().then((clients) => {
-    console.log('clients online', clients);
+room.hereNow().then((users) => {
+    console.log('users online', users);
 });
 ```
 

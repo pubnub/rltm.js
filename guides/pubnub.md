@@ -5,7 +5,7 @@ PubNub is a cloud realtime service. You only need to supply your PubNub publish 
 You can get your publish and subscribe keys from [the pubnub admin panel](https://admin.pubnub.com/).
 
 ```js
-let client = rltm({
+let user = rltm({
     service: 'pubnub', 
     config: {
         publishKey: 'YOUR_PUBNUB_PUBLISH_KEY',
@@ -16,4 +16,4 @@ let client = rltm({
 
 You can read about more config options on the official [PubNub Documentation](https://www.pubnub.com/docs/javascript/api-reference-sdk-v4#init).
 
-This service exposes PubNub only features within ```client.pubnub``` or ```room.pubnub```.
+This service exposes PubNub only features within ```user.pubnub``` or ```room.pubnub```.

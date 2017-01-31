@@ -15,10 +15,10 @@ class Room extends EventEmitter {
         // call the EventEmitter constructor
         super();
 
-        // determine the client's state 
+        // determine the user's state 
         this.state = state || {};
 
-        // store this clients uuid
+        // store this users uuid
         this.uuid = uuid;
 
         // assign the channel parameter as a property
@@ -41,7 +41,7 @@ class Room extends EventEmitter {
 
                     globalReady = true;
 
-                    // tell the client that first connection made
+                    // tell the user that first connection made
                     this.onReady();
 
                 }
@@ -106,7 +106,7 @@ class Room extends EventEmitter {
     // this can be solved with setTimeout(() => {}, 10) to let the 
     onReady() {
 
-        // waiting to be assigned by client
+        // waiting to be assigned by user
         return;
 
     }
@@ -152,7 +152,7 @@ class Room extends EventEmitter {
 
         return new Promise((resolve, reject) => {
         
-            // ask PubNub for information about connected clients in this channel
+            // ask PubNub for information about connected users in this channel
             this.pubnub.hereNow({
                 channels: [this.channel],
                 includeUUIDs: true,

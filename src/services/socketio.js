@@ -3,7 +3,7 @@
 // include NodeJS event emitter
 const EventEmitter = require('events');
 
-// include the Socket.io client library
+// include the Socket.io user library
 const io = require('socket.io-client');
 
 // represents a connection to a single channel
@@ -14,7 +14,7 @@ class Room extends EventEmitter {
         // call the EventEmitter constructor
         super();
 
-        // store this clients uuid
+        // store this users uuid
         this.uuid = uuid;
 
         // assign the channel parameter as a property
@@ -31,7 +31,7 @@ class Room extends EventEmitter {
             // tell the server that we want to join a channel
             this.socket.emit('channel', channel, this.uuid, state);
 
-            // tell the client the server is ready
+            // tell the user the server is ready
             this.onReady();
             this.isReady = true;
 
@@ -43,7 +43,7 @@ class Room extends EventEmitter {
             // make sure the channel is this channel
             if(this.channel == channel) {
 
-                // emit the 'join' event to the client
+                // emit the 'join' event to the user
                 this.emit('join', uuid, state);
 
             }
@@ -56,7 +56,7 @@ class Room extends EventEmitter {
             // make sure it's on this channel
             if(this.channel == channel) {
 
-                // emit the 'leave' event to the client
+                // emit the 'leave' event to the user
                 this.emit('leave', uuid);
             }
 
@@ -68,19 +68,19 @@ class Room extends EventEmitter {
             // make sure it is on this channel
             if(this.channel == channel) {
 
-                // tell the client of the new message
+                // tell the user of the new message
                 this.emit('message', uuid, data);
             }
 
         });
 
-        // a client sets their state
+        // a user sets their state
         this.socket.on('state', (channel, uuid, state) => {
 
             // make sure it is on this channel
             if(this.channel == channel) {
 
-                // tell the client of the set state
+                // tell the user of the set state
                 this.emit('state', uuid, state);
             }
 
@@ -97,7 +97,7 @@ class Room extends EventEmitter {
 
     }
     onReady() {
-        // waiting to be assigned by client
+        // waiting to be assigned by user
         return;
     }
     publish(data) {
