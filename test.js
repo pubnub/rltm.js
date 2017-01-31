@@ -97,7 +97,7 @@ describe(connection.service, function() {
 
         it('at least one user online', function(done) {
 
-            room.hereNow().then(function(users) {
+            room.here().then(function(users) {
 
                 assert.isOk(users, 'At least one user online now');
                 done();

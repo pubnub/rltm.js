@@ -138,10 +138,10 @@ room.publish({hello: world}).then(() => {
 
 ### Here Now
 
-A ```room``` can get a list of other ```user```s who have in the ```room``` by using the ```hereNow()``` method. Returns a promise.
+A ```room``` can get a list of other ```user```s who have in the ```room``` by using the ```here()``` method. Returns a promise.
 
 ```js
-room.hereNow().then((users) => {
+room.here().then((users) => {
     console.log('users online', users);
 });
 ```

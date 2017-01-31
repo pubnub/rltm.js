@@ -148,7 +148,7 @@ class Room extends EventEmitter {
 
     };
 
-    hereNow() {
+    here() {
 
         return new Promise((resolve, reject) => {
         

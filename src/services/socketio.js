@@ -112,7 +112,7 @@ class Room extends EventEmitter {
         });
 
     }
-    hereNow() {
+    here() {
         
         // ask socket.io-server for a list of online users
         return new Promise((resolve, reject) => {
