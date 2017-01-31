@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <style type="text/css">
+        #log {
+            padding-top: 10px;
+            padding-bottom: 100px;
+        }
+        #input {
+            height: 80px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+    </style>
+  </head>
+  <body>
+
+    <div class="container-fluid">
+        <div class="row" id="log">
+        </div>
+    </div>
+    <form id="input">
+        <div class="container-fluid">
+            <div class="form-group row">
+              <label for="text" class="col-sm-2 col-form-label">Message</label>
+              <div class="col-sm-8">
+                <input id="message" type="text" class="form-control" placeholder="Your message here...">
+              </div>
+              <div class="col-sm-2">
+                <input type="submit" class="btn btn-primary btn-block" value="Send">
+              </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="../web/rltm.js"></script>
+
+    <script type="text/javascript">
+
+        const roomName = 'rltm-demo';
+
+        const log = (text = 'No text given', title = '', color = false) => {
+
+            let html = $(`<div class="col-md-2"><p class="text-${color}"><strong>${title}</strong></p></div><div class="col-md-10"><p class="text-${color}">${text}</p></div>`);
+
+            $('#log').append(html);
+            $('body').scrollTop(1E10);
+
+        };
+
+        const rltmConfig = {
+            service: 'pubnub', 
+            config: {
+                publishKey: 'demo',
+                subscribeKey: 'demo'
+            }
+        };
+
+        const client = rltm(rltmConfig);
+        
+        log(`<pre><code>${JSON.stringify(rltmConfig, null, 4)}</pre></code>`, 'Configure', 'info');
+        
+        let room = client.join(roomName);
+
+        log(`Joining ${roomName}...`, 'Join', 'info');
+
+
+        room.ready(() => {
+            log(`Joined ${roomName}`, 'Connect', 'success');
+        });
+
+        room.history().then(function(history) {
+            
+            let i = 0;
+            
+            while(i < 5) {
+
+                log(`<pre><code>${JSON.stringify(history[i])}</pre></code>`, 'History', 'muted');
+
+                i++;
+            }
+
+        }, function() {
+        });
+        
+
+        room.on('join', function(uuid, state) {
+            log(`Client joined ${roomName} with uuid ${uuid} and state <code>${JSON.stringify(state)}</code>`, 'Join');
+        });
+
+        room.on('message', function(uuid, message){
+            log(`<strong>${uuid}:</strong> ${message} `, 'Message');
+        });
+
+
+        let state = {online: true};
+
+        // state set goes here
+        room.setState(state).then(function() {
+            log(`Setting state as <pre><code>${JSON.stringify(state)}</code></pre> `, 'Setting State...', 'info');
+        });    
+
+        room.on('state', function(uuid, state) {
+            log(`State set for <strong>${uuid}</strong> <pre><code>${JSON.stringify(state)}</code></pre> `, 'State', 'success');
+        });
+    
+        room.on('leave', (uuid) => {
+            log(`${uuid} has left`, 'Leave', 'warning');
+        });
+
+        $('form').submit(() => {
+
+            room.publish($('#message').val());
+            
+            log($('#message').val(), 'Sending...', 'info');
+
+            $('#message').val('');
+
+            return false;
+
+        });
+
+    </script>
+  </body>
+</html>
