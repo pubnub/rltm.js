@@ -52,7 +52,7 @@
 
     <script type="text/javascript">
 
-        const roomName = 'rltm-demo';
+        const roomName = 'rltm-demo-test';
 
         const log = (text = 'No text given', title = '', color = false) => {
 
@@ -79,9 +79,12 @@
 
         log(`Joining ${roomName}...`, 'Join', 'info');
 
-
         room.ready(() => {
             log(`Joined ${roomName}`, 'Connect', 'success');
+        });
+
+        room.here().then((users) => {
+            log(`<pre><code>${JSON.stringify(users)}</pre></code>`, 'Here', 'info');
         });
 
         room.history().then(function(history) {
@@ -90,7 +93,9 @@
             
             while(i < 5) {
 
-                log(`<pre><code>${JSON.stringify(history[i])}</pre></code>`, 'History', 'muted');
+                if(history[i]) {
+                    log(`<pre><code>${JSON.stringify(history[i])}</pre></code>`, 'History', 'muted');
+                }
 
                 i++;
             }
