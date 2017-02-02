@@ -54,9 +54,24 @@
 
         const roomName = 'rltm-demo-test';
 
+        const randomName = () => {
+
+            // list of friendly animals
+            let animals = ['pigeon', 'seagull', 'bat', 'owl', 'sparrows', 'robin', 'bluebird', 'cardinal', 'hawk', 'fish', 'shrimp', 'frog', 'whale', 'shark', 'eel', 'seal', 'lobster', 'octopus', 'mole', 'shrew', 'rabbit', 'chipmunk', 'armadillo', 'dog', 'cat', 'lynx', 'mouse', 'lion', 'moose', 'horse', 'deer', 'raccoon', 'zebra', 'goat', 'cow', 'pig', 'tiger', 'wolf', 'pony', 'antelope', 'buffalo', 'camel', 'donkey', 'elk', 'fox', 'monkey', 'gazelle', 'impala', 'jaguar', 'leopard', 'lemur', 'yak', 'elephant', 'giraffe', 'hippopotamus', 'rhinoceros', 'grizzlybear'];
+            
+            // list of friendly colors
+            let colors = ['silver', 'gray', 'black', 'red', 'maroon', 'olive', 'lime', 'green', 'teal', 'blue', 'navy', 'fuchsia', 'purple'];
+
+            // randomly generate a combo of the two and return it
+            return colors[Math.floor(Math.random() * colors.length)] + '_' + animals[Math.floor(Math.random() * animals.length)];
+
+        }
+
+        const myUsername = randomName();
+
         const log = (text = 'No text given', title = '', color = false) => {
 
-            let html = $(`<div class="col-md-2"><p class="text-${color}"><strong>${title}</strong></p></div><div class="col-md-10"><p class="text-${color}">${text}</p></div>`);
+            let html = $(`<div class="col-sm-3"><p class="text-${color}"><strong>${title}</strong></p></div><div class="col-sm-9 text-${color}">${text}</div>`);
 
             $('#log').append(html);
             $('body').scrollTop(1E10);
@@ -67,7 +82,8 @@
             service: 'pubnub', 
             config: {
                 publishKey: 'demo',
-                subscribeKey: 'demo'
+                subscribeKey: 'demo',
+                uuid: myUsername
             }
         };
 
@@ -77,14 +93,14 @@
         
         let room = user.join(roomName);
 
-        log(`Joining ${roomName}...`, 'Join', 'info');
+        log(`<p>Joining ${roomName}...</p>`, 'Join', 'info');
 
         room.ready(() => {
-            log(`Joined ${roomName}`, 'Connect', 'success');
+            log(`<p>Joined ${roomName}</p>`, 'Connect', 'success');
         });
 
         room.here().then((users) => {
-            log(`<pre><code>${JSON.stringify(users)}</pre></code>`, 'Here', 'info');
+            log(`<pre><code>${JSON.stringify(users, null, 4)}</pre></code>`, 'Here', 'info');
         });
 
         room.history().then(function(history) {
@@ -94,7 +110,7 @@
             while(i < 5) {
 
                 if(history[i]) {
-                    log(`<pre><code>${JSON.stringify(history[i])}</pre></code>`, 'History', 'muted');
+                    log(`<pre><code>${JSON.stringify(history[i], null, 4)}</pre></code>`, 'History', 'muted');
                 }
 
                 i++;
@@ -105,34 +121,33 @@
         
 
         room.on('join', function(uuid, state) {
-            log(`User joined ${roomName} with uuid ${uuid} and state <code>${JSON.stringify(state)}</code>`, 'Join');
+            log(`<p>User joined ${roomName} with uuid ${uuid}`, 'Join');
         });
 
         room.on('message', function(uuid, message){
-            log(`<strong>${uuid}:</strong> ${message} `, 'Message');
+            log(`<p>${message}</p>`, uuid);
         });
 
-
-        let state = {online: true};
+        let state = {lastOnline: new Date()};
 
         // state set goes here
         room.setState(state).then(function() {
-            log(`Setting state as <pre><code>${JSON.stringify(state)}</code></pre> `, 'Setting State...', 'info');
+            log(`<p.Setting state as</p><pre><code>${JSON.stringify(state, null, 4)}</code></pre> `, 'Setting State...', 'info');
         });    
 
         room.on('state', function(uuid, state) {
-            log(`State set for <strong>${uuid}</strong> <pre><code>${JSON.stringify(state)}</code></pre> `, 'State', 'success');
+            log(`<p>State set for <strong>${uuid}</strong></p> <pre><code>${JSON.stringify(state, null, 4)}</code></pre> `, 'State', 'success');
         });
     
         room.on('leave', (uuid) => {
-            log(`${uuid} has left`, 'Leave', 'warning');
+            log(`<p>${uuid} has left</p>`, 'Leave', 'warning');
         });
 
         $('form').submit(() => {
 
             room.publish($('#message').val());
             
-            log($('#message').val(), 'Sending...', 'info');
+            log(`<p>${$('#message').val()}</p>`, 'Sending...', 'info');
 
             $('#message').val('');
 
