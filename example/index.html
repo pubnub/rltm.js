@@ -109,16 +109,9 @@
         });
 
         room.history().then(function(history) {
-            
-            let i = 0;
-            
-            while(i < 5) {
-
-                if(history[i]) {
-                    log(`<pre><code>${JSON.stringify(history[i], null, 4)}</pre></code>`, 'History', 'muted');
-                }
-
-                i++;
+        
+            if(history[0]) {
+                log(`<pre><code>${JSON.stringify(history[0], null, 4)}</pre></code>`, 'History', 'muted');
             }
 
         }, function() {
