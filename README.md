@@ -1,6 +1,6 @@
 ![](./assets/rltm.js-logo.png)
 
-Universal API realtime services. Integrate once and easily swap PubNub and open source infrastructure. 
+Universal API for realtime services. Integrate once and easily switch between Socket.io and PubNub. 
 
 Provides handy methods for rooms, users, message history, and information about connected user.
 
@@ -116,7 +116,7 @@ room.on('join', (uuid, state) => {
 
 ### Message Event
 
-When another ```user``` sends a message to the room, it will trigger the ```message``` event. The ```room``` can subscribe to that event with the ```on()``` method.
+When another ```user``` sends a message to the ```room```, it will trigger the ```message``` event. The ```room``` can subscribe to that event with the ```on()``` method.
 
 ```js
 room.on('message', (uuid, data) => {
@@ -126,7 +126,7 @@ room.on('message', (uuid, data) => {
 
 ### Publish
 
-To send a message to the entire room, use the ```publish()``` method. Returns a promise.
+To send a message to the entire ```room```, use the ```publish()``` method. Returns a promise.
 
 ```js
 room.publish({hello: world}).then(() => {
@@ -191,7 +191,7 @@ room.setState({idle: true}).then(() => {
 });
 ```
 
-This will fire the ```state``` event which you can subscribe to with the ```on()``` method. When fired you will get the ```uuid``` of the ```user``` and the new ```state```.
+This will fire the ```state``` event which you can subscribe to with the ```room.on()``` method. When fired you will get the ```uuid``` of the ```user``` and the new ```state```.
 
 ```js
 room.on('state', (uuid, state) => {
