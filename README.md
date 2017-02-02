@@ -1,6 +1,6 @@
 ![](./assets/rltm.js-logo.png)
 
-Universal API realtime services. Integrate once and easily swap PubNub and open source infrastructure. 
+Universal API for realtime services. Integrate once and easily switch between Socket.io and PubNub. 
 
 Provides handy methods for rooms, users, message history, and information about connected user.
 
