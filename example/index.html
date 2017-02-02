@@ -51,6 +51,7 @@
     <script type="text/javascript" src="../web/rltm.js"></script>
 
     <script type="text/javascript">
+    $(document).ready(() => {
 
         const roomName = 'rltm-demo-test';
 
@@ -76,6 +77,10 @@
             $('#log').append(html);
             $('body').scrollTop(1E10);
 
+            html.find('pre code').each(function(i, block) {
+              hljs.highlightBlock(block);
+            });
+
         };
 
         const rltmConfig = {
@@ -89,7 +94,7 @@
 
         const user = rltm(rltmConfig);
         
-        log(`<pre><code>${JSON.stringify(rltmConfig, null, 4)}</pre></code>`, 'Configure', 'info');
+        log(`<pre><code class='json'>${JSON.stringify(rltmConfig, null, 4)}</pre></code>`, 'Configure', 'info');
         
         let room = user.join(roomName);
 
@@ -138,7 +143,7 @@
         room.on('state', function(uuid, state) {
             log(`<p>State set for <strong>${uuid}</strong></p> <pre><code>${JSON.stringify(state, null, 4)}</code></pre> `, 'State', 'success');
         });
-    
+        
         room.on('leave', (uuid) => {
             log(`<p>${uuid} has left</p>`, 'Leave', 'warning');
         });
@@ -155,6 +160,19 @@
 
         });
 
+    });
     </script>
+
+    <link rel="stylesheet" href="../bower_components/highlightjs/styles/gh.css"/>
+    <style type="text/css">
+        .hljs {
+            background-color: #fff;
+            border: 1px solid #efefef;
+            border-radius: 5px;
+            padding: 20px;
+        }
+    </style>
+    <script src="../bower_components/highlightjs/highlight.pack.min.js"></script>
+
   </body>
 </html>
