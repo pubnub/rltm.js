@@ -62,6 +62,19 @@ class Room extends EventEmitter {
 
         });
 
+
+        // server says someone has disconnected
+        this.socket.on('disconnect', (channel, uuid) => {
+
+            // make sure it's on this channel
+            if(this.channel == channel) {
+
+                // emit the 'leave' event to the user
+                this.emit('disconnect', uuid);
+            }
+
+        });
+
         // a message is sent from the srever
         this.socket.on('message', (channel, uuid, data) => {
 

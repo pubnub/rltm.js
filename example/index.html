@@ -84,11 +84,17 @@
         };
 
         const rltmConfig = {
-            service: 'pubnub', 
+        //     service: 'pubnub', 
+        //     config: {
+        //         publishKey: 'demo',
+        //         subscribeKey: 'demo',
+        //         uuid: myUsername
+        //     }
+        
+            service: 'socketio', 
             config: {
-                publishKey: 'demo',
-                subscribeKey: 'demo',
-                uuid: myUsername
+                endpoint: 'http://localhost:9000',
+                uuid: new Date().getTime()
             }
         };
 
@@ -148,6 +154,10 @@
             log(`<p>${uuid} has left</p>`, 'Leave', 'warning');
         });
 
+        room.on('disconnect', (uuid) => {
+            log(`<p>${uuid} has been disconnected</p>`, 'Disconnect', 'warning');
+        });
+
         $('form').submit(() => {
 
             room.publish($('#message').val());
@@ -163,7 +173,7 @@
     });
     </script>
 
-    <link rel="stylesheet" href="../bower_components/highlightjs/styles/gh.css"/>
+    <link rel="stylesheet" href="../bower_components/highlightjs/styles/github.css"/>
     <style type="text/css">
         .hljs {
             background-color: #fff;

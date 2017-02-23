@@ -44,6 +44,8 @@ const saveHistory = function(channel, uuid, data) {
 
 }
 
+let socketChannels = {};
+
 // when a new rltm.js user connects
 io.on('connection', function (socket) {
   
@@ -58,6 +60,13 @@ io.on('connection', function (socket) {
 
     // send the 'join' event to everyone else in the channel
     io.to(channel).emit('join', channel, uuid, state);
+
+    socketChannels[socket.id] = socketChannels[socket.id] || [];
+
+    socketChannels[socket.id].push({
+      channel: channel,
+      uuid: uuid
+    });
 
   });
 
@@ -116,10 +125,19 @@ io.on('connection', function (socket) {
 
     // call tell socket.io to disconnect
     socket.leave(channel);
-
     fn();
 
   });
 
+  socket.on('disconnect', function() {
+    
+    console.log('disconnect', socket)
+
+    socketChannels[socket.id].forEach(function(data) {
+      console.log('telling ', data.channel, 'that', data.uuid, 'disconnected')
+      io.to(data.channel).emit('disconnect', data.channel, data.uuid);
+    });
+
+  });
 
 });
