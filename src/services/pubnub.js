@@ -78,7 +78,7 @@ class Room extends EventEmitter {
 
                     // someone timesout
                     if(presenceEvent.action == "timeout") {
-                        this.emit('timeout', presenceEvent.uuid);
+                        this.emit('disconnect', presenceEvent.uuid);
                     }
                     
                     // someone's state is updated
