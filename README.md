@@ -169,8 +169,6 @@ room.on('leave', (uuid) => {
 });
 ```
 
-### Disconnect
-
 A ```user``` can manually leave a ```room``` by using the ```unsubscribe()``` method. Returns a promise.
 
 ```js
@@ -180,6 +178,16 @@ room.unsubscribe().then(() => {
 ```
 
 This will fire the ```leave``` event.
+
+### Disconnect
+
+If a ```user``` gets disconnected without leaving the room, the ```disconnect``` event will fire.
+
+```js
+room.on('disconnect', (uuid) => {
+    console.log('user with uuid', uuid, 'has disconnected');
+});
+```
 
 ## Set User State
 
