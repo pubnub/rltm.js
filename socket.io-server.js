@@ -1,5 +1,7 @@
 // require socket.io module
-const io = require('socket.io')(9000);
+const port = 9000;
+
+const io = require('socket.io')(port);
 
 // stores user states per room
 const states = {};
@@ -123,6 +125,8 @@ io.on('connection', function (socket) {
   // user disconnects manually
   socket.on('leave', function(uuid, channel, fn) {
 
+    if (states[data.channel]) delete states[channel];
+
     // call tell socket.io to disconnect
     socket.leave(channel);
     fn();
@@ -130,14 +134,16 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function() {
-    
-    console.log('disconnect', socket)
 
     socketChannels[socket.id].forEach(function(data) {
-      console.log('telling ', data.channel, 'that', data.uuid, 'disconnected')
+    
+      if (states[data.channel]) delete states[data.channel];
       io.to(data.channel).emit('disconnect', data.channel, data.uuid);
+
     });
 
   });
 
 });
+
+console.log('rltm.js - socket.io server running on port', port)
