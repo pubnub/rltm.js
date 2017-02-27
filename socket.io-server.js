@@ -125,7 +125,9 @@ io.on('connection', function (socket) {
   // user disconnects manually
   socket.on('leave', function(uuid, channel, fn) {
 
-    if (states[data.channel]) delete states[channel];
+    if (states[data.channel][uuid]) {
+      delete states[channel][uuid];
+    }
 
     // call tell socket.io to disconnect
     socket.leave(channel);
@@ -137,7 +139,10 @@ io.on('connection', function (socket) {
 
     socketChannels[socket.id].forEach(function(data) {
     
-      if (states[data.channel]) delete states[data.channel];
+      if (states[data.channel][data.uuid]) {
+        delete states[data.channel][data.uuid];
+      }
+
       io.to(data.channel).emit('disconnect', data.channel, data.uuid);
 
     });
