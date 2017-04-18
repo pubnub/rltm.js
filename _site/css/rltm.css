@@ -1,0 +1,47 @@
+#main-logo {
+    width: 500px;
+}
+#docs-header {
+    padding-bottom: 50px;
+}
+#docs {
+    padding-top: 50px;
+}
+#docs .row {
+    margin-top: -160px;
+    padding-top: 160px; 
+    margin-bottom: 50px;
+}
+#docs p, pre {
+    margin: 20px 0px;
+}
+#doc-links {
+    text-align: center;
+    background-color: #efefef;
+    padding: 20px 0px;
+    width: 100%;
+    z-index: 9;
+    border-bottom: 1px solid #ddd;
+}
+#doc-links a {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+@media (max-width: 767px) {
+  #doc-links {
+    display: none;
+  }
+}
+
+#demo-embed {
+    border: 1px solid #ccc;
+    margin: 20px 0px
+    border-radius: 3px;
+}
+section.success a {
+    color: #fff;
+    text-decoration: underline;
+}
+.dont-forget {
+    font-size: 14px;
+}

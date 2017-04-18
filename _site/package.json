@@ -1,0 +1,39 @@
+{
+  "name": "rltm",
+  "version": "1.1.1",
+  "description": "abstraction for realtime frameworks",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pubnub/rltm.js.git"
+  },
+  "keywords": [
+    "realtime",
+    "abstraction",
+    "socket.io",
+    "pubnub",
+    "faye"
+  ],
+  "author": "PubNub",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pubnub/rltm/issues"
+  },
+  "homepage": "https://github.com/pubnub/rltm#readme",
+  "devDependencies": {
+    "async": "^2.1.4",
+    "browserify": "^13.1.0",
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "browserify": "^13.1.0",
+    "pubnub": "^4.0.13",
+    "socket.io": "^1.5.1",
+    "socket.io-client": "^1.5.1"
+  }
+}

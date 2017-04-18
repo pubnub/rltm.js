@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <style type="text/css">
+        #log {
+            padding-top: 10px;
+            padding-bottom: 100px;
+        }
+        #input {
+            height: 80px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+    </style>
+  </head>
+  <body>
+
+    <div class="container-fluid">
+        <div class="row" id="log">
+        </div>
+    </div>
+    <form id="input">
+        <div class="container-fluid">
+            <div class="form-group row">
+              <label for="text" class="col-sm-2 col-form-label">Message</label>
+              <div class="col-sm-8">
+                <input id="message" type="text" class="form-control" placeholder="Your message here...">
+              </div>
+              <div class="col-sm-2">
+                <input type="submit" class="btn btn-primary btn-block" value="Send">
+              </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="../web/rltm.js"></script>
+
+    <script type="text/javascript">
+    $(document).ready(() => {
+
+        const roomName = 'rltm-demo-test';
+
+        const randomName = () => {
+
+            // list of friendly animals
+            let animals = ['pigeon', 'seagull', 'bat', 'owl', 'sparrows', 'robin', 'bluebird', 'cardinal', 'hawk', 'fish', 'shrimp', 'frog', 'whale', 'shark', 'eel', 'seal', 'lobster', 'octopus', 'mole', 'shrew', 'rabbit', 'chipmunk', 'armadillo', 'dog', 'cat', 'lynx', 'mouse', 'lion', 'moose', 'horse', 'deer', 'raccoon', 'zebra', 'goat', 'cow', 'pig', 'tiger', 'wolf', 'pony', 'antelope', 'buffalo', 'camel', 'donkey', 'elk', 'fox', 'monkey', 'gazelle', 'impala', 'jaguar', 'leopard', 'lemur', 'yak', 'elephant', 'giraffe', 'hippopotamus', 'rhinoceros', 'grizzlybear'];
+            
+            // list of friendly colors
+            let colors = ['silver', 'gray', 'black', 'red', 'maroon', 'olive', 'lime', 'green', 'teal', 'blue', 'navy', 'fuchsia', 'purple'];
+
+            // randomly generate a combo of the two and return it
+            return colors[Math.floor(Math.random() * colors.length)] + '_' + animals[Math.floor(Math.random() * animals.length)];
+
+        }
+
+        const myUsername = randomName();
+
+        const log = (text = 'No text given', title = '', color = false) => {
+
+            let html = $(`<div class="col-sm-3"><p class="text-${color}"><strong>${title}</strong></p></div><div class="col-sm-9 text-${color}">${text}</div>`);
+
+            $('#log').append(html);
+            $('body').scrollTop(1E10);
+
+            html.find('pre code').each(function(i, block) {
+              hljs.highlightBlock(block);
+            });
+
+        };
+
+        const rltmConfig = {
+            service: 'pubnub', 
+            config: {
+                publishKey: 'demo',
+                subscribeKey: 'demo',
+                uuid: myUsername
+            }
+        };
+
+        const user = rltm(rltmConfig);
+        
+        log(`<pre><code class='json'>${JSON.stringify(rltmConfig, null, 4)}</pre></code>`, 'Configure', 'info');
+        
+        let room = user.join(roomName);
+
+        log(`<p>Joining ${roomName}...</p>`, 'Join', 'info');
+
+        room.ready(() => {
+            log(`<p>Joined ${roomName}</p>`, 'Connect', 'success');
+        });
+
+        room.here().then((users) => {
+            log(`<pre><code>${JSON.stringify(users, null, 4)}</pre></code>`, 'Here', 'info');
+        });
+
+        room.history().then(function(history) {
+        
+            if(history[0]) {
+                log(`<pre><code>${JSON.stringify(history[0], null, 4)}</pre></code>`, 'History', 'muted');
+            }
+
+        }, function() {
+        });
+        
+
+        room.on('join', function(uuid, state) {
+            log(`<p>User joined ${roomName} with uuid ${uuid}`, 'Join');
+        });
+
+        room.on('message', function(uuid, message){
+            log(`<p>${message}</p>`, uuid);
+        });
+
+        let state = {lastOnline: new Date()};
+
+        // state set goes here
+        room.setState(state).then(function() {
+            log(`<p.Setting state as</p><pre><code>${JSON.stringify(state, null, 4)}</code></pre> `, 'Setting State...', 'info');
+        });    
+
+        room.on('state', function(uuid, state) {
+            log(`<p>State set for <strong>${uuid}</strong></p> <pre><code>${JSON.stringify(state, null, 4)}</code></pre> `, 'State', 'success');
+        });
+        
+        room.on('leave', (uuid) => {
+            log(`<p>${uuid} has left</p>`, 'Leave', 'warning');
+        });
+
+        $('form').submit(() => {
+
+            room.publish($('#message').val());
+            
+            log(`<p>${$('#message').val()}</p>`, 'Sending...', 'info');
+
+            $('#message').val('');
+
+            return false;
+
+        });
+
+    });
+    </script>
+
+    <link rel="stylesheet" href="../bower_components/highlightjs/styles/gh.css"/>
+    <style type="text/css">
+        .hljs {
+            background-color: #fff;
+            border: 1px solid #efefef;
+            border-radius: 5px;
+            padding: 20px;
+        }
+    </style>
+    <script src="../bower_components/highlightjs/highlight.pack.min.js"></script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-16927549-21', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+  </body>
+</html>

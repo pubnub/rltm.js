@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Rltm.js - Uniform API for Realtime</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Theme CSS -->
+    <link href="css/freelancer.min.css" rel="stylesheet">
+    <link href="css/rltm.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body id="page-top" class="index">
+
+    <!-- Navigation -->
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <a href="#page-top">
+                    <img src="assets/rltm.js-logo-white.svg" class="img-responsive" style="height: 50px;">
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#demo">Demo</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#config">Setup</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#docs">Docs</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="https://github.com/pubnub/rltm.js"><i class="fa fa-github"></i> GitHub</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <img src="assets/rltm.js-logo-white.svg" id="main-logo" class="img-responsive">
+                    <div class="intro-text">
+                        <hr class="star-light">
+                        <span class="name">Uniform API for Realtime</span>
+                        <span class="skills">Use a single code base to connect to multiple realtime services.</span>
+                        <div class="col-sm-8 col-sm-offset-2 text-center">
+                            <a href="https://github.com/pubnub/rltm.js" class="btn btn-lg btn-outline">
+                                <i class="fa fa-github"></i> Get Rltm.js
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Portfolio Grid Section -->
+    <section id="demo">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h2>Demo</h2>
+
+                    <hr class="star-primary">
+                    <p>Swap between Socket.io and PubNub with a single API. Works on web and NodeJS.</p>
+                </div>
+                <div class="col-sm-8 col-sm-offset-2">
+
+                    <div  id="demo-embed" class="embed-responsive embed-responsive-16by9">
+                      <iframe class="embed-responsive-item" src="example/index.html"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="success" id="config">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 text-center">
+                    <h2>Setup</h2>
+                    <hr class="star-light">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5 col-sm-offset-1">
+                    <p class="text-center">Socket.io</p>
+                    <pre><code class="javascript">let user = rltm({
+    service: 'socketio', 
+    config: {
+        endpoint: 'http://localhost:8000'
+    }
+});</code></pre>
+<p class="dont-forget text-center">Don't forget to run the <a href="https://github.com/pubnub/rltm.js/blob/master/socket.io-server.js">socket.io server</a>.
+                </div>
+                <div class="col-sm-5">
+                    <p class="text-center">PubNub</p>
+                    <pre><code class="javascript">let user = rltm({
+    service: 'pubnub', 
+    config: {
+        publishKey: 'YOUR_PUBNUB_PUBLISH_KEY',
+        subscribeKey: 'YOUR_PUBNUB_SUBSCRIBE_KEY'
+    }
+});</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section>
+        <div class="container">
+            <div id="docs-header" class="row">
+                <div class="col-sm-12 text-center">
+                    <h2>Docs</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+        </div>
+        <div id="doc-links">
+            <div>
+                <a href="#users">Users</a>
+                <a href="#rooms">Rooms</a>
+                <a href="#join">Join</a>
+                <a href="#messages">Messages</a>
+                <a href="#history">History</a>
+                <a href="#state">State</a>
+                <a href="#here">Here</a>
+                <a href="#leave">Leave</a>
+            </div>
+        </div>
+        <div class="container" id="docs">
+            <div class="row" id="users">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="assets/user.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Users</h1>
+                    <p>Every <code>user</code> connected to rltm.js has two properties:</p>
+
+                    <ol>
+                    <li><code>uuid</code> - a unique way to identify this <code>user</code></li>
+
+                    <li><code>state</code> - data associated with this <code>user</code></li>
+                    </ol>
+
+                    <p>You can provide these as parameters during initialization.</p>
+
+                    <pre><code>let user = rltm({
+    service: 'socketio', 
+    config: {
+        endpoint: 'http://localhost:9000',
+        uuid: 'MY_UNIQUE_ID',
+        state: {admin: true}
+    }
+});</code></pre>
+                </div>
+            </div>
+            <div class="row" id="rooms">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="assets/room.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Rooms</h1>
+                    <p>Realtime communication happens over <code>room</code>s. <code>room</code>s are like chat rooms, everybody in a <code>room</code> receives events sent by every other <code>user</code>.</p>
+                </div>
+            </div>
+            <div class="row" id="join">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="assets/join.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Join</h1>
+                    <p>A <code>user</code> can join a <code>room</code> by using the <code>join()</code> method and supplying a <code>room</code> identifier. <code>user</code>s who provide the same  identifier will be able to communicate with each other.</p>
+                    <pre><code class="javascript">room = user.join('room-name');</code></pre>
+                    <p>This returns a <code>room</code> object which we can use to communicate with other <code>user</code>s.</p>
+                    <p>A user can subscribe to the <code>join</code> event to find out when other <code>user</code>s join the room.</p>
+                    <pre><code class="javascript">room.on('join', (uuid, state) =&gt; {
+    console.log('user with uuid', uuid, 'joined with state', state);
+});</code></pre>
+                </div>
+            </div>
+            <div class="row" id="messages">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="assets/publish.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Messages</h1>
+
+                    <p>To send a message to the entire room, use the <code>publish()</code> method. Returns a promise.</p>
+
+                    <pre><code class="javascript">room.publish({hello: world}).then(() =&gt; {
+    console.log('message published');
+});</code></pre>
+                    <p>When another <code>user</code> sends a message to the room, it will trigger the <code>message</code> event. The <code>room</code> can subscribe to that event with the <code>on()</code> method.</p>
+
+                    <pre><code class="javascript">room.on('message', (uuid, data) =&gt; {
+    console.log('message received from uuid', uuid, 'with data', data);
+});</code></pre>
+
+                </div>
+            </div>
+            <div class="row" id="history">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="assets/history.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>History</h1>
+                    <p>A <code>user</code> can retrieve previously published messages in the <code>room</code> by using the <code>()</code> method. Returns a promise.</p>
+
+                    <pre><code class="javascript">room.history().then((history) =&gt; {
+    console.log('got array of all messages in channel', history);
+});</code></pre>
+
+                    <p>It will return the last 100 messages as an array of objects containing the <code>uuid</code> and <code>data</code> of every message. The array is sorted newest to oldest.</p>
+
+                    <pre><code class="javascript">[ 
+    { 
+        uuid: uuid2, 
+        data: { 
+            sentTime: '2pm',
+            text: 'boy howdy' 
+        } 
+    }, 
+    { 
+        uuid: uuid1, 
+        data: { 
+            sentTime: '1pm',
+            text: 'hello there' 
+        } 
+    }
+]</code></pre>
+                </div>
+            </div>
+            <div class="row" id="state">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="assets/state.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>State</h1>
+                    <p>A <code>user</code> state can be updated at any time by using the <code>setState()</code> method. Supply the new <code>state</code> as the only parameter. Return a promise.</p>
+
+                    <pre><code class="javascript">room.setState({idle: true}).then(() =&gt; {
+    console.log('state set');
+});</code></pre>
+
+                    <p>This will fire the <code>state</code> event which you can subscribe to with the <code>on()</code> method. When fired you will get the <code>uuid</code> of the <code>user</code> and the new <code>state</code>.</p>
+
+                    <pre><code class="javascript">room.on('state', (uuid, state) =&gt; {
+    console.log('user with uuid', uuid, 'was given state', state);
+});</code></pre>
+                </div>
+            </div>
+            <div class="row" id="here">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="assets/herenow.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Here</h1>
+                    <p>A <code>room</code> can get a list of other <code>user</code>s who are in the <code>room</code> by using the <code>here()</code> method. Returns a promise.</p>
+
+                    <pre><code class="javascript">room.here().then((users) =&gt; {
+    console.log('users online', users);
+});</code></pre>
+
+                    <p>Successful responses will return a object of <code>user</code>s who are currently connected to the <code>room</code>. The keys are the <code>user</code>'s <code>uuid</code>s and the values are their current <code>state</code>.</p>
+
+                    <pre><code class="javascript">{ 
+    uuid1: {
+        username: 'ianjennings'
+    },
+    uuid2: {
+        username: 'stephenblum'
+    }
+}</code></pre>
+                </div>
+            </div>
+            <div class="row" id="leave">
+                <div class="col-sm-3 col-sm-offset-1">
+                    <img src="assets/leave.png" class="img-responsive" />
+                </div>
+                <div class="col-sm-7">
+                    <h1>Leave</h1>
+
+                    <p>A <code>user</code> can manually leave a <code>room</code> by using the <code>unsubscribe()</code> method. Returns a promise.</p>
+
+                    <pre><code class="javascript">room.unsubscribe().then(() =&gt; {
+    console.log('left the room.');
+});</code></pre>
+                    <p>A <code>room</code> can subscribe to the <code>leave</code> event to find out when a <code>user</code> leaves.</p>
+
+                    <pre><code class="javascript">room.on('leave', (uuid) =&gt; {
+    console.log('user with uuid', uuid, 'has left');
+});</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="footer-above">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-col col-md-4">
+                        <h3>Created By PubNub</h3>
+                        <p>Realtime Apps Made Simple</p>
+                        <p><a href="https://www.pubnub.com/?utm_source=GitHub&utm_medium=rltmjs&utm_campaign=SYN-CY17-Q2-GitHub-April17">PubNub Data Stream Network</a></p>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>Around the Web</h3>
+                        <ul class="list-inline">
+                            <li>
+                                <a href="https://www.facebook.com/PubNub/" class="btn-social btn-outline"><i class="fa fa-fw fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://plus.google.com/+Pubnub" class="btn-social btn-outline"><i class="fa fa-fw fa-google-plus"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://twitter.com/PubNub" class="btn-social btn-outline"><i class="fa fa-fw fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.linkedin.com/company/pubnub" class="btn-social btn-outline"><i class="fa fa-fw fa-linkedin"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer-col col-md-4">
+                        <h3>HOT SWAP REALTIME</h3>
+                        <p>Easily switch between realtime providers with a single code base.</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        Copyright &copy; PubNub 2017
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-top page-scroll hidden-sm hidden-xs hidden-lg hidden-md">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+
+    <!-- jQuery -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+    <!-- Theme JavaScript -->
+    <script src="js/freelancer.min.js"></script>
+
+    <script type="text/javascript">
+        var $cache = $('#doc-links');
+        var keyPos = $cache.position().top - 70;
+        function fixDiv() {
+           if ($(window).scrollTop() > keyPos)
+             $cache.css({
+               'position': 'fixed',
+               'top': '70px'
+             });
+           else
+             $cache.css({
+               'position': 'relative',
+               'top': 'auto'
+             });
+         }
+         $(window).scroll(fixDiv);
+         fixDiv();
+    </script>
+
+    <link rel="stylesheet" href="bower_components/highlightjs/styles/gh.css"/>
+    <script src="bower_components/highlightjs/highlight.pack.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-16927549-21', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+</body>
+
+</html>

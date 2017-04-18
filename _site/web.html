@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Rltm.js Tester</title>
+    </head>
+    <body>
+        <script src="./web/rltm.js"></script>
+        <script type="text/javascript">
+
+            const connections = {
+                pubnub: new Rltm('pubnub', {
+                    publishKey: 'demo',
+                    subscribeKey: 'demo',
+                    uuid: new Date().getTime()
+                }),
+                socketio: new Rltm('socketio', {
+                    // must run socketio-server.js 
+                    endpoint: 'http://localhost:9000',
+                    uuid: new Date().getTime()
+                })    
+            };
+
+            const connection = connections['pubnub'];
+
+            console.log(connection)
+
+            room = connection.join(new Date().getTime());
+
+            let i = 1;
+     
+            setInterval(function(){
+
+                room.publish({
+                    i: i,
+                    sentTime: new Date().getTime()
+                });
+
+                i++;
+
+            }, 1000);
+     
+            room.on('message', function(uuid, message){
+
+                let latency = new Date().getTime() - message.sentTime;
+
+                document.body.innerHTML = 
+                    document.body.innerHTML + message.i + ' Latency: ' 
+                    + latency + 'ms <br/>';
+
+            });
+
+        </script>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-16927549-21', 'auto');
+          ga('send', 'pageview');
+
+        </script>
+    </body>
+</html>

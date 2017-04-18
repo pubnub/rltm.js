@@ -38,3 +38,10 @@
     margin: 20px 0px
     border-radius: 3px;
 }
+section.success a {
+    color: #fff;
+    text-decoration: underline;
+}
+.dont-forget {
+    font-size: 14px;
+}
