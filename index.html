@@ -243,9 +243,9 @@
                 <div class="col-sm-7">
                     <h1>Messages</h1>
 
-                    <p>To send a message to the entire room, use the <code>publish()</code> method. Returns a promise.</p>
+                    <p>To send a message to the entire room, use the <code>message()</code> method. Returns a promise.</p>
 
-                    <pre><code class="javascript">room.publish({hello: world}).then(() =&gt; {
+                    <pre><code class="javascript">room.message({hello: world}).then(() =&gt; {
     console.log('message published');
 });</code></pre>
                     <p>When another <code>user</code> sends a message to the room, it will trigger the <code>message</code> event. The <code>room</code> can subscribe to that event with the <code>on()</code> method.</p>
@@ -295,9 +295,9 @@
                 </div>
                 <div class="col-sm-7">
                     <h1>State</h1>
-                    <p>A <code>user</code> state can be updated at any time by using the <code>setState()</code> method. Supply the new <code>state</code> as the only parameter. Return a promise.</p>
+                    <p>A <code>user</code> state can be updated at any time by using the <code>state()</code> method. Supply the new <code>state</code> as the only parameter. Return a promise.</p>
 
-                    <pre><code class="javascript">room.setState({idle: true}).then(() =&gt; {
+                    <pre><code class="javascript">room.state({idle: true}).then(() =&gt; {
     console.log('state set');
 });</code></pre>
 
@@ -339,9 +339,9 @@
                 <div class="col-sm-7">
                     <h1>Leave</h1>
 
-                    <p>A <code>user</code> can manually leave a <code>room</code> by using the <code>unsubscribe()</code> method. Returns a promise.</p>
+                    <p>A <code>user</code> can manually leave a <code>room</code> by using the <code>leave()</code> method. Returns a promise.</p>
 
-                    <pre><code class="javascript">room.unsubscribe().then(() =&gt; {
+                    <pre><code class="javascript">room.leave().then(() =&gt; {
     console.log('left the room.');
 });</code></pre>
                     <p>A <code>room</code> can subscribe to the <code>leave</code> event to find out when a <code>user</code> leaves.</p>
