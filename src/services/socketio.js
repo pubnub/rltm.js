@@ -167,7 +167,7 @@ class Room extends EventEmitter {
         });
 
     }
-    unsubscribe(channel) {
+    leave(channel) {
         
         return new Promise((resolve, reject) => {
 

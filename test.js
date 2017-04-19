@@ -130,10 +130,10 @@ describe(connection.service, function() {
 
     });
 
-    describe('unsubscribe', function() {
+    describe('leave', function() {
 
         it('should disconnect', function(done) {
-            room.unsubscribe().then(function(){
+            room.leave().then(function(){
                 done();
             });
         });

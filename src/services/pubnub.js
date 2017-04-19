@@ -247,7 +247,7 @@ class Room extends EventEmitter {
 
     }
 
-    unsubscribe() {
+    leave() {
 
         return new Promise((resolve, reject) => {
             
