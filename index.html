@@ -338,9 +338,9 @@
                 <div class="col-sm-7">
                     <h1>Leave</h1>
 
-                    <p>A <code>user</code> can manually leave a <code>room</code> by using the <code>leave()</code> method. Returns a promise.</p>
+                    <p>A <code>user</code> can manually leave a <code>room</code> by using the <code>unsubscribe()</code> method. Returns a promise.</p>
 
-                    <pre><code class="javascript">room.leave().then(() =&gt; {
+                    <pre><code class="javascript">room.unsubscribe().then(() =&gt; {
     console.log('left the room.');
 });</code></pre>
                     <p>A <code>room</code> can subscribe to the <code>leave</code> event to find out when a <code>user</code> leaves.</p>
