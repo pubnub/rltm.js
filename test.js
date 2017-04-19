@@ -133,7 +133,7 @@ describe(connection.service, function() {
     describe('unsubscribe', function() {
 
         it('should disconnect', function(done) {
-            room.unsubscribe().then(function(){
+            room.leave().then(function(){
                 done();
             });
         });
