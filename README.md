@@ -169,10 +169,10 @@ room.on('leave', (uuid) => {
 });
 ```
 
-A ```user``` can manually leave a ```room``` by using the ```unsubscribe()``` method. Returns a promise.
+A ```user``` can manually leave a ```room``` by using the ```leave()``` method. Returns a promise.
 
 ```js
-room.unsubscribe().then(() => {
+room.leave().then(() => {
     console.log('left the room.');
 });
 ```
@@ -191,10 +191,10 @@ room.on('disconnect', (uuid) => {
 
 ## Set User State
 
-A ```user``` state can be updated at any time by using the ```setState()``` method. Supply the new ```state``` as the only parameter. Return a promise.
+A ```user``` state can be updated at any time by using the ```state()``` method. Supply the new ```state``` as the only parameter. Return a promise.
 
 ```js
-room.setState({idle: true}).then(() => {
+room.state({idle: true}).then(() => {
     console.log('state set');
 });
 ```
