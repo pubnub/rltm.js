@@ -120,7 +120,7 @@ describe(connection.service, function() {
                 done();
             });
 
-            room.setState(testNewStateData).then(function() {
+            room.state(testNewStateData).then(function() {
                 // it worked
             }, function(err) {
                 assert.fail();

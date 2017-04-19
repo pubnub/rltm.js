@@ -16,7 +16,7 @@ class Room extends EventEmitter {
         super();
 
         // determine the user's state 
-        this.state = state || {};
+        state = state || {};
 
         // store this users uuid
         this.uuid = uuid;
@@ -186,7 +186,7 @@ class Room extends EventEmitter {
 
     }
 
-    setState(state) {
+    state(state) {
 
         return new Promise((resolve, reject) => {
             

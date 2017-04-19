@@ -140,7 +140,7 @@ class Room extends EventEmitter {
         });
 
     }
-    setState (state) {
+    state(state) {
         
         return new Promise((resolve, reject) => {
 
