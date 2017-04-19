@@ -256,13 +256,14 @@
 
                 </div>
             </div>
+
             <div class="row" id="history">
                 <div class="col-sm-3 col-sm-offset-1">
                     <img src="assets/history.png" class="img-responsive" />
                 </div>
                 <div class="col-sm-7">
                     <h1>History</h1>
-                    <p>A <code>user</code> can retrieve previously published messages in the <code>room</code> by using the <code>()</code> method. Returns a promise.</p>
+                    <p>A <code>user</code> can retrieve previously published messages in the <code>room</code> by using the <code>history()</code> method. Returns a promise.</p>
 
                     <pre><code class="javascript">room.history().then((history) =&gt; {
     console.log('got array of all messages in channel', history);
