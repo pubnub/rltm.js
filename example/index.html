@@ -142,7 +142,7 @@
         let state = {lastOnline: new Date()};
 
         // state set goes here
-        room.setState(state).then(function() {
+        room.state(state).then(function() {
             log(`<p.Setting state as</p><pre><code>${JSON.stringify(state, null, 4)}</code></pre> `, 'Setting State...', 'info');
         });    
 
@@ -160,7 +160,7 @@
 
         $('form').submit(() => {
 
-            room.publish($('#message').val());
+            room.message($('#message').val());
             
             log(`<p>${$('#message').val()}</p>`, 'Sending...', 'info');
 
