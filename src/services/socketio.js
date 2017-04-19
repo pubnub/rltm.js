@@ -113,7 +113,7 @@ class Room extends EventEmitter {
         // waiting to be assigned by user
         return;
     }
-    publish(data) {
+    message(data) {
 
         return new Promise((resolve, reject) => {
 

@@ -122,7 +122,7 @@ class Room extends EventEmitter {
 
     }
 
-    publish (data) {
+    message (data) {
 
         return new Promise((resolve, reject) => {
           

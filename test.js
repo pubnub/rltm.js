@@ -87,7 +87,7 @@ describe(connection.service, function() {
                 done();
             });
 
-            room.publish(testMessageData);
+            room.message(testMessageData);
 
         });
 
@@ -183,7 +183,7 @@ describe(connection.service, function() {
                         callback();
                     });
 
-                    room1.publish(input);
+                    room1.message(input);
 
                 },
                 two: function(callback) {
@@ -196,7 +196,7 @@ describe(connection.service, function() {
                         callback();
                     });
 
-                    room2.publish(input);
+                    room2.message(input);
                 }
             }, function(err, results) {
 

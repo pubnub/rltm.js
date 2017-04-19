@@ -126,10 +126,10 @@ room.on('message', (uuid, data) => {
 
 ### Publish
 
-To send a message to the entire ```room```, use the ```publish()``` method. Returns a promise.
+To send a message to the entire ```room```, use the ```message()``` method. Returns a promise.
 
 ```js
-room.publish({hello: world}).then(() => {
+room.message({hello: world}).then(() => {
     console.log('message published');
 });
 ```
