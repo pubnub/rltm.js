@@ -16,7 +16,7 @@ class Room extends EventEmitter {
         super();
 
         // determine the user's state 
-        this.state = state || {};
+        state = state || {};
 
         // store this users uuid
         this.uuid = uuid;
@@ -78,7 +78,7 @@ class Room extends EventEmitter {
 
                     // someone timesout
                     if(presenceEvent.action == "timeout") {
-                        this.emit('timeout', presenceEvent.uuid);
+                        this.emit('disconnect', presenceEvent.uuid);
                     }
                     
                     // someone's state is updated
@@ -122,7 +122,7 @@ class Room extends EventEmitter {
 
     }
 
-    publish (data) {
+    message (data) {
 
         return new Promise((resolve, reject) => {
           
@@ -186,7 +186,7 @@ class Room extends EventEmitter {
 
     }
 
-    setState(state) {
+    state(state) {
 
         return new Promise((resolve, reject) => {
             
@@ -247,7 +247,7 @@ class Room extends EventEmitter {
 
     }
 
-    unsubscribe() {
+    leave() {
 
         return new Promise((resolve, reject) => {
             

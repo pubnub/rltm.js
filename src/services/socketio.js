@@ -113,7 +113,7 @@ class Room extends EventEmitter {
         // waiting to be assigned by user
         return;
     }
-    publish(data) {
+    message(data) {
 
         return new Promise((resolve, reject) => {
 
@@ -140,7 +140,7 @@ class Room extends EventEmitter {
         });
 
     }
-    setState (state) {
+    state(state) {
         
         return new Promise((resolve, reject) => {
 
@@ -167,7 +167,7 @@ class Room extends EventEmitter {
         });
 
     }
-    unsubscribe(channel) {
+    leave(channel) {
         
         return new Promise((resolve, reject) => {
 

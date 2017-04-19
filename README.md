@@ -126,10 +126,10 @@ room.on('message', (uuid, data) => {
 
 ### Publish
 
-To send a message to the entire ```room```, use the ```publish()``` method. Returns a promise.
+To send a message to the entire ```room```, use the ```message()``` method. Returns a promise.
 
 ```js
-room.publish({hello: world}).then(() => {
+room.message({hello: world}).then(() => {
     console.log('message published');
 });
 ```
@@ -169,24 +169,32 @@ room.on('leave', (uuid) => {
 });
 ```
 
-### Disconnect
-
-A ```user``` can manually leave a ```room``` by using the ```unsubscribe()``` method. Returns a promise.
+A ```user``` can manually leave a ```room``` by using the ```leave()``` method. Returns a promise.
 
 ```js
-room.unsubscribe().then(() => {
+room.leave().then(() => {
     console.log('left the room.');
 });
 ```
 
 This will fire the ```leave``` event.
 
-## Set User State
+### Disconnect
 
-A ```user``` state can be updated at any time by using the ```setState()``` method. Supply the new ```state``` as the only parameter. Return a promise.
+If a ```user``` gets disconnected without leaving the room, the ```disconnect``` event will fire.
 
 ```js
-room.setState({idle: true}).then(() => {
+room.on('disconnect', (uuid) => {
+    console.log('user with uuid', uuid, 'has disconnected');
+});
+```
+
+## Set User State
+
+A ```user``` state can be updated at any time by using the ```state()``` method. Supply the new ```state``` as the only parameter. Return a promise.
+
+```js
+room.state({idle: true}).then(() => {
     console.log('state set');
 });
 ```

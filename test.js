@@ -87,7 +87,7 @@ describe(connection.service, function() {
                 done();
             });
 
-            room.publish(testMessageData);
+            room.message(testMessageData);
 
         });
 
@@ -120,7 +120,7 @@ describe(connection.service, function() {
                 done();
             });
 
-            room.setState(testNewStateData).then(function() {
+            room.state(testNewStateData).then(function() {
                 // it worked
             }, function(err) {
                 assert.fail();
@@ -130,10 +130,10 @@ describe(connection.service, function() {
 
     });
 
-    describe('unsubscribe', function() {
+    describe('leave', function() {
 
         it('should disconnect', function(done) {
-            room.unsubscribe().then(function(){
+            room.leave().then(function(){
                 done();
             });
         });
@@ -183,7 +183,7 @@ describe(connection.service, function() {
                         callback();
                     });
 
-                    room1.publish(input);
+                    room1.message(input);
 
                 },
                 two: function(callback) {
@@ -196,7 +196,7 @@ describe(connection.service, function() {
                         callback();
                     });
 
-                    room2.publish(input);
+                    room2.message(input);
                 }
             }, function(err, results) {
 
