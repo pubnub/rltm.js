@@ -201,7 +201,7 @@ room.on('state', (uuid, state) => {
 
 ## Get Old Messages
 
-A ```user``` can retrieve previously published messages in the ```room``` by using the ```    ()``` method. Returns a promise.
+A ```user``` can retrieve previously published messages in the ```room``` by using the ```history()``` method. Returns a promise.
 
 ```js
 room.history().then((history) => {
