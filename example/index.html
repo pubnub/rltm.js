@@ -51,6 +51,26 @@
     <script type="text/javascript" src="../web/rltm.js"></script>
 
     <script type="text/javascript">
+        var entityMap = {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;',
+          '/': '&#x2F;',
+          '`': '&#x60;',
+          '=': '&#x3D;'
+        };
+
+        function escapeHtml (string) {
+          return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+            return entityMap[s];
+          });
+        }
+
+    </script>
+
+    <script type="text/javascript">
     $(document).ready(() => {
 
         const roomName = 'rltm-demo-test';
@@ -111,7 +131,7 @@
         room.history().then(function(history) {
         
             if(history[0]) {
-                log(`<pre><code>${JSON.stringify(history[0], null, 4)}</pre></code>`, 'History', 'muted');
+                log(`<pre><code>${escapeHtml(JSON.stringify(history[0], null, 4))}</pre></code>`, 'History', 'muted');
             }
 
         }, function() {
@@ -123,7 +143,7 @@
         });
 
         room.on('message', function(uuid, message){
-            log(`<p>${message}</p>`, uuid);
+            log(`<p>${escapeHtml(message)}</p>`, uuid);
         });
 
         let state = {lastOnline: new Date()};
@@ -145,7 +165,7 @@
 
             room.message($('#message').val());
             
-            log(`<p>${$('#message').val()}</p>`, 'Sending...', 'info');
+            log(`<p>${escapeHtml($('#message').val())}</p>`, 'Sending...', 'info');
 
             $('#message').val('');
 
