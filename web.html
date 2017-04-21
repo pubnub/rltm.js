@@ -8,6 +8,12 @@
         <script type="text/javascript">
 
             const connections = {
+                ably: rltm({
+                    service: 'ably',
+                    config: {
+                        key: 'INSERT_API_KEY_HERE',
+                        clientId: String(new Date().getTime())
+                    }
                 }),
                 pubnub: rltm({
                     service: 'pubnub',
