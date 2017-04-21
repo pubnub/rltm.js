@@ -27,6 +27,12 @@ const testNewStateData = {
 const connectionInput = process.env.CLIENT || 'pubnub';
 
 const connections = {
+    ably: rltm({
+        service: 'ably',
+        config: {
+            authUrl: 'https://www.ably.io/ably-auth/token-request/demos?client_id=testSuite'
+        }
+    }),
     pubnub: rltm({
         service: 'pubnub', 
         config: {
@@ -63,15 +69,21 @@ describe(connection.service, function() {
 
         it('should get called when ready', function(done) {
             
+            this.timeout(5000);
+
             room = connection.join(new Date().getTime(), testStateData);
 
             room.ready(() => {
-                done();
+                // Leave so that next join event arrives in all realtime platforms
+                room.leave().then(() => {
+                    done();
+                })
             });
 
         });
 
         it('should get itself as a join event', function(done) {
+            this.timeout(5000);
 
             room = connection.join(new Date().getTime(), testStateData);
 

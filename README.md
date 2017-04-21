@@ -1,10 +1,12 @@
 ![](./assets/rltm.js-logo.png)
 
-Universal API for realtime services. Integrate once and easily switch between Socket.io and PubNub. 
+Universal API for realtime services. Integrate once and easily switch between Socket.io, PubNub and Ably.
 
 Provides handy methods for rooms, users, message history, and information about connected user.
 
 Supported realtime services:
+
+![](./assets/ably.png)
 
 ![](./assets/socketio.png)
 
@@ -43,7 +45,7 @@ Include library in HTML.
 
 # Configure
 
-Both the NodeJS and web libraries are configured with the ```rltm``` variable. 
+Both the NodeJS and web libraries are configured with the ```rltm``` variable.
 
 ```js
 let user = rltm({
@@ -54,7 +56,7 @@ let user = rltm({
 });
 ```
 
-* ```service``` is the name of the realtime service to use (```pubnub``` or ```socketio```) 
+* ```service``` is the name of the realtime service to use (```ably```, ```pubnub``` or ```socketio```)
 * ```config``` is a Javascript object with a config for that service.
 
 ## PubNub or Socket.io
@@ -62,11 +64,15 @@ let user = rltm({
 #### [Set Up With Socket.io](/guides/socketio.md)
 
 Socket.io is an open source websocket framework. To use socket.io, you'll run
-your own socket.io server on the back end. 
+your own socket.io server on the back end.
 
 #### [Set Up With PubNub](/guides/pubnub.md)
 
 PubNub is a hosted realtime solution that doesn't require you to run or maintain any servers.
+
+#### [Set Up With Ably](/guides/ably.md)
+
+Ably  is a hosted realtime solution that doesn't require you to run or maintain any servers.
 
 # Usage
 
@@ -81,7 +87,7 @@ You can provide these as parameters during initialization.
 
 ```js
 let user = rltm({
-    service: 'socketio', 
+    service: 'socketio',
     config: {
         endpoint: 'http://localhost:9000',
         uuid: 'MY_UNIQUE_ID',
@@ -149,7 +155,7 @@ room.here().then((users) => {
 Successful responses will return a object of ```user```s who are currently connected to the ```room```. The keys are the ```user```'s ```uuid```s and the values are their current ```state```.
 
 ```js
-{ 
+{
     uuid1: {
         username: 'ianjennings'
     },
@@ -220,20 +226,20 @@ room.history().then((history) => {
 It will return the last 100 messages as an array of objects containing the ```uuid``` and ```data``` of every message. The array is sorted newest to oldest.
 
 ```js
-[ 
-    { 
-        uuid: uuid2, 
-        data: { 
+[
+    {
+        uuid: uuid2,
+        data: {
             sentTime: '2pm',
-            text: 'boy howdy' 
-        } 
-    }, 
-    { 
-        uuid: uuid1, 
-        data: { 
+            text: 'boy howdy'
+        }
+    },
+    {
+        uuid: uuid1,
+        data: {
             sentTime: '1pm',
-            text: 'hello there' 
-        } 
+            text: 'hello there'
+        }
     }
 ]
 ```
@@ -247,7 +253,11 @@ npm install mocha -g
 npm install chai -g
 ```
 
-Set environment variable ```CLIENT``` to test either service.
+Set environment variable ```CLIENT``` to test each service.
+
+```sh
+env CLIENT=ably mocha
+```
 
 ```sh
 env CLIENT=pubnub mocha

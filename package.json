@@ -31,6 +31,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
+    "ably": "^1.0.3",
     "browserify": "^13.1.0",
     "pubnub": "^4.0.13",
     "socket.io": "^1.5.1",
