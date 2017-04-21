@@ -8,29 +8,34 @@
         <script type="text/javascript">
 
             const connections = {
-                pubnub: new Rltm('pubnub', {
-                    publishKey: 'demo',
-                    subscribeKey: 'demo',
-                    uuid: new Date().getTime()
                 }),
-                socketio: new Rltm('socketio', {
-                    // must run socketio-server.js 
-                    endpoint: 'http://localhost:9000',
-                    uuid: new Date().getTime()
-                })    
+                pubnub: rltm({
+                    service: 'pubnub',
+                    config: {
+                        publishKey: 'demo',
+                        subscribeKey: 'demo',
+                        uuid: new Date().getTime()
+                    }
+                }),
+                socketio: rltm({
+                    service: 'socketio',
+                    config: {
+                        // must run socketio-server.js
+                        endpoint: 'http://localhost:9000',
+                        uuid: new Date().getTime()
+                    }
+                })
             };
 
-            const connection = connections['pubnub'];
+            const user = connections['pubnub'];
 
-            console.log(connection)
-
-            room = connection.join(new Date().getTime());
+            let room = user.join(String(new Date().getTime()));
 
             let i = 1;
      
             setInterval(function(){
 
-                room.publish({
+                room.message({
                     i: i,
                     sentTime: new Date().getTime()
                 });
