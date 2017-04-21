@@ -1,3 +1,5 @@
+"use strict";
+
 const assert = require('chai').assert;
 
 const fork = require('child_process').fork;
@@ -40,6 +42,10 @@ const connections = {
         }
     })    
 };
+
+// Room object is shared across the test suite although this is an anti-pattern
+// as each test has no set up and tear down that would allow tests to be run in isolation
+let room;
 
 const connection = connections[connectionInput];
 

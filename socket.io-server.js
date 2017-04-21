@@ -1,3 +1,5 @@
+"use strict";
+
 // require socket.io module
 const port = 9000;
 
