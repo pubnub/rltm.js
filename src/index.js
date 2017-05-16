@@ -5,6 +5,7 @@ module.exports = function(setup) {
 
     // these are available realtime providers and their definitions
     const services = {
+        ably: require('./services/ably'),
         pubnub: require('./services/pubnub'),
         socketio: require('./services/socketio') 
     };

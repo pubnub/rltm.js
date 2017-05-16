@@ -8,6 +8,7 @@
   "main": "web/rltm.js",
   "keywords": [
     "realtime",
+    "ably",
     "abstrction",
     "pubnub",
     "socket.io",

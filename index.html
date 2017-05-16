@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="rltm.js is an universal API for realtime messaging, allowing you to easily swap between Socket.IO and PubNub for bidirectional event-based communication.">
+    <meta name="description" content="rltm.js is an universal API for realtime messaging, allowing you to easily swap between Socket.IO, Ably and PubNub for bidirectional event-based communication.">
     <meta name="author" content="PubNub">
 
     <title>Rltm.js - Universal API for Realtime</title>
@@ -24,7 +24,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
     <meta property="og:title" content="Rltm.js - Universal API for Realtime"/>
-    <meta property="og:description" content="rltm.js is an universal API for realtime messaging, allowing you to easily swap between Socket.IO and PubNub for bidirectional event-based communication."/>1
+    <meta property="og:description" content="rltm.js is an universal API for realtime messaging, allowing you to easily swap between Socket.IO, Ably and PubNub for bidirectional event-based communication."/>1
     <meta property="og:image" content="assets/publish@2x.png">
     <meta property="og:url" content="http://rltmjs.com/">
 
@@ -117,7 +117,7 @@
                     <h2>Demo</h2>
 
                     <hr class="star-primary">
-                    <p>Swap between Socket.io and PubNub with a single API. Works on web and NodeJS.</p>
+                    <p>Swap between Socket.io, Ably and PubNub with a single API. Works on web and NodeJS.</p>
                 </div>
                 <div class="col-sm-8 col-sm-offset-2">
 
@@ -156,6 +156,16 @@
     config: {
         publishKey: 'YOUR_PUBNUB_PUBLISH_KEY',
         subscribeKey: 'YOUR_PUBNUB_SUBSCRIBE_KEY'
+    }
+});</code></pre>
+                </div>
+                <div class="col-sm-5">
+                    <p class="text-center">Ably</p>
+                    <pre><code class="javascript">let user = rltm({
+    service: 'ably',
+    config: {
+        key: 'YOU_ABLY_API_KEY',
+        clientId: 'YOUR_UNIQUE_CLIENT_ID_FOR_PRESENCE'
     }
 });</code></pre>
                 </div>
